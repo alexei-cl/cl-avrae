@@ -1,0 +1,110 @@
+embed
+<drac2>
+
+hitDieMap = {
+    'Artificer':  	8,
+    'Barbarian': 	12,
+    'Blood Hunter':	10,	
+    'Bard':       	8,
+    'Cleric':     	8,
+    'Druid':      	8,
+    'Fighter':   	10,
+    'Monk':       	8,
+    'Paladin':   	10,
+    'Ranger':    	10,
+    'Rogue':      	8,
+    'Sorcerer':   	6,
+    'Warlock':    	8,
+    'Wizard':     	6
+}
+
+pitEarningMap = {
+    '0': 0,
+    '1': 100,
+    '2': 200,
+    '3': 300
+}
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+# Time calculations
+downtime_days = 5                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+
+def pitfightroll(useSkill, rollMod=""):
+  # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
+  if (args.get('rel') and ch.skills[useSkill].prof >0):
+    useDice = f"{ch.skills[useSkill].d20(None, None, 10, None)}"
+  else:
+    useDice = f"{ch.skills[useSkill].d20(None, None, None, None)}"
+
+  return vroll(f'{useDice}+{(ch.stats.prof_bonus * ch.skills[useSkill].prof)}[prof]{f"{rollMod}"}{f"+{argBonus}" if argBonus else ""}')
+
+
+args = &ARGS&
+if (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
+  `{ctx.prefix+ctx.alias} [args]`
+
+  **__Valid Arguments__**
+  **`-rel`** = if you have Reliable Talent or Glibness.
+  """
+  return f"""embed -title "Looking for a fight?" -desc "{desc}" """
+
+args = argparse(args)               # Parse the remaining arguments
+argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+
+ch=character()
+
+# get highest Hit Die
+hitDice = []
+for i in ch.levels:                 # Get List of Character's Classes and Class Levels
+  hitDice.append(hitDieMap[i[0]])   # Lookup Class Hit Die
+
+maxHitDie = 0
+for i in hitDice:                   # find max Hit Die
+  maxHitDie = max(maxHitDie, i)
+
+
+# Roll DCs
+DC1 = vroll("2d10+5")
+DC2 = vroll("2d10+5")
+DC3 = vroll("2d10+5")
+
+# Skill Rolls
+roll1 = pitfightroll('athletics')
+roll2 = pitfightroll('acrobatics')
+roll3 = pitfightroll('constitution', '+1d' + maxHitDie)
+
+pitfightSuccess = 0
+if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1
+if roll2.total >= DC2.total: pitfightSuccess = pitfightSuccess +1
+if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
+
+pitfightEarning = pitEarningMap[str(pitfightSuccess)]
+
+outTitle = (f'Pif Fighting <t:{CurTime}:D> - <t:{busyTime}:D>')
+outDescr = (f'\n**Character:** {ch.name}') +  \
+           (f'\n**Successes:** {str(pitfightSuccess)} / 3') +  \
+           (f'\n**Winnings:** {str(pitfightEarning)} gp')
+outField1 =(f'__Check 1 - STR(Athletics)__|**DC** {str(DC1)} \n**Check** {str(roll1)} \n{f":white_check_mark: *Success*" if roll1.total>=DC1.total else ":x: *no Success*"} \n')
+outField2 =(f'__Check 2 - DEX(Acrobatics)__|**DC** {str(DC2)} \n**Check** {str(roll2)} \n{f":white_check_mark: *Success*" if roll2.total>=DC2.total else ":x: *no Success*"} \n')
+outField3 =(f'__Check 3 - CON + Hit Die__|**DC** {str(DC3)} \n**Check** {str(roll3)} \n{f":white_check_mark: *Success*" if roll3.total>=DC3.total else ":x: *no Success*"} \n')
+nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
+
+return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}}"

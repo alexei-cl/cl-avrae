@@ -1,0 +1,146 @@
+embed
+<drac2>
+
+# Time calculations
+downtime_days = 1                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+
+jobInfoMap = {
+  'Alchemist':     {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Calligrapher':  {'jobValue': 30, 'jobStats': ["INT", "DEX", "CHA"]},
+  'Carpenter':     {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+  'Cartographer':  {'jobValue': 30, 'jobStats': ["INT", "DEX"]},
+  'Cobbler':       {'jobValue': 10, 'jobStats': ["CHA", "DEX"]},
+  'Cook':          {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Driver':        {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Enchanter':	   {'jobValue': 20, 'jobStats': ["INT", "WIS"]},
+  'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
+  'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
+  'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
+  'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
+  'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
+  'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON"]},
+  'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
+  'Woodcarver':    {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+}
+availableJobs = ', '.join(jobInfoMap.keys())
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+def getJobInfo(argDayjob, target, jobInfoMap):
+  jobKey = findBestMatch(jobInfoMap, argDayjob)
+  if jobKey is not None:
+    jobInfo = jobInfoMap[jobKey]
+    jobValue = jobInfo['jobValue']
+    max_mod = -5
+    for stat in jobInfo['jobStats']:
+      mod_value = target.stats.get_mod(stat)
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return jobValue, useStat, jobKey
+  else:
+    return None, None, None
+
+def getJobMultiplier(dayjobRoll):
+  if dayjobRoll <= 9:
+    multiplier = 0.5
+  elif 10 <= dayjobRoll <= 14:
+    multiplier = 0.75
+  elif 15 <= dayjobRoll <= 20:
+    multiplier = 1
+  elif 21 <= dayjobRoll <= 25:
+    multiplier = 1.5
+  elif 26 <= dayjobRoll <= 30:
+    multiplier = 2.5
+  else:
+    multiplier = 4
+  return multiplier
+
+
+
+args = &ARGS&
+if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0] in x) : # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  **`-adv`** = if you have advantage.
+  **`-rel`** = if you have Reliable Talent or Glibness.
+  **`-exp`** = if you have Expertise in this Job.
+  **`-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+
+argDayjob = args[0]                 # Pull out the JobName
+args = argparse(args)               # Parse the remaining arguments
+targetName = args.get('char', name) # Get the specified target name, defaults to yourself
+argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+argAdv = args.adv(boolwise=True)    # Check if advantage is present
+
+if (targetName == name):
+  target = character()
+else:
+  return f'-title "Error" -desc "-char argument was not found"'
+  ##target = character(f"{targetName}")   # Try to find the character with the specified name
+
+jobValue, useStat, useJobName = getJobInfo(argDayjob, target, jobInfoMap)
+if jobValue is None:
+  return f'-title "Error: unknown <JobName>" -desc "**Use:** `{availableJobs}`"'
+
+# .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
+if (args.get('rel')):
+  useDice = f"{target.skills[attMap[useStat]].d20(argAdv, None, 10, None)}"
+else:
+  useDice = f"{target.skills[attMap[useStat]].d20(argAdv, None, None, None)}"
+
+if (args.get('exp')):
+  dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+else:
+  dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+
+multiplier = getJobMultiplier(dayjobRoll.total)
+dayjobEarning = ceil(jobValue * multiplier)
+
+outTitle = (f'Dayjob')
+outDescr = (f'\n**Character:** {target.name}') +  \
+           (f'\n**Job:** {useJobName} ({useStat})') +  \
+           (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
+           (f'\n**Gold:** {jobValue} gp/Day --> **{dayjobEarning} gp**') +  \
+		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n')
+
+
+return f'-title "{outTitle}" -desc "{outDescr}"'
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS&}}"

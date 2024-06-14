@@ -128,7 +128,8 @@ else:
   dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
 
 multiplier = getJobMultiplier(dayjobRoll.total)
-dayjobEarning = ceil(jobValue * multiplier)
+dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece
+dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver and copper pieces is my understanding
 
 outTitle = (f'Dayjob')
 outDescr = (f'\n**Character:** {target.name}') +  \

@@ -50,7 +50,7 @@ def pitfightroll(useSkill, rollMod=""):
 
   return vroll(f'{useDice}+{(ch.stats.prof_bonus * ch.skills[useSkill].prof)}[prof]{f"{rollMod}"}{f"+{argBonus}" if argBonus else ""}')
       
-    def getWeapons(char):                       #   Takes a character, spits out a SafeDict of all of their avrae automations (!a) that involve an attack roll.
+def getWeapons(char):                           #   Takes a character, spits out a SafeDict of all of their avrae automations (!a) that involve an attack roll.
     weaponAttacks = {}                          #   Can't really think of an easy tway to filter weapon attacks vs. spell attacks 
     for attack in char.attacks:                 #   I'm thinking '-w "<Weapon Name>"' as a passable argument? Should be easy to pull the weapon/attack bonus from this function's returned value
         try:                                    #   We could then dynamically determine which roll should be replaced 

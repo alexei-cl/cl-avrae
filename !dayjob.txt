@@ -94,7 +94,7 @@ if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0
 
   **__Valid Arguments__**
   **`-adv`** = if you have advantage.
-  **`-rel`** = if you have Reliable Talent or Glibness.
+  **`-rel`** = if you have Reliable Talent.
   **`-exp`** = if you have Expertise in this Job.
   **`-b <bonus>`** = if you have an additional bonus. (1d8+5)
   """

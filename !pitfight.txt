@@ -60,40 +60,151 @@ def getWeapons(char):                           #   Takes a character, spits out
             pass
     return weaponAttacks
 
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+def maxHitDieCalc(ch): #moving to function for weapon replacement
+  hitDice = []
+  for i in ch.levels:                 # Get List of Character's Classes and Class Levels
+    hitDice.append(hitDieMap[i[0]])   # Lookup Class Hit Die
+  maxHitDie = 0
+  for i in hitDice:                   # find max Hit Die
+    maxHitDie = max(maxHitDie, i)
+  return maxHitDie
+  
+def replaceWhich(character, ab, wn):           #Given an attack bonus from a weapon, determine which roll if any should be replaced
+  attackBonus = int(ab)
+  if ab and wn and int(wn) > 0 and int(wn) < 4:
+    return int(wn)                # if they've passed valid parameters, replace wn in range [1,3]
+
+  ath = float(character.skills.athletics.value)
+  acr = float(character.skills.acrobatics.value)
+  con = float(character.stats.get_mod("constitution")+(maxHitDieCalc(character)/2+0.5)) # average roll
+
+  if ath < attackBonus:      # athletics is worse than your attack
+    if acr < ath:            # check is acro is even worse..
+      if con < acr:          # if, somehow, your con is even worse....
+        return 3             # con <  acr <  ath <  attackBonus; replace con roll as it's the 'worst'
+      else:
+        return 2             # acr <= con <  ath <  attackBonus; replace acr roll as it's the worst
+    else:
+      if con < ath:          # con <  ath <= acr <  attackBonus; replace con roll as it's the 'worst'
+        return 3
+      else:                  # ath <= con <= acr <  attackBonus; replace ath roll as it's the 'worst
+        return 1
+  elif acr < attackBonus:    # attackBonus <= ath
+    if con < acr:
+      return 3               # con <  acr < attackBonus <= ath; replace con roll
+    else:
+      return 2               # acr <= con < attackBonus <= ath; replace acr roll
+  elif con < attackBonus:    # con < attackBonus <= acr <= ath; replace con roll
+    return 3
+  else:
+    return 0                 # attackBonus <= con <= acr <= ath; why'd you build your character like this?
+
 args = &ARGS&
 if (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
   `{ctx.prefix+ctx.alias} [args]`
 
   **__Valid Arguments__**
-  **`-rel`** = if you have Reliable Talent or Glibness.
+  **`-rel`** = if you have Reliable Talent.
+  **`-w "<Weapon>"`** = to replace your worst pitfighting roll with a single weapon attack. Weapon must be equiped/usable through avrae.
+  ** `-wn <1-3>`** = to override which roll is replaced with a weapon attack. No argument->your worst roll will be replaced if your weapon is better 
+  (Con-> Replaced if Weapon Attack Bonus > Con Mod+AvgHitDieRoll)
   """
   return f"""embed -title "Looking for a fight?" -desc "{desc}" """
 
 args = argparse(args)               # Parse the remaining arguments
 argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+weapon = args.join('w', ' ')        # If a Weapon is provided, log it
+weaponReplace = args.join('wn', ' ',)
+
+if weaponReplace and not(int(weaponReplace)>0 and int(weaponReplace) < 4 ):
+  desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
+  `{ctx.prefix+ctx.alias} [args]`
+  
+  **__Error: Invalid Argument__**
+  You've tried to replace roll number {weaponReplace} with a weapon attack, but the argument doesn't fall within the expected range. Please make sure your `-wn` argument is a number between 1 and 3!
+  
+  ex: `!pitfight -w Warhammer -wn 2`
+  
+  **__Valid Arguments__**
+  **`-rel`** = if you have Reliable Talent.
+  **`-w "<Weapon>"`** = to replace your worst pitfighting roll with a single weapon attack. Weapon must be equiped/usable through avrae.
+  ** `-wn <1-3>`** = to override which roll is replaced with a weapon attack. No argument->your worst roll will be replaced if your weapon is better 
+  (Con-> Replaced if Weapon Attack Bonus > Con Mod+AvgHitDieRoll)
+  
+  """
+  return f"""embed -title "Looking for a fight?" -desc "{desc}" """
 
 ch=character()
 
+
+charWeapons = getWeapons(ch)        # Populate the character's automations which use an attack roll
+charWeaponName = "error"
+charWeapBonus = 0
+replaceWhichRoll = 0
+
+if weapon: 
+  charWeaponName = findBestMatch(charWeapons,weapon)
+  
+  if not(charWeapons.get(charWeaponName)):
+    desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
+    `{ctx.prefix+ctx.alias} [args]`
+    
+    **__Error: Invalid Argument__**
+    You've tried to replace a roll with a weapon attack with from a `{weapon}`, but avrae wasn't able to find this weapon on your character. Maybe check for typos, ensure you've equiped the weapon, and try again?
+    
+    **__Valid Arguments__**
+    **`-rel`** = if you have Reliable Talent.
+    **`-w "<Weapon>"`** = to replace your worst pitfighting roll with a single weapon attack. Weapon must be equiped/usable through avrae.
+    ** `-wn <1-3>`** = to override which roll is replaced with a weapon attack. No argument->your worst roll will be replaced if your weapon is better 
+    (Con-> Replaced if Weapon Attack Bonus > Con Mod+AvgHitDieRoll)
+    
+    """
+    return f"""embed -title "Looking for a fight?" -desc "{desc}" """
+  
+  charWeapBonus = charWeapons.get(charWeaponName).get('attackBonus')
+  replaceWhichRoll=replaceWhich(ch,charWeapBonus,weaponReplace) if charWeaponName and charWeapBonus else 0
+
 # get highest Hit Die
-hitDice = []
-for i in ch.levels:                 # Get List of Character's Classes and Class Levels
-  hitDice.append(hitDieMap[i[0]])   # Lookup Class Hit Die
-
-maxHitDie = 0
-for i in hitDice:                   # find max Hit Die
-  maxHitDie = max(maxHitDie, i)
-
+maxHitDie = maxHitDieCalc(ch)
 
 # Roll DCs
 DC1 = vroll("2d10+5")
 DC2 = vroll("2d10+5")
 DC3 = vroll("2d10+5")
+match replaceWhichRoll:
+  case 1:
+    weapDC= DC1
+  case 3:
+    weapDC = DC2
+  case 2:
+    weapDC = DC3
+  case _:
+    weapDC = 69
 
 # Skill Rolls
+weapRoll = vroll("1d20+"+charWeapBonus)
 roll1 = pitfightroll('athletics')
 roll2 = pitfightroll('acrobatics')
 roll3 = pitfightroll('constitution', '+1d' + maxHitDie)
+
+match replaceWhichRoll:
+  case 1:
+    roll1= weapRoll
+  case 3:
+    roll2 = weapRoll
+  case 2:
+    roll13 = weapRoll
 
 pitfightSuccess = 0
 if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1
@@ -102,13 +213,23 @@ if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
 
 pitfightEarning = pitEarningMap[str(pitfightSuccess)]
 
-outTitle = (f'Pif Fighting <t:{CurTime}:D> - <t:{busyTime}:D>')
+outTitle = (f'Pit Fighting <t:{CurTime}:D> - <t:{busyTime}:D>')
 outDescr = (f'\n**Character:** {ch.name}') +  \
            (f'\n**Successes:** {str(pitfightSuccess)} / 3') +  \
            (f'\n**Winnings:** {str(pitfightEarning)} gp')
-outField1 =(f'__Check 1 - STR(Athletics)__|**DC** {str(DC1)} \n**Check** {str(roll1)} \n{f":white_check_mark: *Success*" if roll1.total>=DC1.total else ":x: *no Success*"} \n')
-outField2 =(f'__Check 2 - DEX(Acrobatics)__|**DC** {str(DC2)} \n**Check** {str(roll2)} \n{f":white_check_mark: *Success*" if roll2.total>=DC2.total else ":x: *no Success*"} \n')
-outField3 =(f'__Check 3 - CON + Hit Die__|**DC** {str(DC3)} \n**Check** {str(roll3)} \n{f":white_check_mark: *Success*" if roll3.total>=DC3.total else ":x: *no Success*"} \n')
+
+
+weaponField = (f'__Check {replaceWhichRoll} - Weapon Attack - {charWeaponName}__|**Target** {weapDC} \n **Attack Roll** {weapRoll}')
+
+outField1 = weaponField if replaceWhichRoll==1 else (f"__Check 1 - STR(Athletics)__|**DC** {DC1} \n**Check** {roll1}\n")
+outField1 += (f'\n{":white_check_mark: *Success*" if roll1.total >= DC1.total else ":x: *no Success*"}\n')
+
+outField2 = weaponField if replaceWhichRoll==2 else (f"__Check 2 - DEX(Acrobatics)__|**DC** {DC2} \n**Check** {roll2}\n")
+outField2 += (f'\n{":white_check_mark: *Success*" if roll2.total >= DC2.total else ":x: *no Success*"}\n')
+
+outField3 = weaponField if replaceWhichRoll==3 else (f"__Check 3 - CON + Hit Die__|**DC** {DC3} \n**Check** {roll3}\n")
+outField3 += (f'\n{":white_check_mark: *Success*" if roll3.total >= DC3.total else ":x: *no Success*"}\n')
+
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
 return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'

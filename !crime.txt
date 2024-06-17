@@ -1,0 +1,132 @@
+embed
+<drac2>
+
+crimeMap = {
+  'Con':                      {'DC':10, 'PayoutFine':50,   'LongDesc':"run a street con",                                                 'JailTime':2},
+  'Robbery':                  {'DC':10, 'PayoutFine':50,   'LongDesc':"make and sell minor drugs",                                        'JailTime':2},
+  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"robbery",                                                          'JailTime':2},
+  'Grave Robbing':            {'DC':15, 'PayoutFine':100,  'LongDesc':"grave robbing",                                                    'JailTime':4},
+  'Forgery':                  {'DC':15, 'PayoutFine':100,  'LongDesc':"make and sell counterfeits or forgery",                            'JailTime':4},
+  'Blackmail':                {'DC':15, 'PayoutFine':100,  'LongDesc':"blackmail",                                                        'JailTime':4},
+  'Spying':                   {'DC':20, 'PayoutFine':200,  'LongDesc':"spying",                                                           'JailTime':8},
+  'Major Drugs':              {'DC':20, 'PayoutFine':200,  'LongDesc':"make and sell illicit drugs",                                      'JailTime':8},
+  'Cover Up':                 {'DC':20, 'PayoutFine':200,  'LongDesc':"cover up another crime",                                           'JailTime':8},
+  'Breaking and Entering':    {'DC':25, 'PayoutFine':500,  'LongDesc':"breaking and entering",                                            'JailTime':20},
+  'Money Laundering':         {'DC':25, 'PayoutFine':500,  'LongDesc':"money laundering",                                                 'JailTime':20},
+  'Poison':                   {'DC':25, 'PayoutFine':500,  'LongDesc':"make and sell lethal poison",                                      'JailTime':20},
+  'Assassinate':              {'DC':30, 'PayoutFine':1000, 'LongDesc':"assassinate a target",                                             'JailTime':40},
+  'Heist':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"pull off a heist to rip off one of the wealthiest nobles in town", 'JailTime':40},
+  'Fraud':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"insurance fraud/tax evasion",                                      'JailTime':40},
+}
+
+availableCrimes = ', '.join(crimeMap.keys())
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+toolSkillMap = {
+    'Forgery Kit':      ["CHA","DEX","INT"],
+    'Thief\'s Tools':   ["DEX","INT","WIS"],
+    'Disguise Kit':     ["CHA","DEX","INT","CON"],
+    'Poisoner\'s Kit':  ["CON","DEX","INT"],
+}
+
+availableTools = ', '.join(toolSkillMap.keys())
+
+def toolBestSkill(argTool, char, toolSkillMap):
+  toolKey = findBestMatch(toolSkillMap, argTool)
+  if toolKey:
+    toolInfo = toolSkillMap[toolKey]
+    max_mod = -5
+    for stat in toolInfo:
+      mod_value = char.stats.get_mod(stat)
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useState = stat
+    return useStat, jobKey
+  else:
+    return None, None, None
+
+def getCrimeInfo(argCrime, target, crimeMap):
+  crimeKey = findBestMatch(crimeMap, argCrime)
+  if crimeKey is not None:
+    crimeInfo     = crimeMap[crimeKey] #DICT
+    crimeDC       = crimeInfo['DC']
+    crimePayout   = crimeInfo['PayoutFine']
+    crimeLong     = crimeInfo['LongDesc']
+    crimeJail       = crimeInfo['JailTime']
+    jobValue = jobInfo['jobValue']
+    max_mod = -5
+    for stat in jobInfo['jobStats']:
+      mod_value = target.stats.get_mod(stat)
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return jobValue, useStat, toolKey
+  else:
+    return None, None, None
+
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+# Command format: `!crime "<Crime Name>" -tool "<Tool>" -gp "<Info Fee>" -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+
+# Time calculations
+downtime_days = 5                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+args = &ARGS&
+if True or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)): # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for committing criminal activities
+  
+  **__Usage__**: 
+  `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+  
+  **__Crime Names:__** `{availableCrimes}`
+  
+  **__Valid Arguments__**
+  **`-tool '<Tool>'`** One of: `{availableTools}`
+  **`-gp X`** How much gold you're spending on investigation Min 25, Max 250. 
+  For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
+  **`-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has go here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
+  **`-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has go here as well.
+  **`-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses go here as well added after your investigation bonus. i.e. `0+1d4` for Mark of Warding investigation.
+  **`prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  **`invest/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
+  **`-rel`** = if you have Reliable Talent.
+  """
+  return f"""embed -title "Looking for a fight?" -desc "{desc}" """
+
+argCrime = args[0]
+args = argparse(args)               # Parse the remaining arguments
+toolName = args.get('tool',' ')
+gpSpent = args.get('gp',' ')
+b1Invest=args.get('b1',' ').split('+')[0] #should probably use a match-> +/- in case someone has a NEGATIVE crime modifier for robustness
+b2Invest=args.get('b2',' ').split('+')[0]
+b3Invest=args.get('b3',' ').split('+')[0]
+
+b1Bonus = args.get('b1',' ')[b1.invest.len:]
+b2Bonus = args.get('b2',' ')[b2.invest.len:]
+b3Bonus = args.get('b3',' ')[b3.invest.len:]
+
+
+argAdv = args.adv(boolwise=True)    # Check if advantage is present
+                                    # Should figure out handling for specific advantage situations...

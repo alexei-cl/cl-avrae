@@ -184,13 +184,11 @@ DC2 = vroll("2d10+5")
 DC3 = vroll("2d10+5")
 match replaceWhichRoll:
   case 1:
-    weapDC= DC1
-  case 3:
-    weapDC = DC2
+    weapDC = DC1
   case 2:
+    weapDC = DC2
+  case 3:
     weapDC = DC3
-  case _:
-    weapDC = 69
 
 # Skill Rolls
 weapRoll = vroll("1d20+"+charWeapBonus)
@@ -201,9 +199,9 @@ roll3 = pitfightroll('constitution', '+1d' + maxHitDie)
 match replaceWhichRoll:
   case 1:
     roll1= weapRoll
-  case 3:
-    roll2 = weapRoll
   case 2:
+    roll2 = weapRoll
+  case 3:
     roll13 = weapRoll
 
 pitfightSuccess = 0

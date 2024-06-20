@@ -4,19 +4,19 @@ embed
 crimeMap = {
   'Con':                      {'DC':10, 'PayoutFine':50,   'LongDesc':"run a street con",                                                 'JailTime':2},
   'Robbery':                  {'DC':10, 'PayoutFine':50,   'LongDesc':"make and sell minor drugs",                                        'JailTime':2},
-  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"robbery",                                                          'JailTime':2},
-  'Grave Robbing':            {'DC':15, 'PayoutFine':100,  'LongDesc':"grave robbing",                                                    'JailTime':4},
+  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"rob some suckers",                                                          'JailTime':2},
+  'Grave Robbing':            {'DC':15, 'PayoutFine':100,  'LongDesc':"rob some graves",                                                    'JailTime':4},
   'Forgery':                  {'DC':15, 'PayoutFine':100,  'LongDesc':"make and sell counterfeits or forgery",                            'JailTime':4},
-  'Blackmail':                {'DC':15, 'PayoutFine':100,  'LongDesc':"blackmail",                                                        'JailTime':4},
-  'Spying':                   {'DC':20, 'PayoutFine':200,  'LongDesc':"spying",                                                           'JailTime':8},
+  'Blackmail':                {'DC':15, 'PayoutFine':100,  'LongDesc':"gather up some blackmail",                                                        'JailTime':4},
+  'Spying':                   {'DC':20, 'PayoutFine':200,  'LongDesc':"their hand at spying",                                                           'JailTime':8},
   'Major Drugs':              {'DC':20, 'PayoutFine':200,  'LongDesc':"make and sell illicit drugs",                                      'JailTime':8},
   'Cover Up':                 {'DC':20, 'PayoutFine':200,  'LongDesc':"cover up another crime",                                           'JailTime':8},
-  'Breaking and Entering':    {'DC':25, 'PayoutFine':500,  'LongDesc':"breaking and entering",                                            'JailTime':20},
-  'Money Laundering':         {'DC':25, 'PayoutFine':500,  'LongDesc':"money laundering",                                                 'JailTime':20},
+  'Breaking and Entering':    {'DC':25, 'PayoutFine':500,  'LongDesc':"do some breaking and entering",                                            'JailTime':20},
+  'Money Laundering':         {'DC':25, 'PayoutFine':500,  'LongDesc':"launder money",                                                 'JailTime':20},
   'Poison':                   {'DC':25, 'PayoutFine':500,  'LongDesc':"make and sell lethal poison",                                      'JailTime':20},
   'Assassinate':              {'DC':30, 'PayoutFine':1000, 'LongDesc':"assassinate a target",                                             'JailTime':40},
   'Heist':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"pull off a heist to rip off one of the wealthiest nobles in town", 'JailTime':40},
-  'Fraud':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"insurance fraud/tax evasion",                                      'JailTime':40},
+  'Fraud':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"commit insurance fraud or tax evasion",                                      'JailTime':40},
 }
 
 availableCrimes = ', '.join(crimeMap.keys())
@@ -331,6 +331,8 @@ if roll3.total >= crimeDC: crimeSuccess = crimeSuccess +1
 
 outTitle = (f'Crime <t:{CurTime}:D> - <t:{busyTime}:D>')
 
+introField =f"**{ch.name} is committing a crime!**\n They are going to try to __**{crimeLong}**__.\nDC: {crimeDC} \n Payout/Fine: {crimePayout} gp\n Jail Time: {crimeJail} days"
+
 outField1=f"__Check 1 - Dexterity(Stealth)__|**DC** {crimeDC}\n" + \
          (f"**Check** {roll1}\n") + \
         ((f":white_check_mark: *Success*") if roll1.total >= crimeDC else ":x: *no success*\n")
@@ -360,7 +362,7 @@ match crimeSuccess:
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
-return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
+return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
 
 
 </drac2>

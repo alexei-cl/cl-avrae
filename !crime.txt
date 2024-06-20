@@ -98,7 +98,7 @@ def getCrimeInfo(argCrime, target, crimeMap):
     crimePayout   = crimeInfo['PayoutFine'] #int
     crimeLong     = crimeInfo['LongDesc']   #int
     crimeJail     = crimeInfo['JailTime']   #int
-    
+
     return crimeInfo,crimeDC,crimePayout,crimeLong,crimeJail
   else:
     return None, None, None, None, None
@@ -151,15 +151,15 @@ busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activit
 args = &ARGS&
 
 defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activities
-  
-  **__Usage__**: 
+
+  **__Usage__**:
   `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
-  
+
   **__Crime Names:__** `{availableCrimes}`
-  
+
   **__Valid Arguments__**
   ** *`-tool '<Tool>'`** One of: `{availableTools}`
-  ** *`-gp X`** How much gold you're spending on investigation Min 25, Max 250. 
+  ** *`-gp X`** How much gold you're spending on investigation Min 25, Max 250.
   For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
   ** *`-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
   Add any other downtime-applicable bonuses your character has here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
@@ -183,7 +183,7 @@ if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if arg
 ##                                ##
 ####################################
 ####################################
-                
+
  ##################################
 ##     Argument 1: Crime Type     ##
  ##################################
@@ -231,7 +231,7 @@ if toolName is None: #Should not ever be None
  #######################################
 ## Argument 3+4: -gp and -b ephemerals ##
  #######################################
- 
+
 #Parse gp args
 gpSpent = args.get('gp',' ')
 gpSpent = int(gpSpent[0]) if typeof(gpSpent)=='SafeList' else 0

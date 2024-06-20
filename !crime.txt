@@ -49,7 +49,8 @@ availableSkills = ', '.join(checkThreeMap.keys())
 
 availableTools = ', '.join(toolSkillMap.keys())
 
-def toolBestSkillAll(char, toolSkillMap): #overloaded for if no choice
+## If no tool provided, make a check with the best applicable modifier.
+def toolBestSkillAll(char, toolSkillMap):
   toolName="uwu"
   max_mod = -5
   for toolKey in toolSkillMap:
@@ -60,6 +61,7 @@ def toolBestSkillAll(char, toolSkillMap): #overloaded for if no choice
         toolName = toolKey
   return stat, toolName
 
+#Choose which stat to use with the selected tool
 def toolBestSkill(argTool, char, toolSkillMap):
   toolKey = findBestMatch(toolSkillMap, argTool)
   if toolKey:
@@ -74,6 +76,7 @@ def toolBestSkill(argTool, char, toolSkillMap):
   else:
     return None, None
 
+#Function to return the player's best choice for check #3
 def skillBestSkill(char, checkThreeMap):
   skillName=""
   skillMod=""
@@ -86,6 +89,7 @@ def skillBestSkill(char, checkThreeMap):
       skillMod = checkThreeMap[skillKey]
   return  skillMod, skillName
 
+#Helper function...
 def getCrimeInfo(argCrime, target, crimeMap):
   crimeKey = findBestMatch(crimeMap, argCrime)
   if crimeKey is not None:
@@ -100,7 +104,7 @@ def getCrimeInfo(argCrime, target, crimeMap):
     return None, None, None, None, None
 
 
-
+#knall ty this is very nice
 def findBestMatch(lookupMap, keyArgument):
   bestMatch = None
   for curKey in lookupMap.keys():
@@ -111,6 +115,7 @@ def findBestMatch(lookupMap, keyArgument):
         return None
   return bestMatch
 
+#separate bonuses from gp from other bonuses
 def getInvestBonus(arg):
   if '+' in arg:
     investB = arg.find('+')
@@ -121,6 +126,7 @@ def getInvestBonus(arg):
   else:
     return int(arg),None
 
+#Helper function to make sure the player is spending their gold correctly!
 def validateInvest(gp,b1,b2,b3):
   gpMax=(gp-25)/25*2
   if (b1%2) > 0 or (b2%2) > 0 or (b3%2) > 0:
@@ -152,18 +158,18 @@ defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activiti
   **__Crime Names:__** `{availableCrimes}`
   
   **__Valid Arguments__**
-  **`-tool '<Tool>'`** One of: `{availableTools}`
-  **`-gp X`** How much gold you're spending on investigation Min 25, Max 250. 
+  ** *`-tool '<Tool>'`** One of: `{availableTools}`
+  ** *`-gp X`** How much gold you're spending on investigation Min 25, Max 250. 
   For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
-  **`-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses your character has go here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
-  **`-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses your character has go here as well.
-  **`-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses go here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
-  **`prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
-  **`inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
-  **`-rel`** = if you have Reliable Talent.
+  ** *`-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
+  ** *`-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well.
+  ** *`-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
+  ** *`prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  ** *`inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
+  ** *`-rel`** = if you have Reliable Talent.
   """
 
 if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
@@ -242,7 +248,7 @@ b3Invest, b3Bonus = getInvestBonus(b3[0]) if b3 else [0,0]
 
 #Error Catching
 if not gpSpent or gpSpent<25:
-  return f' -title "Error: Cheapskate" -desc "You must spend *at least* 25gp gathering information on potential targets before committing the indended crime."'
+  return f' -title "Error: Cheapskate" -desc "You must spend *at least* 25gp gathering information on potential targets before committing the intended crime."'
 if gpSpent%25>0 or gpSpent>250:
   return f' -title "Error: You\'re wasting money." -desc "You\'re trying to spend {gpSpent}gp. Please make sure you spend in increments of 25gp and no more than 250gp. You\'re wasting money otherwise. "'
 if (errorCode:=validateInvest(gpSpent,b1Invest,b2Invest,b3Invest))<0: ##ERROR

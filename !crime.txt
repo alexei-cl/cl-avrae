@@ -31,13 +31,34 @@ attMap = {
 }
 
 toolSkillMap = {
-    'Forgery Kit':      ["CHA","DEX","INT"],
-    'Thief\'s Tools':   ["DEX","INT","WIS"],
-    'Disguise Kit':     ["CHA","DEX","INT","CON"],
-    'Poisoner\'s Kit':  ["CON","DEX","INT"],
+  'Forgery Kit':      ["CHA","DEX","INT"],
+  'Thief\'s Tools':   ["DEX","INT","WIS"],
+  'Disguise Kit':     ["CHA","DEX","INT","CON"],
+  'Poisoner\'s Kit':  ["CON","DEX","INT"],
 }
+availableTools = ', '.join(toolSkillMap.keys())
+
+checkThreeMap = {
+  'Investigation': 'INT',
+  'Perception': 'WIS',
+  'Athletics': 'STR',
+  'Deception': 'CHA',
+}
+availableSkills = ', '.join(checkThreeMap.keys())
+
 
 availableTools = ', '.join(toolSkillMap.keys())
+
+def toolBestSkillAll(char, toolSkillMap): #overloaded for if no choice
+  toolName="uwu"
+  max_mod = -5
+  for toolKey in toolSkillMap:
+    for stat in toolSkillMap[toolKey]:
+      mod_value = char.stats.get_mod(stat)
+      if mod_value > max_mod:
+        max_mod = mod_value
+        toolName = toolKey
+  return stat, toolName
 
 def toolBestSkill(argTool, char, toolSkillMap):
   toolKey = findBestMatch(toolSkillMap, argTool)
@@ -45,32 +66,40 @@ def toolBestSkill(argTool, char, toolSkillMap):
     toolInfo = toolSkillMap[toolKey]
     max_mod = -5
     for stat in toolInfo:
-      mod_value = char.stats.get_mod(stat)
+      mod_value = char.stats.get_mod(attMap[stat])
       if mod_value > max_mod:
         max_mod = mod_value
-        useState = stat
-    return useStat, jobKey
+        useStat = stat
+    return useStat, toolKey
   else:
-    return None, None, None
+    return None, None
+
+def skillBestSkill(char, checkThreeMap):
+  skillName=""
+  skillMod=""
+  max_mod = -5
+  for skillKey in checkThreeMap:
+    mod_value = char.skills[skillKey.lower()].value
+    if mod_value > max_mod:
+      max_mod = mod_value
+      skillName = skillKey
+      skillMod = checkThreeMap[skillKey]
+  return  skillMod, skillName
 
 def getCrimeInfo(argCrime, target, crimeMap):
   crimeKey = findBestMatch(crimeMap, argCrime)
   if crimeKey is not None:
-    crimeInfo     = crimeMap[crimeKey] #DICT
-    crimeDC       = crimeInfo['DC']
-    crimePayout   = crimeInfo['PayoutFine']
-    crimeLong     = crimeInfo['LongDesc']
-    crimeJail       = crimeInfo['JailTime']
-    jobValue = jobInfo['jobValue']
-    max_mod = -5
-    for stat in jobInfo['jobStats']:
-      mod_value = target.stats.get_mod(stat)
-      if mod_value > max_mod:
-        max_mod = mod_value
-        useStat = stat
-    return jobValue, useStat, toolKey
+    crimeInfo     = crimeMap[crimeKey]      #SafeDict
+    crimeDC       = crimeInfo['DC']         #int
+    crimePayout   = crimeInfo['PayoutFine'] #int
+    crimeLong     = crimeInfo['LongDesc']   #int
+    crimeJail     = crimeInfo['JailTime']   #int
+    
+    return crimeInfo,crimeDC,crimePayout,crimeLong,crimeJail
   else:
-    return None, None, None
+    return None, None, None, None, None
+
+
 
 def findBestMatch(lookupMap, keyArgument):
   bestMatch = None
@@ -82,6 +111,29 @@ def findBestMatch(lookupMap, keyArgument):
         return None
   return bestMatch
 
+def getInvestBonus(arg):
+  if '+' in arg:
+    investB = arg.find('+')
+    return int(arg[:investB]), arg[investB:]
+  elif '-' in arg:
+    investB = arg.find('-')
+    return int(arg[:investB]), arg[investB:]
+  else:
+    return int(arg),None
+
+def validateInvest(gp,b1,b2,b3):
+  gpMax=(gp-25)/25*2
+  if (b1%2) > 0 or (b2%2) > 0 or (b3%2) > 0:
+    return -4
+  elif b1>6 or b2>6 or b3>6:
+    return -1 #-1 -> Max bonus is +6 to one roll
+  elif b1+b2+b3>gpMax:
+    return -2 #-2 -> Total bonus is too big for the amount spent
+  elif b1+b2+b3 < gpMax:
+    return -3 #-3 -> Total bonus is too big for the amount spent
+  else:
+    return 0
+
 # Command format: `!crime "<Crime Name>" -tool "<Tool>" -gp "<Info Fee>" -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
 
 # Time calculations
@@ -91,8 +143,8 @@ CurTime = int(time())                           #get current time
 busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
 
 args = &ARGS&
-if True or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)): # Early out for help
-  desc = f"""{ctx.alias.title()} is a tool for committing criminal activities
+
+defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activities
   
   **__Usage__**: 
   `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
@@ -108,25 +160,204 @@ if True or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0]
   **`-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
   Add any other downtime-applicable bonuses your character has go here as well.
   **`-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses go here as well added after your investigation bonus. i.e. `0+1d4` for Mark of Warding investigation.
+  Add any other downtime-applicable bonuses go here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
   **`prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
-  **`invest/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
+  **`inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
   **`-rel`** = if you have Reliable Talent.
   """
-  return f"""embed -title "Looking for a fight?" -desc "{desc}" """
 
+if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
+  desc = defaultDesc
+  return f"""embed -title "Looking to do something *bad*?" -desc "{desc}" """
+
+####################################
+####################################
+##                                ##
+## PROCESS AND VALIDATE ARGUMENTS ##
+##                                ##
+####################################
+####################################
+                
+ ##################################
+##     Argument 1: Crime Type     ##
+ ##################################
 argCrime = args[0]
-args = argparse(args)               # Parse the remaining arguments
-toolName = args.get('tool',' ')
+
+ch = character()
+
+#Get Crime Type!
+crimeInfo, crimeDC, crimePayout, crimeLong, crimeJail = getCrimeInfo(argCrime, ch, crimeMap)
+
+#Early Out -> No Crime Selected
+if crimeInfo is None:
+  return f'-title "Error: unknown <CrimeName>" -desc "**Use:** `{availableCrimes}`"'
+
+args = argparse(args,parse_ephem=False)               # Parse the remaining arguments
+
+ ##################################
+##            tool/prof            ##
+ ##################################
+
+#tool proficiency
+prof=0
+if 'prof' in args:
+  prof=1
+elif 'exp' in args:
+  prof=2
+
+ ##################################
+##     Argument 2: -tool Type     ##
+ ##################################
+
+toolName = args.get('tool',None)
+
+if not toolName:
+  toolStat,toolName = toolBestSkillAll(ch, toolSkillMap)
+  if prof > 0: #You can't just say you're proficient and NOT give a tool
+    return f'-title "Error: Tool you have Proficiency with not provided." -desc "**Use:** `{availableTools}`"'
+else:
+  toolName=toolName[0] #unlist
+  toolStat,toolName= toolBestSkill(toolName, ch, toolSkillMap)
+
+if toolName is None: #Should not ever be None
+  return f'-title "Error: Unknown Tool {toolName}{toolStat}" -desc "**Use:** `{availableTools}`"'
+
+ #######################################
+## Argument 3+4: -gp and -b ephemerals ##
+ #######################################
+ 
+#Parse gp args
 gpSpent = args.get('gp',' ')
-b1Invest=args.get('b1',' ').split('+')[0] #should probably use a match-> +/- in case someone has a NEGATIVE crime modifier for robustness
-b2Invest=args.get('b2',' ').split('+')[0]
-b3Invest=args.get('b3',' ').split('+')[0]
+gpSpent = int(gpSpent[0]) if typeof(gpSpent)=='SafeList' else 0
 
-b1Bonus = args.get('b1',' ')[b1.invest.len:]
-b2Bonus = args.get('b2',' ')[b2.invest.len:]
-b3Bonus = args.get('b3',' ')[b3.invest.len:]
+#Parse -b args
+b1=args.get('b1')
+b2=args.get('b2')
+b3=args.get('b3')
 
+#Check if they're adding some extra bonuses a la Dragonmarks
+b1Invest, b1Bonus = getInvestBonus(b1[0]) if b1 else [0,0]
+b2Invest, b2Bonus = getInvestBonus(b2[0]) if b2 else [0,0]
+b3Invest, b3Bonus = getInvestBonus(b3[0]) if b3 else [0,0]
+
+#Error Catching
+if not gpSpent or gpSpent<25:
+  return f' -title "Error: Cheapskate" -desc "You must spend *at least* 25gp gathering information on potential targets before committing the indended crime."'
+if gpSpent%25>0 or gpSpent>250:
+  return f' -title "Error: You\'re wasting money." -desc "You\'re trying to spend {gpSpent}gp. Please make sure you spend in increments of 25gp and no more than 250gp. You\'re wasting money otherwise. "'
+if (errorCode:=validateInvest(gpSpent,b1Invest,b2Invest,b3Invest))<0: ##ERROR
+  if errorCode == -4:
+    return f' -title "Error: You\'re being a little *odd*?" -desc "You get bonuses in increments of **`+2`** for spending gp.\nYou tried to give yourself\n**__Roll 1:__ `+{b1Invest}`**\n**__Roll 2:__ `+{b2Invest}`**\n**__Roll 3__: `+{b3Invest}`**\nYou can see why this is a little odd, right?"'
+  if errorCode == -3:
+    return f' -title "Error: Give yourself more credit" -desc "You\'re trying to add a total of **`+{b1Invest+b2Invest+b3Invest}`** to your skill checks from gp spent.\nYou can get up to a total of **`+{int((gpSpent-25)/25*2)}`** spread out among all three.\nIf you\'re spending the money, get the bonus!" '
+  elif errorCode == -2:
+    return f' -title "Error: Feeling overconfident?" -desc "You\'re trying to add a total of **`+{int(b1Invest+b2Invest+b3Invest)}`** to your skill checks from gp spent.\nYou can get up to a total of **`+{int((gpSpent-25)/25*2)}`** spread out among all three.\nMake sure not to give yourself more than you\'ve paid for!" '
+  elif errorCode == -1:
+    return f' -title "Error: Spread the Love?" -desc "You can only get a total of +6 to one roll from gp spent casing targets. You tried to give yourself\n**__Roll 1__:`+{b1Invest}`**\n**__Roll 2:__ `+{b2Invest}`**\n**__Roll 3:__ `+{b3Invest}`**"'
+
+
+ #######################################
+## Argument 5: Check 3 skill           ##
+ #######################################
+
+skillThree=""
+skillThreeMod=""
+if 'inv' in args:
+  skillThree='Investigation'
+  skillThreeMod='INT'
+elif 'perc' in args:
+  skillThree='Perception'
+  skillThreeMod='WIS'
+elif 'ath' in args:
+  skillThree='Athletics'
+  skillThreeMod='STR'
+elif 'dec' in args:
+  skillThree='Deception'
+  skillThreeMod='CHA'
+else:
+  skillThreeMod,skillThree=skillBestSkill(ch,checkThreeMap)
 
 argAdv = args.adv(boolwise=True)    # Check if advantage is present
                                     # Should figure out handling for specific advantage situations...
+
+stealthMod = character().skills['stealth'].value
+
+
+####################################
+####################################
+##                                ##
+##         MAKE YA ROLLS          ##
+##                                ##
+####################################
+####################################
+
+## Roll 1 - Stealth ##
+
+if args.get('rel') and ch.skills['stealth'].prof>0:
+  useDice = f"{ch.skills['stealth'].d20(ch.skills['stealth'].adv, None, 10, None)}"
+else:
+  useDice = f"{ch.skills['stealth'].d20(ch.skills['stealth'].adv, None, None, None)}"
+roll1 = vroll(f"{useDice}{f'+{b1Invest}[gp bonus]' if b1 else ''}{f'{b1Bonus}[misc bonus]' if b1Bonus else ''}")
+
+## Roll 2 - Tool! ##
+
+if args.get('rel') and prof>0:
+  useDice = f"{ch.skills[attMap[toolStat]].d20(ch.skills[attMap[toolStat]].adv, None, 10, None)}"
+else:
+  useDice = f"{ch.skills[attMap[toolStat]].d20(ch.skills[attMap[toolStat]].adv, None, None, None)}"
+roll2 = vroll(f"{useDice}{f'+{ch.stats.prof_bonus * prof }[prof]'}{f'+{b2Invest}[gp bonus]' if b2 else ''}{f'{b2Bonus}[misc bonus]' if b2Bonus else ''}")
+
+## Roll 3 - Skill of choice! ##
+
+if args.get('rel') and ch.skills[skillThree.lower()].prof>0:
+  useDice = f"{ch.skills[skillThree.lower()].d20(ch.skills[skillThree.lower()].adv, None, 10, None)}"
+else:
+  useDice = f"{ch.skills[skillThree.lower()].d20(ch.skills[skillThree.lower()].adv, None, None, None)}"
+roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b2 else ''}{f'{b3Bonus}[misc bonus]' if b2Bonus else ''}")
+
+## Determine Success!
+
+crimeSuccess = 0
+if roll1.total >= crimeDC: crimeSuccess = crimeSuccess +1
+if roll2.total >= crimeDC: crimeSuccess = crimeSuccess +1
+if roll3.total >= crimeDC: crimeSuccess = crimeSuccess +1
+
+
+outTitle = (f'Crime <t:{CurTime}:D> - <t:{busyTime}:D>')
+
+outField1=f"__Check 1 - Dexterity(Stealth)__|**DC** {crimeDC}\n" + \
+         (f"**Check** {roll1}\n") + \
+        ((f":white_check_mark: *Success*") if roll1.total >= crimeDC else ":x: *no success*\n")
+
+outField2=f"__Check 2 - {attMap[toolStat].title()}({toolName})__|**DC** {crimeDC} \n" + \
+         (f"**Check** {roll2}\n") + \
+        ((f":white_check_mark: *Success*") if roll2.total >= crimeDC else ":x: *no success*\n")
+
+outField3=f"__Check 3 - {attMap[checkThreeMap[skillThree]].title()}({skillThree})__|**DC** {crimeDC}\n" + \
+         (f"**Check** {roll3}\n") + \
+        ((f":white_check_mark: *Success*") if roll3.total >= crimeDC else ":x: *no success*\n")
+
+
+
+outDescr = (f'\n**Character:** {ch.name}') +  \
+           (f'\n**Successes:** {str(crimeSuccess)} / 3')
+
+match crimeSuccess:
+  case 3:
+    outDescr+=(f'\n**Complete Success:** **`{str(crimePayout)}`** gp gained\n**Net Profit**: **`{crimePayout-gpSpent}`** gp')
+  case 2:
+    outDescr+=(f'\n**Partial Success:** **`{int(crimePayout/2*100)/100}`** gp gained\n**Net Profit**: **`{int(crimePayout/2*100)/100-gpSpent}`** gp')
+  case 1:
+    outDescr+=(f'\n**You got away...** Lose your initial investment of **`{gpSpent}`** gp')
+  case 0:
+    outDescr+=(f'\n**You got caught...!** Lose your initial investment of **`{gpSpent}`** gp\nEither pay the fine of **`{crimePayout}`** gp or spend **`{crimeJail}`** days in jail!')
+
+nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
+
+return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
+
+
+</drac2>
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}}"

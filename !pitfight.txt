@@ -48,7 +48,7 @@ def pitfightroll(useSkill, rollMod=""):
   else:
     useDice = f"{ch.skills[useSkill].d20(None, None, None, None)}"
 
-  return vroll(f'{useDice}+{(ch.stats.prof_bonus * ch.skills[useSkill].prof)}[prof]{f"{rollMod}"}{f"+{argBonus}" if argBonus else ""}')
+  return vroll(f'{useDice}{f"{rollMod}"}{f"+{argBonus}" if argBonus else ""}')
       
 def getWeapons(char):                           #   Takes a character, spits out a SafeDict of all of their avrae automations (!a) that involve an attack roll.
     weaponAttacks = {}                          #   Can't really think of an easy tway to filter weapon attacks vs. spell attacks 

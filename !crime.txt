@@ -3,8 +3,8 @@ embed
 
 crimeMap = {
   'Con':                      {'DC':10, 'PayoutFine':50,   'LongDesc':"run a street con",                                                 'JailTime':2},
-  'Robbery':                  {'DC':10, 'PayoutFine':50,   'LongDesc':"make and sell minor drugs",                                        'JailTime':2},
-  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"rob some suckers",                                                          'JailTime':2},
+  'Robbery':                  {'DC':10, 'PayoutFine':50,   'LongDesc':"rob some suckers",                                        'JailTime':2},
+  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"make and sell minor drugs",                                                          'JailTime':2},
   'Grave Robbing':            {'DC':15, 'PayoutFine':100,  'LongDesc':"rob some graves",                                                    'JailTime':4},
   'Forgery':                  {'DC':15, 'PayoutFine':100,  'LongDesc':"make and sell counterfeits or forgery",                            'JailTime':4},
   'Blackmail':                {'DC':15, 'PayoutFine':100,  'LongDesc':"gather up some blackmail",                                                        'JailTime':4},
@@ -33,8 +33,10 @@ attMap = {
 toolSkillMap = {
   'Forgery Kit':      ["CHA","DEX","INT"],
   'Thief\'s Tools':   ["DEX","INT","WIS"],
+  'Thiefs Tools':   ["DEX","INT","WIS"],
   'Disguise Kit':     ["CHA","DEX","INT","CON"],
   'Poisoner\'s Kit':  ["CON","DEX","INT"],
+  'Poisoners Kit':  ["CON","DEX","INT"],
 }
 availableTools = ', '.join(toolSkillMap.keys())
 
@@ -215,7 +217,7 @@ elif 'exp' in args:
 ##     Argument 2: -tool Type     ##
  ##################################
 
-toolName = args.get('tool',None)
+toolName = args.get('tool',None).replace(Char(39),'')
 
 if not toolName:
   toolStat,toolName = toolBestSkillAll(ch, toolSkillMap)

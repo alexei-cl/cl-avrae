@@ -33,9 +33,9 @@ attMap = {
 toolSkillMap = {
   'Forgery Kit':      ["CHA","DEX","INT"],
   'Thief\'s Tools':   ["DEX","INT","WIS"],
-  'Thiefs Tools':   ["DEX","INT","WIS"],
+  #'Thiefs Tools':   ["DEX","INT","WIS"],
   'Thieves\' Tools':   ["DEX","INT","WIS"],
-  'Thieves Tools':   ["DEX","INT","WIS"],
+  #'Thieves Tools':   ["DEX","INT","WIS"],
   'Disguise Kit':     ["CHA","DEX","INT","CON"],
   'Poisoner\'s Kit':  ["CON","DEX","INT"],
   'Poisoners Kit':  ["CON","DEX","INT"],
@@ -112,11 +112,11 @@ def getCrimeInfo(argCrime, target, crimeMap):
 def findBestMatch(lookupMap, keyArgument):
   bestMatch = None
   for curKey in lookupMap.keys():
-    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+    if curKey.lower().replace("'",'').startswith(keyArgument.lower().replace("'",'')): # leftside match
       if bestMatch is None:
         bestMatch = curKey
       else:
-        return None
+        return bestMatch
   return bestMatch
 
 #separate bonuses from gp from other bonuses
@@ -219,14 +219,14 @@ elif 'exp' in args:
 ##     Argument 2: -tool Type     ##
  ##################################
 
-toolName = args.get('tool',None).replace(Char(39),'')
+toolName = args.get('tool',None)
 
 if not toolName:
   toolStat,toolName = toolBestSkillAll(ch, toolSkillMap)
   if prof > 0: #You can't just say you're proficient and NOT give a tool
     return f'-title "Error: Tool you have Proficiency with not provided." -desc "**Use:** `{availableTools}`"'
 else:
-  toolName=toolName[0] #unlist
+  toolName=toolName[0].replace("'",'') #unlist
   toolStat,toolName= toolBestSkill(toolName, ch, toolSkillMap)
 
 if toolName is None: #Should not ever be None

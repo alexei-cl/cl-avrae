@@ -34,6 +34,8 @@ toolSkillMap = {
   'Forgery Kit':      ["CHA","DEX","INT"],
   'Thief\'s Tools':   ["DEX","INT","WIS"],
   'Thiefs Tools':   ["DEX","INT","WIS"],
+  'Thieves\' Tools':   ["DEX","INT","WIS"],
+  'Thieves Tools':   ["DEX","INT","WIS"],
   'Disguise Kit':     ["CHA","DEX","INT","CON"],
   'Poisoner\'s Kit':  ["CON","DEX","INT"],
   'Poisoners Kit':  ["CON","DEX","INT"],

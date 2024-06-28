@@ -70,7 +70,7 @@ def findBestMatch(lookupMap, keyArgument):
       if bestMatch is None:
         bestMatch = curKey
       else:
-        return None
+        return curKey
   return bestMatch
 
 def maxHitDieCalc(ch): #moving to function for weapon replacement

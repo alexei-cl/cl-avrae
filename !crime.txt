@@ -183,7 +183,7 @@ defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activiti
   ** * `-b2 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your second check.
   ** * `-b3 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your third check.
   
-  __Example__: `!crime Con -gp 50 -b1 2`
+  __Example__: `!{ctx.alias.title()} Con -gp 50 -b1 2`
   """
 
 verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
@@ -216,7 +216,7 @@ verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
   ** * `lucky`** if you are a Halfling who rerolls nat 1s
   ** * `indom`** if you are a level 18 Barbarian
   ** * `elo`** if you are an Eloquence Bard
-  * __Example__: `!crime Con -gp 50 -tool thief -b1 2 rel`
+  * __Example__: `!{ctx.alias.title()} Con -gp 50 -tool thief -b1 2 rel`
   """
 
 if '-v' in args:
@@ -364,7 +364,7 @@ d20Dict = {
 if ('halfling' in character().race.lower()) or 'lucky' in args:
   for key in d20Dict:
     d20Dict[key].update({'reroll':1})
-  miscNotes+=f'\n"{character().name} rerolls Nat 1s due to being a {character().race}"'
+  miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}'
 
 ## Check for advantage in avrae
 

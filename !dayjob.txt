@@ -101,6 +101,7 @@ if '-v' in args: # Early out for help
   ** * `lucky`** if you are a halfling
   ** * `royal`** if you are a Royal Mothfolk
   ** * `indom`** if you are a level 18 barbarian
+  ** __Example:__ `!{ctx.alias.title()} callig rel adv`**
   """
   return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
 
@@ -114,7 +115,7 @@ if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0
   ** * `-v`** To see advanced arguments
   ** * `-exp`** = if you have Expertise in this Job.
   ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
-  **
+  ** __Example:__ `!{ctx.alias.title()} callig`**
   """
   return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
 

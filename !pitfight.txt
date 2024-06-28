@@ -41,6 +41,7 @@ CurTime = int(time())                           #get current time
 busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
 
 
+## TBH need to bring this out of a function, or move reliable talent INTO a function
 def pitfightroll(useSkill, rollMod=""):
   # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
   if (args.get('rel') and ch.skills[useSkill].prof >0):
@@ -49,6 +50,8 @@ def pitfightroll(useSkill, rollMod=""):
     useDice = f"{ch.skills[useSkill].d20(None, None, None, None)}"
 
   return vroll(f'{useDice}{f"{rollMod}"}{f"+{argBonus}" if argBonus else ""}')
+
+
       
 def getWeapons(char):                           #   Takes a character, spits out a SafeDict of all of their avrae automations (!a) that involve an attack roll.
     weaponAttacks = {}                          #   Can't really think of an easy tway to filter weapon attacks vs. spell attacks 
@@ -178,10 +181,14 @@ if weapon:
 # get highest Hit Die
 maxHitDie = maxHitDieCalc(ch)
 
-# Roll DCs
+##############
+## Roll DCs ##
+##############
+
 DC1 = vroll("2d10+5")
 DC2 = vroll("2d10+5")
 DC3 = vroll("2d10+5")
+weapDC=None
 match replaceWhichRoll:
   case 1:
     weapDC = DC1
@@ -190,18 +197,108 @@ match replaceWhichRoll:
   case 3:
     weapDC = DC3
 
-# Skill Rolls
+useWeapRoll = "1d20"
+
+#################
+## Skill Rolls ##
+#################
+
+d20Dict = {
+    'Roll 1':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 3':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 2':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+}
+miscNotes=''
+
+## Halfling Lucky ##
+if ('halfling' in character().race.lower()) or 'lucky' in args:
+  for key in d20Dict:
+    d20Dict[key].update({'reroll':1})
+  miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}'
+  useWeapRoll +="ro1" ##Halfling Luck applies to attack rolls
+
+## Advantage ##
+if 'adv' in &ARGS&:
+  d20Dict['Roll 1'].update({'adv':True})
+  d20Dict['Roll 2'].update({'adv':True})
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on all of their rolls (Player passed the **`adv`** argument)'
+else:
+  if 'adv1' in &ARGS&:
+    d20Dict['Roll 1'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their Athletics (Strength) roll (Player passed the **`adv1`** argument)'
+  if 'adv2' in &ARGS&:
+    d20Dict['Roll 2'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their Acrobatics (Dexterity) roll (Player passed the **`adv2`** argument)'
+  if 'adv3' in &ARGS&:
+    d20Dict['Roll 3'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their Constitution Roll (Player passed the **`adv3`** argument)'
+
+if character().skills['athletics'].adv:
+  d20Dict['Roll 1'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Athletics (Strength) rolls for some reason (Set in Avrae)'
+
+if character().skills['acrobatics'].adv:
+  d20Dict['Roll 2'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Acrobatics (Dexterity) rolls for some reason (Set in Avrae)'
+
+if character().skills['constitution'].adv:
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Constitution rolls for some reason (Set in Avrae)'
+
+## Reliable Talents ##
+
+# Rogue #
+if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
+  if ch.skills['athletics'].prof > 0:
+    d20Dict['Roll 1'].update({'min_val':10})
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Athletics rolls due to Rogue\'s Reliable Talent'
+  if ch.skills['acrobatics'].prof > 0:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Acrobatics rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 2'].update({'min_val':10})
+  if ch.skills['constitution'].prof > 0:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Constitution rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 3'].update({'min_val':10})
+
+# Barbarian #
+if character().levels.get('Barbarian')>=18 or 'indom' in args: #Imdomitable Might
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on Athletics rolls due to Barbarian\'s Indomitable Might'
+  d20Dict['Roll 1'].update({'min_val':character().stats.strength})
+  
+if miscNotes:
+  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
+
+
+
+roll1= vroll( f"{ch.skills['athletics'].d20(d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}")
+roll2= vroll(f"{ch.skills['acrobatics'].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}")
+roll3= vroll(f"{ch.skills['constitution'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}+1d{maxHitDie}")
+
+
+
 weapRoll = vroll("1d20+"+charWeapBonus)
-roll1 = pitfightroll('athletics')
-roll2 = pitfightroll('acrobatics')
-roll3 = pitfightroll('constitution', '+1d' + maxHitDie)
 
 match replaceWhichRoll:
   case 1:
+    if d20Dict['Roll 1']['adv']:
+      useWeapRoll+='kh1'
+    elif d20Dict['Roll 1']['adv']==False:
+      useWeapRoll+='kl1'
+    weapRoll = vroll(useWeapRoll+charWeapBonus)
     roll1= weapRoll
   case 2:
+    if d20Dict['Roll 3']['adv']:
+      useWeapRoll+='kh1'
+    elif d20Dict['Roll 3']['adv']==False:
+      useWeapRoll+='kl1'
+    weapRoll = vroll(useWeapRoll+charWeapBonus)
     roll2 = weapRoll
   case 3:
+    if d20Dict['Roll 3']['adv']:
+      useWeapRoll+='kh1'
+    elif d20Dict['Roll 3']['adv']==False:
+      useWeapRoll+='kl1'
+    weapRoll = vroll(useWeapRoll+charWeapBonus)
     roll13 = weapRoll
 
 pitfightSuccess = 0
@@ -230,7 +327,7 @@ outField3 += (f'\n{":white_check_mark: *Success*" if roll3.total >= DC3.total el
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
-return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
+return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}"'
 </drac2>
 
 -thumb <image>

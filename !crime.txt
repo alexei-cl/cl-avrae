@@ -213,8 +213,9 @@ verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
   ** * `adv1` / `adv2` / `adv3`** To specify certain checks to have advantage
   ** * `rel`** if you have Reliable Talent 
   ** * `royal`** if you are a Royal Mothfolk
-  ** * `indom`** if you are a a level 18 Barbarian
-  
+  ** * `lucky`** if you are a Halfling who rerolls nat 1s
+  ** * `indom`** if you are a level 18 Barbarian
+  ** * `elo`** if you are an Eloquence Bard
   * __Example__: `!crime Con -gp 50 -tool thief -b1 2 rel`
   """
 
@@ -360,10 +361,10 @@ d20Dict = {
 }
 
 ## Check for Halfling; don't think there are ANY other reroll nat 1 features that workin downtime
-if 'halfling' in character().race.lower():
+if ('halfling' in character().race.lower()) or 'lucky' in args:
   for key in d20Dict:
     d20Dict[key].update({'reroll':1})
-  miscNotes+=f' -f "{character().name} rerolls Nat 1s due to being a {character().race}"'
+  miscNotes+=f'\n"{character().name} rerolls Nat 1s due to being a {character().race}"'
 
 ## Check for advantage in avrae
 
@@ -381,7 +382,7 @@ if character().skills[skillThree.lower()].adv:
   
 
 
-#adv1, adv2, adv3
+# adv, adv1, adv2, adv3
 
 if 'adv' in args:
   d20Dict['Roll 1'].update({'adv':True})
@@ -399,6 +400,10 @@ else:
     d20Dict['Roll 3'].update({'adv':True})
     miscNotes+=f'\n{character().name} has advantage their {skillThree} ({attMap[skillThreeMod]}) Roll (Player passed the **`adv3`** argument)'
 
+
+## Reliable Talents ##
+
+## Rogue ##
 if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
   if ch.skills['stealth'].prof > 0:
     d20Dict['Roll 1'].update({'min_val':10})
@@ -410,11 +415,12 @@ if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: 
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 3'].update({'min_val':10})
 
+# Barbarian Indomitable Might #
 if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): #Imdomitable Might
   miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
   d20Dict['Roll 3'].update({'min_val':character().stats.strength})
 
-#royal mothfolk -> handle with an argument
+# Royal Mothfolk #
 if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
   if 'CHA' in toolStat and prof > 0:
     miscNotes+=f'\n"{character().name} cannot roll below a {5} on {attMap[skillThree]} ({toolName}) rolls due to being a {character().race}'
@@ -422,6 +428,11 @@ if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in chara
   if 'Deception' in skillThree and ch.skills[skillThree.lower()].prof > 0:
     miscNotes+=f'\n{character().name} cannot roll below a {5} on {skillThree} rolls due to being a {character().race}'
     d20Dict['Roll 3'].update({'min_val':5})
+
+# Eloquence Bard Silver Tongue #
+if skillThree == 'Deception' and ( 'elo' in args): #Silver Tongue
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
+  d20Dict['Roll 3'].update({'min_val':10})
 
 if miscNotes:
   miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'

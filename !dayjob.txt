@@ -86,6 +86,24 @@ def getJobMultiplier(dayjobRoll):
 
 
 args = &ARGS&
+if '-v' in args: # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `adv`** if you roll with advantage
+  ** * `rel`** if you have reliable talent
+  ** * `lucky`** if you are a halfling
+  ** * `royal`** if you are a Royal Mothfolk
+  ** * `indom`** if you are a level 18 barbarian
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+
 if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0] in x) : # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
   `{ctx.prefix+ctx.alias} <JobName> [args]`
@@ -93,10 +111,10 @@ if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0
   **JobName:** `{availableJobs}`
 
   **__Valid Arguments__**
-  **`-adv`** = if you have advantage.
-  **`-rel`** = if you have Reliable Talent.
-  **`-exp`** = if you have Expertise in this Job.
-  **`-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  **
   """
   return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
 
@@ -105,6 +123,7 @@ args = argparse(args)               # Parse the remaining arguments
 targetName = args.get('char', name) # Get the specified target name, defaults to yourself
 argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
 argAdv = args.adv(boolwise=True)    # Check if advantage is present
+miscNotes=''
 
 if (targetName == name):
   target = character()
@@ -113,14 +132,40 @@ else:
   ##target = character(f"{targetName}")   # Try to find the character with the specified name
 
 jobValue, useStat, useJobName = getJobInfo(argDayjob, target, jobInfoMap)
+
+## Check for adv in avrae ##
+if 'adv' in args:
+  miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
+elif character().skills[attMap[useStat]].adv:
+  argAdv = True
+  miscNotes+=f'\n{character().name} has advantage on all {useStat} rolls for some reason (Set in Avrae)'
+
+#Reroll nat1
+if 'halfling' in character().race.lower() or 'lucky' in args:
+  reroll=1
+  miscNotes+=f'\n"{character().name} rerolls Nat 1s due to being a {character().race}"'
+
 if jobValue is None:
   return f'-title "Error: unknown <JobName>" -desc "**Use:** `{availableJobs}`"'
 
+argRel=None
+reroll=None
+
 # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
-if (args.get('rel')):
-  useDice = f"{target.skills[attMap[useStat]].d20(argAdv, None, 10, None)}"
-else:
-  useDice = f"{target.skills[attMap[useStat]].d20(argAdv, None, None, None)}"
+if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
+  argRel=10
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
+elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
+  argRel = character().stats.strength
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
+  argRel = 5
+  miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+
+if miscNotes:
+  miscNotes = '-f "**__Misc Notes:__**'+miscNotes+'"'
+
+useDice = f"{target.skills[attMap[useStat]].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
 
 if (args.get('exp')):
   dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
@@ -139,7 +184,7 @@ outDescr = (f'\n**Character:** {target.name}') +  \
 		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n')
 
 
-return f'-title "{outTitle}" -desc "{outDescr}"'
+return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes}'
 </drac2>
 
 -thumb <image>

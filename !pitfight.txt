@@ -54,14 +54,16 @@ def pitfightroll(useSkill, rollMod=""):
 
       
 def getWeapons(char):                           #   Takes a character, spits out a SafeDict of all of their avrae automations (!a) that involve an attack roll.
-    weaponAttacks = {}                          #   Can't really think of an easy tway to filter weapon attacks vs. spell attacks 
-    for attack in char.attacks:                 #   I'm thinking '-w "<Weapon Name>"' as a passable argument? Should be easy to pull the weapon/attack bonus from this function's returned value
-        try:                                    #   We could then dynamically determine which roll should be replaced 
-            if 'attackBonus' in attack.raw.get('automation')[0].get('effects')[0]:
-                weaponAttacks[attack.raw['name']] = {'name':attack.raw['name'],'attackBonus': attack.raw.get('automation')[0].get('effects')[0].get('attackBonus')}
-        except:
-            pass
-    return weaponAttacks
+  weaponAttacks = {}                          #   Can't really think of an easy tway to filter weapon attacks vs. spell attacks 
+  for attack in char.attacks:                 #   I'm thinking '-w "<Weapon Name>"' as a passable argument? Should be easy to pull the weapon/attack bonus from this function's returned value
+    try:                                    #   We could then dynamically determine which roll should be replaced 
+      if 'Attack' in str(attack):
+        abIndexMin = str(attack).find('Attack')+7
+        abIndexMax = str(attack).find('to hit')-1
+        weaponAttacks[attack.raw['name']] = {'name':attack.raw['name'],'attackBonus': roll(str(attack)[abIndexMin:abIndexMax].replace(" ","").replace("+",""))}
+    except:
+      pass
+  return weaponAttacks
 
 def findBestMatch(lookupMap, keyArgument):
   bestMatch = None
@@ -284,21 +286,21 @@ match replaceWhichRoll:
       useWeapRoll+='kh1'
     elif d20Dict['Roll 1']['adv']==False:
       useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+charWeapBonus)
+    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll1= weapRoll
   case 2:
     if d20Dict['Roll 3']['adv']:
       useWeapRoll+='kh1'
     elif d20Dict['Roll 3']['adv']==False:
       useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+charWeapBonus)
+    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll2 = weapRoll
   case 3:
     if d20Dict['Roll 3']['adv']:
       useWeapRoll+='kh1'
     elif d20Dict['Roll 3']['adv']==False:
       useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+charWeapBonus)
+    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll13 = weapRoll
 
 pitfightSuccess = 0

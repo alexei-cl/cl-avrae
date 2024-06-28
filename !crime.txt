@@ -354,10 +354,10 @@ stealthMod = character().skills['stealth'].value
 miscNotes=''
 
 d20Dict = {
-    'Dummy':    {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
-    'Roll 1':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
-    'Roll 3':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
-    'Roll 2':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Dummy':    {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 1':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 3':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 2':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
 }
 
 ## Check for Halfling; don't think there are ANY other reroll nat 1 features that workin downtime

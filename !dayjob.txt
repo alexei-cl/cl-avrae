@@ -10,7 +10,7 @@ busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activit
 
 jobInfoMap = {
   'Alchemist':     {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
-  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
   'Calligrapher':  {'jobValue': 30, 'jobStats': ["INT", "DEX", "CHA"]},
   'Carpenter':     {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
   'Cartographer':  {'jobValue': 30, 'jobStats': ["INT", "DEX"]},

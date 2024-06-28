@@ -19,7 +19,7 @@ crimeMap = {
   'Fraud':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"commit insurance fraud or tax evasion",                                      'JailTime':40},
 }
 
-availableCrimes = ', '.join(crimeMap.keys())
+availableCrimes = ', '.join(crimeMap.keys()) #For help Messages
 
 attMap = {
   'STR':  'strength',
@@ -31,16 +31,21 @@ attMap = {
 }
 
 toolSkillMap = {
-  'Forgery Kit':      ["CHA","DEX","INT"],
-  'Thief\'s Tools':   ["DEX","INT","WIS"],
-  #'Thiefs Tools':   ["DEX","INT","WIS"],
-  'Thieves\' Tools':   ["DEX","INT","WIS"],
-  #'Thieves Tools':   ["DEX","INT","WIS"],
-  'Disguise Kit':     ["CHA","DEX","INT","CON"],
-  'Poisoner\'s Kit':  ["CON","DEX","INT"],
+  'Forgery Kit':        ["CHA","DEX","INT"],
+  'Thieves\' Tools':    ["DEX","INT","WIS"],
+  'Thief\'s Tools':     ["DEX","INT","WIS"],
+  'Thiefs Tools':      ["DEX","INT","WIS"],
+  'Thieves Tools':     ["DEX","INT","WIS"],
+  'Disguise Kit':       ["CHA","DEX","INT","CON"],
+  'Poisoner\'s Kit':    ["CON","DEX","INT"],
   'Poisoners Kit':  ["CON","DEX","INT"],
 }
-availableTools = ', '.join(toolSkillMap.keys())
+availableTools = ', '.join(toolSkillMap.keys()) #For help Messages
+
+availableTools.replace('Thiefs Tools, ',  '') #I'm evil and don't want to encourage people to use these spellings in help messages, even if I'll accept them as arguments.
+availableTools.replace('Thieves Tools, ', '')
+availableTools.replace('Thief\'s Tools, ','')
+
 
 checkThreeMap = {
   'Investigation': 'INT',
@@ -73,6 +78,8 @@ def toolBestSkill(argTool, char, toolSkillMap):
     max_mod = -5
     for stat in toolInfo:
       mod_value = char.stats.get_mod(attMap[stat])
+      if char.skills[attMap[stat].lower()].adv: #advantage is equivalent to roughly +4-5
+        mod_value+=4
       if mod_value > max_mod:
         max_mod = mod_value
         useStat = stat
@@ -87,6 +94,8 @@ def skillBestSkill(char, checkThreeMap):
   max_mod = -5
   for skillKey in checkThreeMap:
     mod_value = char.skills[skillKey.lower()].value
+    if char.skills[skillKey.lower()].adv: #advantage is equivalent to roughly +4-5
+        mod_value+=4
     if mod_value > max_mod:
       max_mod = mod_value
       skillName = skillKey
@@ -160,21 +169,57 @@ defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activiti
   `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
 
   **__Crime Names:__** `{availableCrimes}`
-
-  **__Valid Arguments__**
-  ** *`-tool '<Tool>'`** One of: `{availableTools}`
-  ** *`-gp X`** How much gold you're spending on investigation Min 25, Max 250.
+  
+  **__Required Arguments__**
+  ** * `-gp X`** How much gold you're spending on investigation Min 25, Max 250.
   For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
-  ** *`-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses your character has here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
-  ** *`-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses your character has here as well.
-  ** *`-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
-  Add any other downtime-applicable bonuses here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
-  ** *`prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
-  ** *`inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
-  ** *`-rel`** = if you have Reliable Talent.
+  
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-tool '<Tool>'`** One of: `{availableTools}`
+  ** * `prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  **Avrae does not track tool proficiencies, so you have to supply this yourself.**
+  ** * `-b1 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your first check.
+  ** * `-b2 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your second check.
+  ** * `-b3 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your third check.
+  
+  __Example__: `!crime Con -gp 50 -b1 2`
   """
+
+verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
+
+  **__Usage__**:
+  `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+
+  **__Crime Names:__** `{availableCrimes}`
+  
+  **__Required Arguments__**
+  ** * `-gp X`** How much gold you're spending on investigation Min 25, Max 250.
+  For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
+  
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-tool '<Tool>'`** One of: `{availableTools}`
+  ** * `prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  **Avrae does not track tool proficiencies, so you have to supply this yourself.**
+  ** * `-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
+  ** * `-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well.
+  ** * `-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
+  ** * `inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
+  ** * `adv`** If you have advantage on ALL your checks (Such as from Foresight)
+  ** * `adv1` / `adv2` / `adv3`** To specify certain checks to have advantage
+  ** * `rel`** if you have Reliable Talent 
+  ** * `royal`** if you are a Royal Mothfolk
+  ** * `indom`** if you are a a level 18 Barbarian
+  
+  * __Example__: `!crime Con -gp 50 -tool thief -b1 2 rel`
+  """
+
+if '-v' in args:
+  return f"""embed -title "Looking to do something *bad*?" -desc "{verbose}" """
 
 if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
   desc = defaultDesc
@@ -301,28 +346,104 @@ stealthMod = character().skills['stealth'].value
 ####################################
 ####################################
 
+######################################
+## Checking for Reliable talent Etc ##
+######################################
+
+miscNotes=''
+
+d20Dict = {
+    'Dummy':    {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 1':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 3':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 2':   {'adv':bool(None),   'reroll':None, 'min_val':None,   'mod_override':None},
+}
+
+## Check for Halfling; don't think there are ANY other reroll nat 1 features that workin downtime
+if 'halfling' in character().race.lower():
+  for key in d20Dict:
+    d20Dict[key].update({'reroll':1})
+  miscNotes+=f' -f "{character().name} rerolls Nat 1s due to being a {character().race}"'
+
+## Check for advantage in avrae
+
+if character().skills['stealth'].adv:
+  d20Dict['Roll 1'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Stealth (Dexterity) rolls for some reason (Set in Avrae)'
+
+if character().skills[attMap[toolStat]].adv:
+  d20Dict['Roll 2'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on {attMap[toolStat]} rolls for some reason (Set in Avrae)'
+
+if character().skills[skillThree.lower()].adv:
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on {skillThree} ({attMap[checkThreeMap[skillThree]]}) rolls for some reason (Set in Avrae)'
+  
+
+
+#adv1, adv2, adv3
+
+if 'adv' in args:
+  d20Dict['Roll 1'].update({'adv':True})
+  d20Dict['Roll 2'].update({'adv':True})
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on all of their rolls (Player passed the **`adv`** argument)'
+else:
+  if 'adv1' in args:
+    d20Dict['Roll 1'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their Stealth (Dexterity) roll (Player passed the **`adv1`** argument)'
+  if 'adv2' in args:
+    d20Dict['Roll 2'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their {toolName} ({attMap[toolStat]}) roll (Player passed the **`adv2`** argument)'
+  if 'adv3' in args:
+    d20Dict['Roll 3'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their {skillThree} ({attMap[skillThreeMod]}) Roll (Player passed the **`adv3`** argument)'
+
+if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
+  if ch.skills['stealth'].prof > 0:
+    d20Dict['Roll 1'].update({'min_val':10})
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
+  if prof>0:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {toolName} rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 2'].update({'min_val':10})
+  if ch.skills[skillThree.lower()].prof > 0:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 3'].update({'min_val':10})
+
+if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): #Imdomitable Might
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
+  d20Dict['Roll 3'].update({'min_val':character().stats.strength})
+
+#royal mothfolk -> handle with an argument
+if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
+  if 'CHA' in toolStat and prof > 0:
+    miscNotes+=f'\n"{character().name} cannot roll below a {5} on {attMap[skillThree]} ({toolName}) rolls due to being a {character().race}'
+    d20Dict['Roll 2'].update({'min_val':5})
+  if 'Deception' in skillThree and ch.skills[skillThree.lower()].prof > 0:
+    miscNotes+=f'\n{character().name} cannot roll below a {5} on {skillThree} rolls due to being a {character().race}'
+    d20Dict['Roll 3'].update({'min_val':5})
+
+if miscNotes:
+  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
+
+#return miscNotes
+
 ## Roll 1 - Stealth ##
 
-if args.get('rel') and ch.skills['stealth'].prof>0:
-  useDice = f"{ch.skills['stealth'].d20(ch.skills['stealth'].adv, None, 10, None)}"
-else:
-  useDice = f"{ch.skills['stealth'].d20(ch.skills['stealth'].adv, None, None, None)}"
-roll1 = vroll(f"{useDice}{f'+{b1Invest}[gp bonus]' if b1 else ''}{f'{b1Bonus}[misc bonus]' if b1Bonus else ''}")
+useDice = f"{ch.skills['stealth'].d20( d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}"
+
+roll1 = vroll(f"{useDice}{f'+{b1invest}[gp bonus]' if b1 else ''}{f'{b1bonus}[misc bonus]' if b1Bonus else ''}")
 
 ## Roll 2 - Tool! ##
 
-if args.get('rel') and prof>0:
-  useDice = f"{ch.skills[attMap[toolStat]].d20(ch.skills[attMap[toolStat]].adv, None, 10, None)}"
-else:
-  useDice = f"{ch.skills[attMap[toolStat]].d20(ch.skills[attMap[toolStat]].adv, None, None, None)}"
+useDice = f"{ch.skills['stealth'].d20( d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}"
+
 roll2 = vroll(f"{useDice}{f'+{ch.stats.prof_bonus * prof }[prof]'}{f'+{b2Invest}[gp bonus]' if b2 else ''}{f'{b2Bonus}[misc bonus]' if b2Bonus else ''}")
 
 ## Roll 3 - Skill of choice! ##
 
-if args.get('rel') and ch.skills[skillThree.lower()].prof>0:
-  useDice = f"{ch.skills[skillThree.lower()].d20(ch.skills[skillThree.lower()].adv, None, 10, None)}"
-else:
-  useDice = f"{ch.skills[skillThree.lower()].d20(ch.skills[skillThree.lower()].adv, None, None, None)}"
+useDice = f"{ch.skills['stealth'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
+
 roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b2 else ''}{f'{b3Bonus}[misc bonus]' if b2Bonus else ''}")
 
 ## Determine Success!
@@ -366,7 +487,7 @@ match crimeSuccess:
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
-return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" -f " \n{nextFreetime}"'
+return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}"'
 
 
 </drac2>

@@ -443,7 +443,7 @@ if miscNotes:
 
 useDice = f"{ch.skills['stealth'].d20( d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}"
 
-roll1 = vroll(f"{useDice}{f'+{b1invest}[gp bonus]' if b1 else ''}{f'{b1bonus}[misc bonus]' if b1Bonus else ''}")
+roll1 = vroll(f"{useDice}{f'+{b1Invest}[gp bonus]' if b1 else ''}{f'{b1bonus}[misc bonus]' if b1Bonus else ''}")
 
 ## Roll 2 - Tool! ##
 

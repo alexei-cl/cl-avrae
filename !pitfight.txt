@@ -251,7 +251,7 @@ if character().skills['constitution'].adv:
 ## Reliable Talents ##
 
 # Rogue #
-if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
+if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: add `rel`
   if ch.skills['athletics'].prof > 0:
     d20Dict['Roll 1'].update({'min_val':10})
     miscNotes+=f'\n{character().name} cannot roll below a 10 on Athletics rolls due to Rogue\'s Reliable Talent'

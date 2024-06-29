@@ -61,6 +61,8 @@ def getJobInfo(argDayjob, target, jobInfoMap):
     max_mod = -5
     for stat in jobInfo['jobStats']:
       mod_value = target.stats.get_mod(stat)
+      if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
+      if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
       if mod_value > max_mod:
         max_mod = mod_value
         useStat = stat
@@ -153,12 +155,15 @@ argRel=None
 reroll=None
 
 # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
-if 'rel' in args or character().levels.get('Rogue')>=10: #reliable talent TODO: add `rel`
+if 'rel' in args or character().levels.get('Rogue')>10: #reliable talent TODO: add `rel`
   argRel=10
   miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
+
+##Else because 18 barb cannot be also be a 10 rogue
 elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
   argRel = character().stats.strength
   miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+##Royal Mothfolk
 elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
   argRel = 5
   miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
@@ -168,7 +173,7 @@ if miscNotes:
 
 useDice = f"{target.skills[attMap[useStat]].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
 
-if (args.get('exp')):
+if (args.get('exp')) or 'exp' in &ARGS&:
   dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
 else:
   dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')

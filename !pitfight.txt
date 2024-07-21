@@ -115,6 +115,28 @@ def replaceWhich(character, ab, wn):           #Given an attack bonus from a wea
     return 0                 # attackBonus <= con <= acr <= ath; why'd you build your character like this?
 
 args = &ARGS&
+
+verbose= f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
+  `{ctx.prefix+ctx.alias} [args]`
+
+  **__Valid Arguments__**.
+  **`-w "<Weapon>"`** = to replace your worst pitfighting roll with a single weapon attack. Weapon must be equiped/usable through avrae.
+  ** `-wn <1-3>`** = to override which roll is replaced with a weapon attack. No argument->your worst roll will be replaced if your weapon is better 
+  (Con-> Replaced if Weapon Attack Bonus > Con Mod+AvgHitDieRoll)
+  ** * `-v`** To see advanced arguments
+  
+  __**Advanced Arguments**__
+  ** * `adv`** If you have advantage on ALL your checks (Such as from Foresight)
+  ** * `adv1` / `adv2` / `adv3` / `advW` ** To specify certain checks to have advantage on Ability Checks 1/2/3 or your Weapon Attack roll
+  ** * `rel`** if you have Reliable Talent 
+  ** * `lucky`** if you are a Halfling who rerolls nat 1s
+  ** * `indom`** if you are a level 18 Barbarian
+  """
+  
+if '-v' in args:
+  return f"""embed -title "Looking for a fight?" -desc "{verbose}" """
+
+
 if (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
   `{ctx.prefix+ctx.alias} [args]`
@@ -209,6 +231,7 @@ d20Dict = {
     'Roll 1':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
     'Roll 3':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
     'Roll 2':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll W':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
 }
 miscNotes=''
 
@@ -224,17 +247,21 @@ if 'adv' in &ARGS&:
   d20Dict['Roll 1'].update({'adv':True})
   d20Dict['Roll 2'].update({'adv':True})
   d20Dict['Roll 3'].update({'adv':True})
+  d20Dict['Roll W'].update({'adv':True})
   miscNotes+=f'\n{character().name} has advantage on all of their rolls (Player passed the **`adv`** argument)'
 else:
   if 'adv1' in &ARGS&:
     d20Dict['Roll 1'].update({'adv':True})
-    miscNotes+=f'\n{character().name} has advantage their Athletics (Strength) roll (Player passed the **`adv1`** argument)'
+    miscNotes+=f'\n{character().name} has advantage on their Athletics (Strength) roll (Player passed the **`adv1`** argument)'
   if 'adv2' in &ARGS&:
     d20Dict['Roll 2'].update({'adv':True})
-    miscNotes+=f'\n{character().name} has advantage their Acrobatics (Dexterity) roll (Player passed the **`adv2`** argument)'
+    miscNotes+=f'\n{character().name} has advantage on their Acrobatics (Dexterity) roll (Player passed the **`adv2`** argument)'
   if 'adv3' in &ARGS&:
     d20Dict['Roll 3'].update({'adv':True})
-    miscNotes+=f'\n{character().name} has advantage their Constitution Roll (Player passed the **`adv3`** argument)'
+    miscNotes+=f'\n{character().name} has advantage on their Constitution Roll (Player passed the **`adv3`** argument)'
+  if 'advW' in &ARGS&:
+    d20Dict['Roll W'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage on their Weapon Attack Roll (Player passed the **`advW`** argument)'
 
 if character().skills['athletics'].adv:
   d20Dict['Roll 1'].update({'adv':True})
@@ -276,31 +303,14 @@ roll1= vroll( f"{ch.skills['athletics'].d20(d20Dict['Roll 1']['adv'], d20Dict['R
 roll2= vroll(f"{ch.skills['acrobatics'].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}")
 roll3= vroll(f"{ch.skills['constitution'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}+1d{maxHitDie}")
 
-
-
-weapRoll = vroll("1d20+"+charWeapBonus)
+weapRoll = vroll((("2d20kh1+") if d20Dict['Roll W']['adv'] else ("1d20+")) +charWeapBonus)
 
 match replaceWhichRoll:
   case 1:
-    if d20Dict['Roll 1']['adv']:
-      useWeapRoll+='kh1'
-    elif d20Dict['Roll 1']['adv']==False:
-      useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll1= weapRoll
   case 2:
-    if d20Dict['Roll 3']['adv']:
-      useWeapRoll+='kh1'
-    elif d20Dict['Roll 3']['adv']==False:
-      useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll2 = weapRoll
   case 3:
-    if d20Dict['Roll 3']['adv']:
-      useWeapRoll+='kh1'
-    elif d20Dict['Roll 3']['adv']==False:
-      useWeapRoll+='kl1'
-    weapRoll = vroll(useWeapRoll+"+"+charWeapBonus)
     roll13 = weapRoll
 
 pitfightSuccess = 0

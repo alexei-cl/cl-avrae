@@ -155,7 +155,7 @@ argRel=None
 reroll=None
 
 # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
-if 'rel' in args or character().levels.get('Rogue')>10: #reliable talent TODO: add `rel`
+if 'rel' in args or character().levels.get('Rogue')>11: #reliable talent TODO: add `rel`
   argRel=10
   miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
 

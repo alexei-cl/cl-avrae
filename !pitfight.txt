@@ -311,7 +311,7 @@ match replaceWhichRoll:
   case 2:
     roll2 = weapRoll
   case 3:
-    roll13 = weapRoll
+    roll3 = weapRoll
 
 pitfightSuccess = 0
 if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1

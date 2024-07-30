@@ -78,6 +78,8 @@ def toolBestSkill(argTool, char, toolSkillMap):
     max_mod = -5
     for stat in toolInfo:
       mod_value = char.stats.get_mod(attMap[stat])
+      if 'CHA' in stat and 'ogl' in args:
+        mod_value += char.stats.get_mod(attMap['WIS'])
       if char.skills[attMap[stat].lower()].adv: #advantage is equivalent to roughly +4-5
         mod_value+=4
       if mod_value > max_mod:
@@ -381,6 +383,7 @@ if character().skills[skillThree.lower()].adv:
   miscNotes+=f'\n{character().name} has advantage on {skillThree} ({attMap[checkThreeMap[skillThree]]}) rolls for some reason (Set in Avrae)'
   
 
+d20Dict['Roll 2'].update({'mod_override':get(f'{attMap[toolStat].lower()}Mod')})
 
 # adv, adv1, adv2, adv3
 
@@ -430,9 +433,22 @@ if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in chara
     d20Dict['Roll 3'].update({'min_val':5})
 
 # Eloquence Bard Silver Tongue #
-if skillThree == 'Deception' and ( 'elo' in args): #Silver Tongue
-  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
-  d20Dict['Roll 3'].update({'min_val':10})
+if skillThree == 'Deception':
+  d20Dict['Roll 3'].update({'mod_override':get('charismaMod')})
+  if 'elo' in args: #Silver Tongue
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Eloquence Bard\'s Silver Tongue!'
+    d20Dict['Roll 3'].update({'min_val':10})
+  if 'ogl' in args: #Otherworldly Glamor
+    miscNotes+=f'\n{character().name} adds their Wisdom modifier **`+{get("wisdomMod")}`** to Charisma ({skillThree}) Ability Checks due to Fey Wanderer Ranger\'s Otherworldly Glamour'
+    newMod = int(d20Dict['Roll 3'].get('mod_override'))+int(get('wisdomMod'))+ int( get('proficiencyBonus') * ch.skills['deception'].prof )
+    d20Dict['Roll 3'].update({'mod_override':newMod})
+
+if 'ogl' in args:
+  if 'CHA' in toolStat:
+    d20Dict['Roll 2'].update( {'mod_override':get('charismaMod')} )
+    miscNotes+=f'\n{character().name} adds their Wisdom modifier **`+{get("wisdomMod")}`** to Charisma ({toolName}) Ability Checks due to Fey Wanderer Ranger\'s Otherworldly Glamour'
+    newMod = d20Dict['Roll 2'].get('mod_override')+get('wisdomMod')
+    d20Dict['Roll 2'].update({'mod_override':newMod})
 
 if miscNotes:
   miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
@@ -447,13 +463,13 @@ roll1 = vroll(f"{useDice}{f'+{b1Invest}[gp bonus]' if b1 else ''}{f'{b1bonus}[mi
 
 ## Roll 2 - Tool! ##
 
-useDice = f"{ch.skills['stealth'].d20( d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}"
+useDice = f"""{'2' if d20Dict['Roll 2']['adv'] else '1'}d20{'kh1'if d20Dict['Roll 2']['adv'] else ''}{'ro1' if d20Dict['Roll 2']['reroll'] else ''}{f"mi{d20Dict['Roll 2']['min_val']}'" if d20Dict['Roll 2']['min_val'] else ''} + {d20Dict['Roll 2']['mod_override']}"""
 
 roll2 = vroll(f"{useDice}{f'+{ch.stats.prof_bonus * prof }[prof]'}{f'+{b2Invest}[gp bonus]' if b2 else ''}{f'{b2Bonus}[misc bonus]' if b2Bonus else ''}")
 
 ## Roll 3 - Skill of choice! ##
 
-useDice = f"{ch.skills['stealth'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
+useDice = f"{ch.skills[skillThree.lower()].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
 
 roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b2 else ''}{f'{b3Bonus}[misc bonus]' if b2Bonus else ''}")
 

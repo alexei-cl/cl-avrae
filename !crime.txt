@@ -65,10 +65,13 @@ def toolBestSkillAll(char, toolSkillMap):
   for toolKey in toolSkillMap:
     for stat in toolSkillMap[toolKey]:
       mod_value = char.stats.get_mod(stat)
+      if stat == 'CHA' and 'ogl' in args:
+        mod_value+=char.stats.get_mod("WIS")
       if mod_value > max_mod:
         max_mod = mod_value
         toolName = toolKey
-  return stat, toolName
+        finalStat=stat
+  return finalStat, toolName
 
 #Choose which stat to use with the selected tool
 def toolBestSkill(argTool, char, toolSkillMap):
@@ -421,8 +424,8 @@ if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: 
 # Barbarian Indomitable Might #
 if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): #Imdomitable Might
   miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
-  d20Dict['Roll 3'].update({'min_val':character().stats.strength})
 
+  d20Dict['Roll 3'].update({'min_val':character().stats.strength})
 # Royal Mothfolk #
 if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
   if 'CHA' in toolStat and prof > 0:

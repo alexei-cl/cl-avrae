@@ -69,8 +69,8 @@ def toolBestSkillAll(char, toolSkillMap):
         mod_value+=char.stats.get_mod("WIS")
       if mod_value > max_mod:
         max_mod = mod_value
+        finalStat = stat
         toolName = toolKey
-        finalStat=stat
   return finalStat, toolName
 
 #Choose which stat to use with the selected tool

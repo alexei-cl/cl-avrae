@@ -437,11 +437,11 @@ if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in chara
 
 # Eloquence Bard Silver Tongue #
 if skillThree == 'Deception':
-  d20Dict['Roll 3'].update({'mod_override':get('charismaMod')})
   if 'elo' in args: #Silver Tongue
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Eloquence Bard\'s Silver Tongue!'
     d20Dict['Roll 3'].update({'min_val':10})
   if 'ogl' in args: #Otherworldly Glamor
+    d20Dict['Roll 3'].update({'mod_override':get('charismaMod')})
     miscNotes+=f'\n{character().name} adds their Wisdom modifier **`+{get("wisdomMod")}`** to Charisma ({skillThree}) Ability Checks due to Fey Wanderer Ranger\'s Otherworldly Glamour'
     newMod = int(d20Dict['Roll 3'].get('mod_override'))+int(get('wisdomMod'))+ int( get('proficiencyBonus') * ch.skills['deception'].prof )
     d20Dict['Roll 3'].update({'mod_override':newMod})

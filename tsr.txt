@@ -1,0 +1,71 @@
+<drac2>
+def getWeapons(char):
+  a = {}
+  for d in char.attacks:
+    try:
+      if 'Attack' in str(d):
+        b = str(d).find('Attack')+7
+        c = str(d).find('to hit')-1
+        a[d.raw['name']] = {'name':d.raw['name'],'attackBonus': roll(str(d)[b:c].replace(" ","").replace("+",""))}
+    except:
+      pass
+  return a
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()):
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return curKey
+  return bestMatch
+  
+ch=character()
+weapons=getWeapons(ch)
+chosenWeap=findBestMatch(getWeapons(ch),&ARGS&[0])
+varName=chosenWeap
+
+if typeof(chosenWeap)=='str':
+  varName=''.join(char for char in chosenWeap if char.isalnum())
+else:
+  varName=''.join(char for char in &ARGS&[0] if char.isalnum())
+  
+args = argparse(&ARGS&)
+
+out=''
+
+mod=args.get('tsr')
+errMsg=f"""-title "**Use `!a {chosenWeap} -ts <ability score>` to set up True Strike for this weapon**" """
+
+if 'True' in mod:
+  if (ch.get_cvar("ts"+varName)):
+    mod=ch.get_cvar("ts"+varName)
+  else:
+    return errMsg
+else:
+  mod=mod[0]
+  for stat in ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']:
+    if mod[0] in stat:
+      mod = stat
+      ch.set_cvar('ts'+varName,val=stat)
+      out+= f' -f "**True Strike Stat for {chosenWeap} set to {mod}**|You should now be good to use this weapon with `-ts` by itself!|inline" '
+      break
+  if not out:
+    if (ch.get_cvar('ts'+varName)):
+      i=ch.get_cvar('ts'+varName)
+    else:
+      return errMsg
+
+modVal = ch.stats.get_mod(mod)
+
+out+=f'-b "-{modVal}[{mod}]+{spell}[spell attack mod]" '
+out+=f'-d "-{modVal}+{spell}" '
+if level >4:
+ out+=f"""-d \"{'1d6' if level < 11 else '2d6' if level < 17 else '3d6'}[radiant]\" """
+out+=f""" -f \"True Strike|Guided by a flash of magical insight, you make one attack with the weapon used in the spell’s casting. The attack uses your spellcasting ability for the attack and damage rolls instead of using Strength or Dexterity. If the attack deals damage, it can be Radiant damage or the weapon’s normal damage type (your choice).
+
+***Cantrip Upgrade***. Whether you deal Radiant damage or the weapon’s normal damage type, the attack deals extra Radiant damage when you reach levels 5 (1d6), 11 (2d6), and 17 (3d6)|inline\" """
+out+=f'-title "{ch.name} attacks with a {chosenWeap} using True Strike!" '
+out+=f'-dtype "radiant" '
+return out
+</drac2>

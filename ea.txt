@@ -1,38 +1,46 @@
-<drac2>
-def getWeapons(char):
-  a = {}
-  for d in char.attacks:
-    try:
-      if 'Attack' in str(d):
-        b = str(d).find('Attack')+7
-        c = str(d).find('to hit')-1
-        a[d.raw['name']] = {'name':d.raw['name'],'attackBonus': roll(str(d)[b:c].replace(" ","").replace("+",""))}
-    except:
-      pass
-  return a
-def findBestMatch(lookupMap, keyArgument):
-  bestMatch = None
-  for curKey in lookupMap.keys():
-    if curKey.lower().startswith(keyArgument.lower()):
-      if bestMatch is None:
-        bestMatch = curKey
-      else:
-        return curKey
-  return bestMatch
-  
-ch=character()
-weapons=getWeapons(ch)
-chosenWeap=findBestMatch(getWeapons(ch),&ARGS&[0])
-varName=chosenWeap
+!snippet ea <drac2>
 
-if typeof(chosenWeap)=='str':
-  varName=''.join(char for char in chosenWeap if char.isalnum())
-else:
-  varName=''.join(char for char in &ARGS&[0] if char.isalnum())
-  
+ch=character()
 args = argparse(&ARGS&)
 
-out=''
+damageTypes = ['acid','cold','fire','lightning','thunder','necrotic','radiant','force','psychic']
+prefix="Elemental"
+out=' '
+
+if 'True' in args.get('ea'):
+  return f'-f "{Prefix} Adept Error|Please use `-ea <damage type>`|\nValid damage types: `{""" """.join(str(x) for x in damageTypes}`"'
+else:
+  dType=args.get('ea')[0]
+  for x in damageTypes:
+    if dType in x:
+      dType=x
+      if dType in ['necrotic','radiant','force','psychic']:
+        prefix="Mystic"
+      break
+  return f'-f "{Prefix} Adept Error|Damage type not found. Please use: `-ea <damage type>`\nValid damage types: `{out.join(str(x) for x in damageTypes}`"'
+
+vuln=[]
+immune=[]
+resist=[]
+
+if combat():
+  if args.get('t'):
+  targets=args.get('t')
+  targets= [x for x in targets if combat().get_combatant(x)]
+  safe_to_neutral = True
+  for x in targets:
+    if combat.get_combatant(x).resistances.is_vulnerable(dType):
+      safe_to_neutral=False
+    if combat.get_combatant(x).resistances.is_immune(dType):
+      safe_to_neutral=False
+  if:
+  else:
+    out+=f' -mi 2 '
+    out+=f' -f "Elemental Adept: '
+else:
+  out+=f" -mi 2 "
+  out+=f"
+
 
 spellMod=0
 

@@ -527,11 +527,15 @@ outField3=f"__Check 3 - {attMap[checkThreeMap[skillThree]].title()}({skillThree}
 outDescr = (f'\n**Character:** {ch.name}') +  \
            (f'\n**Successes:** {str(crimeSuccess)} / 3')
 
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
 match crimeSuccess:
   case 3:
-    outDescr+=(f'\n**Complete Success:** **`{str(crimePayout)}`** gp gained\n**Net Profit**: **`{crimePayout-gpSpent}`** gp')
+    outDescr+=(f'\n**Complete Success:** **`{str(crimePayout)}` \* Tier {tier} --> `{crimePayout*tier}`** gp gained\n**Net Profit**: **`{crimePayout*tier-gpSpent}`** gp')
+    outDescr+=(f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
   case 2:
-    outDescr+=(f'\n**Partial Success:** **`{int(crimePayout/2*100)/100}`** gp gained\n**Net Profit**: **`{int(crimePayout/2*100)/100-gpSpent}`** gp')
+    outDescr+=(f'\n**Partial Success:** **`{int(crimePayout/2*100)/100}` \* Tier {tier} --> `{int(crimePayout/2*100)/100*tier}`** gp gained\n**Net Profit**: **`{int(crimePayout/2*100)/100*tier-gpSpent}`** gp')
+    outDescr+=(f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
   case 1:
     outDescr+=(f'\n**You got away...** Lose your initial investment of **`{gpSpent}`** gp')
   case 0:
@@ -539,7 +543,7 @@ match crimeSuccess:
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
-return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}"'
+return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}" -f "-# Problems with this alias? Ping the developer \@alexei"'
 
 
 </drac2>

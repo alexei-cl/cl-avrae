@@ -320,10 +320,13 @@ if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
 
 pitfightEarning = pitEarningMap[str(pitfightSuccess)]
 
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
 outTitle = (f'Pit Fighting <t:{CurTime}:D> - <t:{busyTime}:D>')
 outDescr = (f'\n**Character:** {ch.name}') +  \
            (f'\n**Successes:** {str(pitfightSuccess)} / 3') +  \
-           (f'\n**Winnings:** {str(pitfightEarning)} gp')
+           (f'\n**Winnings:** {str(pitfightEarning)} * Tier {tier} --> **{pitfightEarning * tier }gp**!') +  \
+           (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
 
 
 weaponField = (f'__Check {replaceWhichRoll} - Weapon Attack - {charWeaponName}__|**Target** {weapDC} \n **Attack Roll** {weapRoll}')
@@ -339,7 +342,7 @@ outField3 += (f'\n{":white_check_mark: *Success*" if roll3.total >= DC3.total el
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
 
-return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}"'
+return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}" -f "-# Problems with this alias? Ping the developer \@alexei"'
 </drac2>
 
 -thumb <image>

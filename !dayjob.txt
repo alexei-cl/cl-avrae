@@ -155,9 +155,9 @@ argRel=None
 reroll=None
 
 # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
-if 'rel' in args or character().levels.get('Rogue')>11: #reliable talent TODO: add `rel`
+if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
   argRel=10
-  miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on roll with proficiency due to Rogue\'s Reliable Talent'
 
 ##Else because 18 barb cannot be also be a 10 rogue
 elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
@@ -182,15 +182,19 @@ multiplier = getJobMultiplier(dayjobRoll.total)
 dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece
 dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver and copper pieces is my understanding
 
+level=character().levels.total_level
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
 outTitle = (f'Dayjob')
 outDescr = (f'\n**Character:** {target.name}') +  \
            (f'\n**Job:** {useJobName} ({useStat})') +  \
            (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
-           (f'\n**Gold:** {jobValue} gp/Day --> **{dayjobEarning} gp**') +  \
+           (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
+           (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
 		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n')
 
 
-return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes}'
+return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei"'
 </drac2>
 
 -thumb <image>

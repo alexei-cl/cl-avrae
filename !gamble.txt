@@ -1,0 +1,622 @@
+embed
+<drac2>
+
+def generate_outcomes(num_dice,dice_sides):
+  outcomes=[[]]
+  for _ in range(num_dice):
+    new_outcomes = []
+    for outcome in outcomes:
+      for side in range(1,dice_sides+1):
+        new_outcomes.append(outcome + [side])
+    outcomes = new_outcomes
+  return outcomes
+  
+def getOddsRolls(dice_string,desired_result):
+  dice_string=dice_string.lower()
+  dice_index=dice_string.index('d')
+  num_dice=int(dice_string[:dice_index])
+  dice_sides=int(dice_string[dice_index+1:])
+  
+  possible_rolls = generate_outcomes(num_dice,dice_sides)
+  
+  total_outcomes = len(possible_rolls)
+  
+  successful_outcomes=0
+  for rollResult in possible_rolls:
+    if sum(rollResult) >= desired_result:
+     successful_outcomes+=1
+     
+  probability = successful_outcomes / total_outcomes
+  return probability
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+cheatDCMap= {
+    1:12,
+    2:15,
+    3:20
+}
+
+cheatBonusMap={
+    10:'2d4',
+    5:'1d4',
+    0:'+1',
+    -1:'0',
+    -5:'-1',
+    -10:'-2'
+}
+
+pitEarningMap = {
+    '0': -1.0,
+    '1': 0.5,
+    '2': 1.5,
+    '3': 2.0
+}
+
+# Time calculations
+downtime_days = 5                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+args=&ARGS&
+
+
+args = argparse(args)               # Parse the remaining arguments
+argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+weapon = args.join('w', ' ')        # If a Weapon is provided, log it
+weaponReplace = args.join('wn', ' ',)
+
+ch=character()
+
+
+helpString =f""" -title "Looking to make a quick buck?"
+                -f "**`{ctx.prefix}{ctx.alias}`** is a tool for automating the gambling downtime.
+                Basic Usase: 
+                ```{ctx.prefix}{ctx.alias} -stake <Amount you\'re wagering> [-odds <When you\'d like to cheat>]```"
+                
+                -f "__Required Argument__: `-stake`
+                This is the amount of money you\'re wagering! It have to be a number between 10 and 1000 (per [the gambling rules](<https://docs.google.com/spreadsheets/d/1Pf-sF7FV5JElrhPGqvOzfCA66RVyJIqnCO6GXtpqp6k/edit?gid=689702976#gid=689702976>)!)
+                
+                Example usage: If you want to wager 1,000gp, you\'d do:
+                ```{ctx.prefix}{ctx.alias} -stake```"
+                
+                -f "__But what if I want to play dirty?__
+                
+                If you want the ability to simulate actual gambling, to look at each roll and then decide to cheat? You\'re going to have to do downtime on your own.
+                
+                Instead, if you\'re willing to let Avrae decide, you can tell it how risky you\'re feeling with the optional `-odds`. You need to pass a decimal between 0 and 1, which represents how risky you\'re willing to be! Avrae will figure out how likely you are to succeed from cheating.
+                
+                For example, if you only want to cheat when doing so has a 75% chance of turning a failure into a success? You\'d want to use `0.75`. Or, something you can copy+paste:
+                
+                ```{ctx.prefix}{ctx.alias} -stake 1000 -odds 0.75```"
+                
+                -f "__Other Supported Subarguments__:
+                Add any of these on the *end* of your command as their own word! For example:
+                ```{ctx.prefix}{ctx.alias} -stake 1000 -odds 0.75 ogl```
+                * `ogl` - Fey Ranger\'s Wisdom mod to Charisma Checks\n
+                * `lukcky` If you\'re a halfing who rerolls all 1s\n
+                * `adv`/`adv1`/`adv2`/`adv3`/`advSleight` if you have advantage on all skills/insight/deception or persuasion/intimidate/sleight of hand checks (might be wonky for check 2)\n
+                * `rel` if you have Reliable Talent (it should pick up on this automatically unless you\'ve changed your class name away from rogue for some reasion)\n
+                * `royal` if you\'re using the [homebrew Royal Mothfolk\n race](<https://www.dndbeyond.com/races/1113626-mothfolk>)"
+                
+                -f "-# Do you have a weird niche feature this isn\'t covered? Tell me about it in https://discord.com/channels/938988968404451339/941139522400448582 and ping me @alexei"
+"""
+
+if ctx.channel.id == 946108279543713802:
+  helpString =f""" -title "Looking to make a quick buck?"
+                -f "**`{ctx.prefix}{ctx.alias}`** is a tool for automating the gambling downtime."
+                -f "It looks like you've used this in the #downtime-log channel. If you have questions about how to use this, would you mind trying this in https://discord.com/channels/938988968404451339/941139522400448582 first? Feel free to ping @alexei if you can't figure it out after reading the help message."
+                -f "This message will self destruct to avoid channel clutter in: <t:{CurTime+30}:R>"
+                -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!
+                -t 30
+"""
+
+stake=1000.00
+if args.get('stake') and args.get('stake'):
+  try:
+    stake = float(args.get('stake')[0])
+    if stake > 1000 or stake < 10:
+      return f""" -title "Error, your stake is not valid!"
+                -f "Please enter a number between 10 and 1000 which is how much money you're willing to bet."
+                -f "Example: `{ctx.prefix}{ctx.alias} -stake 1000`"
+                -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!"
+                """
+  except:
+    return f""" -title "Error, your stake is not valid!"
+                -f "Please enter a number between 10 and 1000 which is how much money you're willing to bet."
+                -f "Example: `{ctx.prefix}{ctx.alias} -stake 1000`"
+                -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!"
+                -f "This message will self destruct to avoid channel clutter in: <t:{CurTime+30}:R>"
+                -t 30
+                """
+    
+else:
+  return helpString
+  stake = 1000.00
+
+acceptableOdds = 0.85
+if args.get('odds') and args.get('odds') is not True:
+  try:
+    acceptableOdds = float(args.get('odds')[0])
+    if acceptableOdds >1 or acceptableOdds < 0:
+      return f""" -title "Error, your stake cheating odds not valid!"
+                -f "Please enter a number between 0 and 1 (decimal) representing when you'd like to try to cheat."
+                -f "For example, if you only want to cheat when cheating would have a {int(acceptableOdds*10000)/100}% chance of turning a failure into a success, you'd use `{acceptableOdds}`"
+                -f "Example: `{ctx.prefix}{ctx.alias} -odds {acceptableOdds}`"
+                -f "This message will self destruct to avoid channel clutter in: <t:{CurTime+30}:R>"
+                -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!"
+                -t 30
+                """
+  except:
+    return f""" -title "Error, your stake cheating odds not valid!"
+                -f "Please enter a number between 0 and 1 (decimal) representing when you'd like to try to cheat."
+                -f "For example, if you only want to cheat when cheating would have a {int(acceptableOdds*10000)/100}% chance of turning a failure into a success, you'd use `{acceptableOdds}`"
+                -f "Example: `{ctx.prefix}{ctx.alias} -odds {acceptableOdds}`"
+                -f "This message will self destruct to avoid channel clutter in: <t:{CurTime+30}:R>"
+                -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!"
+                -t 30
+                """
+else:
+  acceptableOdds = 1.0
+##############
+## Roll DCs ##
+##############
+
+DC1 = vroll("2d10+5")
+DC2 = vroll("2d10+5")
+DC3 = vroll("2d10+5")
+
+
+#################
+## Skill Rolls ##
+#################
+
+d20Dict = {
+    'Roll 1':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 3':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 2':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll W':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+}
+miscNotes=''
+
+skill2='persuasion'
+
+if (character().skills['deception'].value + (5 if character().skills['deception'].adv else 0 )) >= (character().skills['persuasion'].value + (5 if character().skills['persuasion'].adv else 0 )):
+  skill2='deception'
+
+## Otherworldly Glamour ##
+if 'ogl' in &ARGS&:
+  d20Dict['Roll 2'].update({'mod_override':(character().skills[skill2].value + max(character().stats.get_mod('wisdom'),1) ) })
+  d20Dict['Roll 3'].update({'mod_override':(character().skills['intimidation'].value + max(character().stats.get_mod('wisdom'),1) ) } )
+  
+  miscNotes+=f"""\n{character().name} adds their Wisdom Modifier (+{max(character().stats.get_mod("wisdom"),1) }) to Charisma Checks due to their Otherworldy Glamour!"""
+
+if ('halfling' in character().race.lower()) or 'lucky' in args:
+  for key in d20Dict:
+    d20Dict[key].update({'reroll':1})
+  miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}'
+  useWeapRoll +="ro1" ##Halfling Luck applies to attack rolls
+
+## Advantage ##
+if 'adv' in &ARGS&:
+  d20Dict['Roll 1'].update({'adv':True})
+  d20Dict['Roll 2'].update({'adv':True})
+  d20Dict['Roll 3'].update({'adv':True})
+  d20Dict['Roll W'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on all of their rolls (Player passed the **`adv`** argument)'
+else:
+  if 'adv1' in &ARGS&:
+    d20Dict['Roll 1'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage on their Athletics (Strength) roll (Player passed the **`adv1`** argument)'
+  if 'adv2' in &ARGS&:
+    d20Dict['Roll 2'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage on their Acrobatics (Dexterity) roll (Player passed the **`adv2`** argument)'
+  if 'adv3' in &ARGS&:
+    d20Dict['Roll 3'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage on their Constitution Roll (Player passed the **`adv3`** argument)'
+  if 'advW' in &ARGS&:
+    d20Dict['Roll W'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage on their Weapon Attack Roll (Player passed the **`advW`** argument)'
+
+if character().skills['insight'].adv:
+  d20Dict['Roll 1'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Insight (Wisdom) rolls for some reason (Set in Avrae)'
+
+if character().skills[skill2].adv:
+  d20Dict['Roll 2'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Acrobatics ({skill2.title()}) rolls for some reason (Set in Avrae)'
+
+if character().skills['intimidation'].adv:
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Constitution rolls for some reason (Set in Avrae)'
+
+## Reliable Talents ##
+
+#https://www.dndbeyond.com/races/1113626-mothfolk
+if (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
+  if ch.skills[skill2].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 5 on {skill2.title()} rolls due to being a [Royal Mothfolk](<#https://www.dndbeyond.com/races/1113626-mothfolk>)'
+    d20Dict['Roll 2'].update({'min_val':5})
+  if ch.skills['intimidation'].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 5 on Intimidation rolls due to being a [Royal Mothfolk](<#https://www.dndbeyond.com/races/1113626-mothfolk>)'
+    d20Dict['Roll 3'].update({'min_val':5})
+
+# Rogue #
+if 'rel' in args or character().levels.get('Rogue')>=7: #reliable talent TODO: add `rel`
+  if ch.skills['insight'].prof > 0.5:
+    d20Dict['Roll 1'].update({'min_val':10})
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Insight rolls due to Rogue\'s Reliable Talent'
+  if ch.skills[skill2].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {skill2.title()} rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 2'].update({'min_val':10})
+  if ch.skills['intimidation'].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Intimidation rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 3'].update({'min_val':10})
+
+
+if miscNotes:
+  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
+
+
+
+roll1= vroll( f"{ch.skills['insight'].d20(d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}")
+roll2= vroll(f"{ch.skills[skill2].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}")
+roll3= vroll(f"{ch.skills['persuasion'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}")
+
+cheats=1
+cheatNotes = ''
+pitfightSuccess = 0
+outField1 = (f"__Check 1 - WIS(Insight)__|**DC** {DC1} \n**Check** {roll1}\n")
+outField2 = (f"__Check 2 - CHA({skill2.title()})__|**DC** {DC2} \n**Check** {roll2}\n")
+outField3 = (f"__Check 3 - CHA(Intimidation)__|**DC** {DC3} \n**Check** {roll3}\n")
+
+#####        #####
+##### Roll 1 #####
+#####        #####
+
+if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1
+else: #Cheat Logic
+  cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
+  
+  cheatOddPlus2d4=getOddsRolls('1d20',cheatDC+10) #odds you'll get a 2d4
+  cheatOddPlus1d4=getOddsRolls('1d20',cheatDC+5) #odds you'll get a 1d4
+  cheatOddPlus1=getOddsRolls('1d20',cheatDC) #odds you'll get a +1
+  
+  dc_Diff = int(DC1.total) - roll1.total
+  
+  checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
+  checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
+  checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC1.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
+  
+  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  
+  miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
+  DC Differential: **{dc_Diff}**
+  Cheat Attempt: **{cheats}**
+  Effective Cheat DC (DC - Sleight Mod): **{cheatDC}**
+  Odds of Extreme Success: **{cheatOddPlus2d4}**
+  Odds of Major Success: **{cheatOddPlus1d4}**
+  Odds of Nominal Success: **{cheatOddPlus1}**
+  
+  Odds of Cheating 2d4: **{checkOdd2d4}**
+  Odds of Cheating 1d4: **{checkOdd1d4}**
+  Odds of Cheating +1: **{checkOdd1}**
+  
+  Overall Cheat Odds:  **{finalCheatOdds}**" 
+  """ if args.get('cheatDebug') else ""
+  
+  #### Never tell me the odds!
+  if finalCheatOdds >= acceptableOdds:
+    cheatRoll = vroll(character().skills['sleightOfHand'].d20())
+    result = cheatRoll.total - cheatDCMap[cheats]
+    outField1 = outField1 + (f"""\n**Cheat Attempt 1** on Check 1:
+    {character().name} chooses to risk it all on a `{int(finalCheatOdds*10000)/100}%` chance to cheat and win!
+    **Cheat DC**: {cheatDCMap[cheats]}
+    **Cheat Sleight of Hand Check**: {cheatRoll}
+    """)
+    if result >= 10:
+      cheatBonus = vroll("2d4")
+      modifiedBonus = roll1.total + cheatBonus.total
+      outField1 = outField1 + (f"""\n * Success by 10 or more! +2d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll1} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC1}
+      """)
+      roll1=vroll(modifiedBonus)
+      if modifiedBonus >= DC1.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField1 = outField1 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField1 = outField1 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result >= 5:
+      cheatBonus = vroll("1d4")
+      modifiedBonus = roll1.total + cheatBonus.total
+      outField1 = outField1 + (f"""\n * Success by 5 or more! +1d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll1} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC1}
+      """)
+      roll1=vroll(modifiedBonus)
+      if modifiedBonus >= DC1.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField1 = outField1 + (f"""Successful cheating!
+        """)
+      else:
+        outField1 = outField1 + (f"""Unsuccessful cheating!
+        """)
+    elif result >= 0:
+      cheatBonus = vroll("1")
+      modifiedBonus = roll1.total + cheatBonus.total
+      outField1 = outField1 + (f"""\n * Success! +1 to the gambling check\n
+      **Bonus**: `{1}`
+      **Final Check Result**: {roll1} + {1} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC1}
+      """)
+      roll1=vroll(modifiedBonus)
+      if modifiedBonus >= DC1.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField1 = outField1 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField1 = outField1 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result <= -10:
+      outField1 = outField1 + (f"""\n * Uh oh, failure by 10+ or more! You've caught cheating and lost all your stake and are banned from the gambling dens for five days\n""")
+      DC1=vroll('9999')
+      DC2=vroll('9999')
+      DC3=vroll('9999')
+      pitfightSuccess = -3
+    elif result <= -5:
+      outField1 = outField1 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check.\n""")
+      outField2 = (f"__Check 2 - CHA({skill2.title()})__|**DC** {DC2}+2[gambling failure]={DC2.total+2} \n**Check** {roll2}\n")
+      DC2=vroll((DC2.total+2))
+    else:
+      outField1 = outField1 + (f"""\n * Uh oh, you failed to cheat effectively!\n""")
+    cheats += 1
+
+#####        #####
+##### Roll 2 #####
+#####        #####
+
+if roll2.total >= DC2.total: pitfightSuccess = pitfightSuccess +1
+else: #Cheat Logic
+  cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
+  
+  cheatOddPlus2d4=getOddsRolls('1d20',cheatDC+10) #odds you'll get a 2d4
+  cheatOddPlus1d4=getOddsRolls('1d20',cheatDC+5) #odds you'll get a 1d4
+  cheatOddPlus1=getOddsRolls('1d20',cheatDC) #odds you'll get a +1
+  
+  dc_Diff = int(DC2.total) - roll2.total
+  
+  checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
+  checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
+  checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC2.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
+  
+  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  
+  miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
+  DC Differential: **{dc_Diff}**
+  Cheat Attempt: **{cheats}**
+  Effective Cheat DC (DC - Sleight Mod): **{cheatDC}**
+  Odds of Extreme Success: **{cheatOddPlus2d4}**
+  Odds of Major Success: **{cheatOddPlus1d4}**
+  Odds of Nominal Success: **{cheatOddPlus1}**
+  
+  Odds of Cheating 2d4: **{checkOdd2d4}**
+  Odds of Cheating 1d4: **{checkOdd1d4}**
+  Odds of Cheating +1: **{checkOdd1}**
+  
+  Overall Cheat Odds:  **{finalCheatOdds}**" 
+  """ if args.get('cheatDebug') else ""
+  
+  if finalCheatOdds >= acceptableOdds:
+    cheatRoll = vroll(character().skills['sleightOfHand'].d20())
+    result = cheatRoll.total - cheatDCMap[cheats]
+    outField2 = outField2 + (f"""\n**Cheat Attempt {cheats}** on Check 2:
+    {character().name} chooses to risk it all on a `{int(finalCheatOdds*10000)/100}%` chance to cheat and win!
+    **Cheat DC**: {cheatDCMap[cheats]}
+    **Cheat Sleight of Hand Check**: {cheatRoll}
+    """)
+    if result >= 10:
+      cheatBonus = vroll("2d4")
+      modifiedBonus = roll2.total + cheatBonus.total
+      outField2 = outField2 + (f"""\n * Success by 10 or more! +2d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll2} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC2}
+      """)
+      roll2=vroll(modifiedBonus)
+      if modifiedBonus >= DC2.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField2 = outField2 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField2 = outField2 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result >= 5:
+      cheatBonus = vroll("1d4")
+      modifiedBonus = roll2.total + cheatBonus.total
+      outField2 = outField2 + (f"""\n * Success by 5 or more! +1d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll2} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC2}
+      """)
+      roll2=vroll(modifiedBonus)
+      if modifiedBonus >= DC2.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField2 = outField2 + (f"""Successful cheating!
+        """)
+      else:
+        outField2 = outField2 + (f"""Unsuccessful cheating!
+        """)
+    elif result >= 0:
+      cheatBonus = vroll("1")
+      modifiedBonus = roll2.total + cheatBonus.total
+      outField2 = outField2 + (f"""\n * Success! +1 to the gambling check\n
+      **Bonus**: `{1}`
+      **Final Check Result**: {roll2} + {1} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC2}
+      """)
+      roll2=vroll(modifiedBonus)
+      if modifiedBonus >= DC2.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField2 = outField2 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField2 = outField2 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result <= -10:
+      outField2 = outField2 + (f"""\n * Uh oh, failure by 10+ or more! You've caught cheating and lost all your stake and are banned from the gambling dens for five days\n""")
+      DC2=vroll('9999')
+      DC2=vroll('9999')
+      DC3=vroll('9999')
+      pitfightSuccess = -3
+    elif result <= -5:
+      outField2 = outField2 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check.\n""")
+      outField3 = (f"__Check 3 - CHA(Intimidation)__|**DC** {DC3}+2[gambling failure]={DC3.total+2} \n**Check** {roll3}\n")
+      DC3=vroll((DC3.total+2))
+    else:
+      outField2 = outField2 + (f"""\n * Uh oh, you failed to cheat effectively!\n""")
+    cheats += 1
+  
+#####        #####
+##### Roll 3 #####
+#####        #####
+
+if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
+else: #Cheat Logic
+  cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
+  
+  cheatOddPlus2d4=getOddsRolls('1d20',cheatDC+10) #odds you'll get a 2d4
+  cheatOddPlus1d4=getOddsRolls('1d20',cheatDC+5) #odds you'll get a 1d4
+  cheatOddPlus1=getOddsRolls('1d20',cheatDC) #odds you'll get a +1
+  
+  dc_Diff = int(DC3.total) - roll1.total
+  
+  checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
+  checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
+  checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC3.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
+  
+  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  
+  miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
+  DC Differential: **{cheatDCMap[cheats]}**
+  Cheat Attempt: **{cheats}**
+  Effective Cheat DC (DC - Sleight Mod): **{cheatDC}**
+  Odds of Extreme Success: **{cheatOddPlus2d4}**
+  Odds of Major Success: **{cheatOddPlus1d4}**
+  Odds of Nominal Success: **{cheatOddPlus1}**
+  
+  Odds of Cheating 2d4: **{checkOdd2d4}**
+  Odds of Cheating 1d4: **{checkOdd1d4}**
+  Odds of Cheating +1: **{checkOdd1}**
+  
+  Overall Cheat Odds:  **{finalCheatOdds}**" 
+  """ if args.get('cheatDebug') else ""
+  
+  if finalCheatOdds >= acceptableOdds:
+    cheatRoll = vroll(character().skills['sleightOfHand'].d20())
+    result = cheatRoll.total - cheatDCMap[cheats]
+    outField3 = outField3 + (f"""\n**Cheat Attempt {cheats}** on Check 3:
+    {character().name} chooses to risk it all on a `{int(finalCheatOdds*10000)/100}%` chance to cheat and win!
+    **Cheat DC**: {cheatDCMap[cheats]}
+    **Cheat Sleight of Hand Check**: {cheatRoll}
+    """)
+    if result >= 10:
+      cheatBonus = vroll("2d4")
+      modifiedBonus = roll3.total + cheatBonus.total
+      outField3 = outField3 + (f"""\n * Success by 10 or more! +2d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll3} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC3}
+      """)
+      roll3=vroll(modifiedBonus)
+      if modifiedBonus >= DC3.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField3 = outField3 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField3 = outField3 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result >= 5:
+      cheatBonus = vroll("1d4")
+      modifiedBonus = roll3.total + cheatBonus.total
+      outField3 = outField3 + (f"""\n * Success by 5 or more! +1d4 to the gambling check\n
+      **Bonus**: {cheatBonus}
+      **Final Check Result**: {roll3} + {cheatBonus.total} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC3}
+      """)
+      roll3=vroll(modifiedBonus)
+      if modifiedBonus >= DC3.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField3 = outField3 + (f"""Successful cheating!
+        """)
+      else:
+        outField3 = outField3 + (f"""Unsuccessful cheating!
+        """)
+    elif result >= 0:
+      cheatBonus = vroll("1")
+      modifiedBonus = roll3.total + cheatBonus.total
+      outField3 = outField3 + (f"""\n * Success! +1 to the gambling check\n
+      **Bonus**: `{1}`
+      **Final Check Result**: {roll3} + {1} = __**`{modifiedBonus}`**__ vs.
+      **DC**: {DC3}
+      """)
+      roll3=vroll(modifiedBonus)
+      if modifiedBonus >= DC3.total:
+        pitfightSuccess = pitfightSuccess +1
+        outField3 = outField3 + (f"""**Successful cheating!**
+        """)
+      else:
+        outField3 = outField3 + (f"""**Unsuccessful cheating!**
+        """)
+    elif result <= -10:
+      outField3 = outField3 + (f"""\n * Uh oh, failure by 10+ or more! You've caught cheating and lost all your stake and are banned from the gambling dens for five days\n""")
+      DC3=vroll('9999')
+      DC3=vroll('9999')
+      DC3=vroll('9999')
+      pitfightSuccess = -3
+    elif result <= -5:
+      outField3 = outField3 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check. Good thing this is the last one!\n""")
+    else:
+      outField3 = outField3 + (f"""\n * Uh oh, you failed to cheat effectively!\n""")
+    cheats += 1
+
+if pitfightSuccess > 0:
+  pitfightEarning = int(pitEarningMap[str(pitfightSuccess)] * stake * 100)/100
+else:
+  pitfightEarning = 0
+
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+outcome='You were caught cheating and lost all the money you bet. You\'re barred from gambling for 1 week (5 days).' if pitfightSuccess <0 else ('Lose all the money you bet, and accrue a debt equal to that amount.' if pitfightSuccess <1 else ('Lose half the money you bet' if pitfightSuccess <2 else ('Gain the amount you bet plus half again more.' if pitfightSuccess<3 else ('Gain double the amount you bet.'))))
+
+outTitle = (f'{character().name} gambles staking {stake} gp:\n<t:{CurTime}:D> - <t:{busyTime}:D>')
+outDescr = (f'\n**Character:** {ch.name}') +  \
+           ((f'\n**Successes:** {str(pitfightSuccess)} / 3') if pitfightSuccess >= 0 else '\n**Caught Cheating!**: Banned/3 Successes') +  \
+           (f'\n**Outcome:** ' + outcome) + \
+           ((f'\n**Winnings:** {str(pitfightEarning)} * Tier {tier} --> **{pitfightEarning * tier }gp**!') if pitfightSuccess > 1 else (f'\n**Losings:** {str(pitfightEarning)}gp') ) +  \
+           ((f'\n**Net GP Change**: {pitfightEarning * tier} - {stake}[original stake] --> **{pitfightEarning * tier - stake}gp**!') if pitfightSuccess > 1 else (f'\n**Net GP Change:** {(pitfightEarning)}- {stake}[original stake] --> **{pitfightEarning-stake}gp**') ) + \
+           (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
+
+nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
+
+outField1 += (f'\n{":white_check_mark: *Success*" if roll1.total >= DC1.total else ":x: *no Success*"}\n')
+outField2 += (f'\n{":white_check_mark: *Success*" if roll2.total >= DC2.total else ":x: *no Success*"}\n')
+outField3 += (f'\n{":white_check_mark: *Success*" if roll3.total >= DC3.total else ":x: *no Success*"}\n')
+
+return f'-title "{outTitle}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {cheatNotes} {miscNotes} -f " \n{nextFreetime}" -f "-# This alias is in beta testing, so it won\'t work if you call it. Sorry!"'
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"

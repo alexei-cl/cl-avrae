@@ -40,15 +40,15 @@ errMsg = f""" -title "**Use:
 `!a {chosenWeap} -ts <abilityScore> -with <spellcastingAbilityScore>`
 to set up True Strike for this character.**" """
 
-if 'True' in args.get('with'):
-  if (ch.get_cvar("tsWith")):
+if 'True' in args.get('with'): #Returns true if they pass -with argument w no subarguments
+  if (ch.get_cvar("tsWith")):  #They've already set it!
     spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
-  elif any(x for x in ch.spellbook.find("True Strike") if x.mod):
-    spellMod=ch.spellbook.find("True Strike")[0].mod
+  elif any(x for x in ch.spellbook.find("True Strike") if x.mod): #If they still used -with with no arguments, throw them a bone and let them pretend like they no what they're doing
+    spellMod=ch.spellbook.find("True Strike")[0].mod #this will only be set on dndbeyond
   else:
-    spellMod=ch.spellbook.spell_mod
-elif args.get('with'):
-  tempName=args.get('with')[0]
+    spellMod=ch.spellbook.spell_mod #this defaults to your largest "spellbook" on avrae. Cleric>anyone who knows their whole list>everyone else
+elif args.get('with'): #This means they passed the -with argument w a subargument
+  tempName=args.get('with')[0] #Hopefully they passed something which is a stat
   for stat in ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']:
     if tempName in stat:
       tempName = stat
@@ -58,22 +58,22 @@ elif args.get('with'):
       break
   if (ch.get_cvar('tsWith')):
     spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
-  else:
+  else: #bro why did you try to cast true strike -with acrobatics
     return errMsg
-else:
-  if (ch.get_cvar('tsWith')):
+else: #No -with argument
+  if (ch.get_cvar('tsWith')): #do they got it set up?
     spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
-  else:
+  else: #they don't tell them to set it up
     return errMsg
 
 
 mod=args.get('ts')
 errMsg=f"""-title "**Use `!a {chosenWeap} -ts <ability score>` to set up True Strike for this weapon**" """
 
-if 'True' in mod:
-  if (ch.get_cvar("ts"+varName)):
+if 'True' in mod: #Returns true when -ts has no subargument following it
+  if (ch.get_cvar("ts"+varName)): #they've set this weapon up!
     mod=ch.get_cvar("ts"+varName)
-  else:
+  else: #they haven't set it up! tell them to do this
     return errMsg
 else:
   mod=mod[0]

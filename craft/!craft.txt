@@ -1,4 +1,4 @@
-embed
+embed 
 <drac2>
 
 ## Dict of Tools and their associated approved ability check modifiers
@@ -113,8 +113,21 @@ else:
   item = ''
 args = argparse(args,parse_ephem=False)
 ch = character()
+outMsg=''
 miscNotes=''
 foundItems=[]
+
+if len(&ARGS&)<1 or 'help' in args:
+  outMsg+=(f""" -title "Looking for some crafting recipes?" """)
+  outMsg+=(f""" -f "{ctx.alias.title()} is a tool for crafting.
+  `{ctx.prefix+ctx.alias} \\"<Item>\\" `
+  
+  **For now, please keep my use limited to the #bot-testing or #bot-setup channels**
+  
+  ** __Example:__** `{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\"` "
+  """)
+  return outMsg + (""" -f "-# Problems with this alias? Ping the developer \@alexei" -t 30""")
+
 
 ## get items
 for gid in craftingGvars:
@@ -140,15 +153,19 @@ if len(foundItems)>1:
     n+=1
     if n>10: break
   outMsg += (f""" " """)
+  outMsg +=(f""" -t 45""")
 
-## no items found
-elif len(foundItems)<0:
-    outMsg = (f"""-title "No Items Founds" """) + \
-             (f"""-f "Your input was: `{item}`\n Maybe this isn't craftable, or maybe check your spelling?" """)
+
+elif len(foundItems)<1:
+  outMsg = (f"""-title "No Items Founds" """) + \
+           (f"""-f "Your input was: `{item}`\n Maybe this isn't craftable, or maybe check your spelling?" """)
+  outMsg +=(f""" -t 45""")
 ## one item found
 else:
   foundItem=foundItems[0]
   if 'True' in args.get('with') or len(args.get('with'))==0:
+    if ctx.channel and ctx.channel.id == 946108279543713802:
+      outMsg +=(f""" -t 45""")
     outMsg = (f"""-title "Crafting Specs: `{foundItem.get('name')}`" """)
     outMsg+= (f"""-f "**Item:** `{foundItem.get('name').replace('"','')}` """) #Name
     outMsg+= (f"""\n*{foundItem.get('rarity').replace('"','').title()} item* """) #Rarity
@@ -158,19 +175,24 @@ else:
       
     if foundItem.get('craftingTags'):
       outMsg+= (f"""\n* **Token Cost:** `{(foundItem.get('tokenCost') +" " + foundItem.get('rarity')).replace('"','')}` """) #Token Cost
-      outMsg+= (f"""\n* **GP Cost:** `{foundItem.get('gpBase')}gp` """) #Gp Cost
+      outMsg+= (f"""\n* **GP Cost:** `{foundItem.get('gpCrafting')}gp` """) #Gp Cost
       outMsg+= (f"""\n* **Crafting DC:** `{dcMap.get(foundItem.get('rarity').replace('"','').title())}` """) #Days
       outMsg+= (f"""\n* **Crafting Time:** `{timeMap.get(foundItem.get('rarity').replace('"','').title())} days` """) #DC
-      outMsg+= (f"""\n* **Can be crafted with:** `{foundItem.get('craftingTags').replace('"','')}` tools" """) #Tools
+      outMsg+= (f"""\n* **Can be crafted with:** `{foundItem.get('craftingTags').replace('"','')}` tools """) #Tools
     else:
       outMsg+= (f"""\nThis item is not craftable!" """)
+    if foundItem.get('craftingNotes'):
+      outMsg+= (f"""\n**Crafting Note:** {foundItem.get('craftingNotes').replace('"','')} """)
+    outMsg+= (f"""" """)
     
-    if foundItem.get('description'):
+    if foundItem.get('description') and ('desc' in args):
       outMsg+= (f"""-f "**Description:**|{foundItem.get('description').replace('"','')[:975]}\n-# Source: {foundItem.get('source').replace('"','')}" """) #Description
     else:
       outMsg+= (f"""-f "\n-# Source: {foundItem.get('source').replace('"','')}" """) #Description
       
   else: ##they are crafting!!
+    if ctx.author.id != 167439243147345921:
+      return (f"""-f "Sorry, actually doing the crafting part of things is not ready yet. Please just use me as a lookup tool!" "-t 15" """)
     tool = args.get('with')
     if foundItem.get('craftingTags'):
       if tool[0].lower() in foundItem.get('craftingTags').lower(): ## valid tool
@@ -195,7 +217,7 @@ else:
         if args.get('scribes') and ('scroll' in foundItem.get('name').replace('"','').lower()):
           discountMod/=2
           miscNotes+=f"\n{character().name} crafts {foundItem.get('name')} at half cost due to Order of Scribes!"
-        gpCost=int((foundItem.get('gpBase')*discountMod)*100)/100
+        gpCost=int((foundItem.get('gpCrafting')*discountMod)*100)/100
         tokens=ceil(foundItem.get('tokenCost')*discountMod)
         days=max(1,ceil(days*discountMod))
         
@@ -260,7 +282,7 @@ else:
         downtime_days = int(days)                               #how many days take this downtime activity
         DAY = 86400                                     #seconds per day
         CurTime = int(time())                           #get current time
-        busyTime = CurTime + days * DAY  #calculate time when the activity ends
+        busyTime = CurTime + (days-1)*DAY  #calculate time when the activity ends
         
         outMsg+=(f"""-f "**Next downtime use: in {days} days**\n <t:{busyTime + DAY}:F>" """)
         
@@ -271,9 +293,11 @@ else:
         outMsg+= (f"""-f "Invalid tool|I'm sorry to say that `{tool[0]}` is not a tool you can use to craft `{foundItem.get('name')}`" """)
         outMsg+= (f"""-f "Try using one of these: `{foundItem.get('craftingTags').replace('"','')}`" """)
         outMsg+= (f"""-f "Or, look up the item in [#bot-testing](https://discord.com/channels/938988968404451339/941139522400448582): `{ctx.prefix}{ctx.alias} '{foundItem.get('name')}'`" """)
+        outMsg +=(f""" -t 45""")
     else:
       outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name')}`" """)
-      outMsg+= (f"""-f "Item cannot be crafted|I'm sorry to say that `{foundItem.get('name')}` is not a craftable item." """)
+      outMsg+= (f"""-f "Item cannot be crafted|I'm sorry to say that `{foundItem.get('name')}` is not a craftable item. """)
+      outMsg +=(f""" -t 45""")
 ## -rarity
 
 # Arguments:
@@ -302,7 +326,7 @@ else:
 # -royal     -> Royal Mothfolk
 
 outMsg+=miscNotes
-return outMsg
+return "embed" + outMsg + (""" -f "-# Problems with this alias? Ping the developer \@alexei" """)
 
 </drac2>
 

@@ -1,0 +1,2081 @@
+[
+    {
+        "Item": "+1 Armor",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+1 Fate Dealer's Deck",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Painter,Caligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 All Purpose Tool",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Tinker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Ammunition",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Amulet of the Devout",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Jeweler,Weaver,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Arcane Grimoire",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Dragonhide Belt",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Leatherworker,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Moon Sickle",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Rhythm-Maker's Drum",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Leatherworker,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Rod of the Pact Keeper",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Shield",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Wand of the War Mage",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Weapon",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+2 Wraps of Unarmed Prowess",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Leather,Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Acheron Blade",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Alchemical Compendium",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Alchemist,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Amulet of Health",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Weaver,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Amulet of Protection from Turning",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Jeweler,Weaver,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Armor of Resistance",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Armor of Vulnerability",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Leather,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Arrow-Catching Shield",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Astral Shard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Astromancy Archive",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Calligrapher,Cartographer,Navigator",
+        "Notes": null
+    },
+    {
+        "Item": "Atlas of Endless Horizons",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Calligrapher,Cartographer,Navigator",
+        "Notes": null
+    },
+    {
+        "Item": "Azorius Keyrune",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Badge of the Watch",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Banner of the Krig Rune",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Enchanter6",
+        "Notes": null
+    },
+    {
+        "Item": "Barrier Tattoo (Medium)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Battering Shield",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Bead of Force",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Jeweler,Special",
+        "Notes": "Crafting this item yields 6 Beads"
+    },
+    {
+        "Item": "Bell Branch",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Herbalism,Woodcarver,Carpenter",
+        "Notes": null
+    },
+    {
+        "Item": "Belt of Dwarvenkind",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Leatherworker,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Belt of Hill Giant Strength",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Leatherworker,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Berserker Axe",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Black Chromatic Rose",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Blod Stone",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Mason,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Blue Chromatic Rose",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Bonecounter",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Boots of Levitation",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leatherworker,Cobbler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Boots of Speed",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leather,Cobbler",
+        "Notes": null
+    },
+    {
+        "Item": "Boros Keyrune",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Bow of Conflagration",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Carpenter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Bowl of Commanding Water Elementals",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Potter,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Bracer of Flying Daggers",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Bracers of Celerity",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Leather",
+        "Notes": null
+    },
+    {
+        "Item": "Bracers of Defense",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Leatherworker,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Brazier of Commanding Fire Elementals",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Breastplate of Balance",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Butcher's Bib",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Cook,Weaver,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Cape of the Mountebank",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Weaver,Enchanter6",
+        "Notes": null
+    },
+    {
+        "Item": "Cauldron of Plenty",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Cook,Brewer",
+        "Notes": null
+    },
+    {
+        "Item": "Censer of Controlling Air Elementals",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Charm of Plant Command",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Potter,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Chime of Opening",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Jeweler,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Claw of the Wyrm Rune",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Mason,Leatherworker,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Claws of the Umber Hulk",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Mason,Leatherworker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Cloak of Displacement",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Enchanter6",
+        "Notes": null
+    },
+    {
+        "Item": "Cloak of the Bat",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Weaver,Enchanter6",
+        "Notes": null
+    },
+    {
+        "Item": "Coat of the Crest",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Leather,Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Corpse Slayer",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Crown of the Wrath Bringer",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Jewler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Crystal Blade",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Cube of Force",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Cube of Summoning",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Tinker,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Daern's Instant Fortress",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Tinker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dagger of Blindsight",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dagger of Denial",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dagger of Venom",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Deck of Oracles",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Painter,Caligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Devotee's Censer",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dimensional Shackles",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Docent",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Calligrapher,Cartographer,Navigator",
+        "Notes": null
+    },
+    {
+        "Item": "Dodecahedron of Doom",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Donjon's Sundering Sphere",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jewler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragon Slayer",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragon Wing Bow",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Dragonguard",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragonguard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith.Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragontooth Dagger",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Duplicitous Manuscript",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Caligrapher,Enchanter,",
+        "Notes": null
+    },
+    {
+        "Item": "Eagle Whistle",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Earthboard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Mason,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Elemental Essence Shard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": "Choose between Air, Earth, Fire, Water when crafting"
+    },
+    {
+        "Item": "Elixir of Health",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Enchanter,Alchemist,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Elven Chain",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Enspelled Armor (2nd Level)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Enspelled Armor (3rd Level)",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Enspelled Staff (2nd Level)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Enspelled Staff (3rd Level)",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Enspelled Weapon (2nd Level)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Enspelled Weapon (3rd Level)",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "Item": "Far Realm Shard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Feather of Diatryma Summoning",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Feywrought Armor",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leather,Smith,",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Bronze Griffon",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Ebony Fly",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Golden Lions",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Ivory Goats",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Onyx Dog",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Figurine of Wondrous Power, Serpentine Owl",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Flame Tongue",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Flamefriend Lantern",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Glassblower,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Flayer Slayer",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Flying Chariot",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Carpenter,Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Folding Boat",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Woodcarver,Carpenter,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Fulminating Treatise",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Calligrapher,Painter",
+        "Notes": null
+    },
+    {
+        "Item": "Futuristic Ammunition (10)",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Tinker,Smith,Firearm",
+        "Notes": null
+    },
+    {
+        "Item": "Gauntlets of Flaming Fury",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Gavel of the Venn Rune4",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Woodcarver,Carpenter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Gem of Seeing",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ghost Lantern",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Enchanter,Tinker,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Giant Slayer",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Glamoured Studded Leather",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Glimmering Moonbow",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Carpenter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Gloomwrought Armor",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leather,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Glowrune Pigment",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Painter,Alchemist",
+        "Notes": null
+    },
+    {
+        "Item": "Grasping Whip",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leather,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Green Chromatic Rose",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Gruul Keyrune",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Gulthias Staff",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Heart Weaver's Primer",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Calligrapher,Weaver,Painter",
+        "Notes": null
+    },
+    {
+        "Item": "Hell Hound Cloak",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Leather",
+        "Notes": null
+    },
+    {
+        "Item": "Helm of Teleportation",
+        "Token": "14",
+        "GP": "2500",
+        "Tools": "Smith,Enchanter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Helm of the Gods",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Heward's Handy Haversack",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Hook of Fisher's Delight",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Cook,Herbalism,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Horn of Blasting",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Horn of the Endless Maze",
+        "Token": "13",
+        "GP": "2300",
+        "Tools": "Leatherworker,Tinker,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Horn of Valhalla, Brass",
+        "Token": "13",
+        "GP": "2300",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Horn of Valhalla, Silver",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Horseshoes of Speed",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Inescapable Lash",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Leather,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Instrument of the Bards, Canaith Mandolin",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Carpenter,Special",
+        "Notes": null
+    },
+    {
+        "Item": "Instrument of the Bards, Cli Lyre",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Carpenter,Special",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Awareness",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Protection",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Reserve",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Sustenance",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Iron Bands of Bilarro",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Izzet Keyrune",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Kagonesti Forest Shroud",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Knave's Eye Patch",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Cartographer,Leatherworker,Navigator",
+        "Notes": null
+    },
+    {
+        "Item": "Lash of Immolation",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Leather,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Libram of Souls and Flesh",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Leatherworker,Weaver,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Loadstone",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Mason,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Luminous War Pick",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Lyre of Building",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Carpenter,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Mace of Disruption",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mace of Smiting",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mace of Terror",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Magician's Judge",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mantle of Spell Resistance",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mimir",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mirror of the Past",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Mizzium Armor",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Smith,Tinker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Mizzium Mortar",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Molten Bronze Skin",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Necklace of Fireballs",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Necklace of Prayer Beads",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Needle of Mending",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Oceanic Weapon",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchater",
+        "Notes": null
+    },
+    {
+        "Item": "Oil of Etherealness",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Enchanter,Alchemist",
+        "Notes": null
+    },
+    {
+        "Item": "Opal of the Ild Rune",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Orb of the Stein Rune",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Mason,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Order of the Silver Dragon +2 Shield",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Smith,Wood",
+        "Notes": null
+    },
+    {
+        "Item": "Orzhov Keyrune",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Outer Essence Shard",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Outer Essence Shard (Chaotic)",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Outer Essence Shard (Evil)",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Outer Essence Shard (Good)",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Outer Essence Shard (Lawful)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Pariah's Shield",
+        "Token": "14",
+        "GP": "2500",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Periapt of Proof against Poison",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Piercer",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Pistol, laser",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Tinker,Smith,Firearm",
+        "Notes": null
+    },
+    {
+        "Item": "Piwafwi of Fire Resistance",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Weaver,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Planecaller's Codex",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Calligrapher,Cartographer,Painter",
+        "Notes": null
+    },
+    {
+        "Item": "Poison Absorbing Tattoo",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Enchanter,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Portable Hole",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Aqueous Form",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Clairvoyance",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Diminution",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Fire Giant Strength",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Frost Giant Strength",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Gaseous Form",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Heroism",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Invisibility",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Invulnerability",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Maximum Power",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Mind Control (beast)",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Mind Control (humanoid)",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Mind Reading",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Stone Giant Strength",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Superior Healing",
+        "Token": "14",
+        "GP": "2500",
+        "Tools": "Special,Herbalism,Alchemist",
+        "Notes": "Failure does not consume materials. Crafting time reduced to 2 days."
+    },
+    {
+        "Item": "Prehistoric Figurine of Wondrous Power, Kyanite Pteranodon",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Professor Orb",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Calligrapher,Cartographer,Navigator",
+        "Notes": null
+    },
+    {
+        "Item": "Protective Verses",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Cartographer,Painter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Anchor",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Bird",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Fan",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Swan Boat",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Tree",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Quaal's Feather Token, Whip",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Red Chromatic Rose",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Reveler's Concertina",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Tinker,Smith,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Animal Influence",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Evasion",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Feather Falling",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Free Action",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Protection",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Resistance",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Jewler",
+        "Notes": "Choose resistance when crafting"
+    },
+    {
+        "Item": "Ring of Spell Storing",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Jewler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of the Ram",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of X-ray Vision",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Enchanter,Jewler",
+        "Notes": null
+    },
+    {
+        "Item": "Robe of Eyes",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Robe of Summer",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Rod of Rulership",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Rod of the Vonindod",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Rogue's Mantle",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Leather,Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Rope of Entanglement",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ruinous Flail",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sage's Signet",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jewler,Enchanter",
+        "Notes": "Pick one as you craft it, must be a Rare version."
+    },
+    {
+        "Item": "Saint Markovia's Thighbone",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scissors of Shadow Snipping",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Smith,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Scorpion Armor",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Leather",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Caligrapher,Enchanter",
+        "Notes": "Choose Creature type when crafting"
+    },
+    {
+        "Item": "Scroll of Protection from Aberrations",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Beasts",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Celestials",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Elementals",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Fey",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Fiends",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Plants",
+        "Token": "5",
+        "GP": "500",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Protection from Undead",
+        "Token": "6",
+        "GP": "700",
+        "Tools": "Calligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Selesnya Keyrune",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Mason,Potter,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Serpent's Fang",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Shadowfell Brand Tattoo",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Enchanter,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Shadowfell Shard",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Jeweler,Enchanter,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Shield of Missile Attraction",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Shrieking Greaves",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Shrieking Greaves",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith.Cobbler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Siren Song Lyre",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Woodcarver,Carpenter,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Skysail",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Woodcarver,Weaver,Carpenter",
+        "Notes": null
+    },
+    {
+        "Item": "Spell Gem (Bloodstone)",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Jeweler,Glassblower,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Spell Gem (Quartz)",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Glassblower,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Spell Scroll (4th Level)",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Special,Calligrapher,Enchanter",
+        "Notes": "Requires Proficiency in Arcana, Material Components for the spell, and ONE of the following: Wizard, Proficiency in Calligrapher's Tools, Proficiency in Enchanter's Tools."
+    },
+    {
+        "Item": "Spell Scroll (5th Level)",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Special,Calligrapher,Enchanter",
+        "Notes": "Requires Proficiency in Arcana, Material Components for the spell, and ONE of the following: Wizard, Proficiency in Calligrapher's Tools, Proficiency in Enchanter's Tools."
+    },
+    {
+        "Item": "Spelljamming Helm",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Tinker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Spellwrought Tattoo (4th Level)",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Special,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Spellwrought Tattoo (5th Level)",
+        "Token": "13",
+        "GP": "2300",
+        "Tools": "Special,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Spider Staff",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Spider Staff",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Charming",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Enchanter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Defense",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Enchanter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Defense",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Healing",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Enchanter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Swarming Insects",
+        "Token": "13",
+        "GP": "2300",
+        "Tools": "Woodcarver,Enchanter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of the Rooted Hills",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Carpenter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of the Woodlands",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of Withering",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Starshot Crossbow",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Stirring Dragon Vessel",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Glassblower,Potter,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Stirring Dragon-Touched Focus",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Jeweler,Smith,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Stirring Dragon's Wrath Weapon",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Stirring Scaled Ornament",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Jeweler,Weaver,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Stone of Controlling Earth Elementals",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Stonespeaker Crystal",
+        "Token": "12",
+        "GP": "2100",
+        "Tools": "Jeweler,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Stormrider Boots",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Cobbler,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Summer's Dance",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sun Blade",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sun Staff",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sunforger",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sword of Life Stealing",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sword of Wounding",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Teleportation Tablet",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Tentacle Rod",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Two-Birds Sling",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Smith,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Ventilating Lungs",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Vicious Weapon",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Binding",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Enemy Detection",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Fear",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Fireballs",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Lightning Bolts",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Paralysis",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Viscid Globs",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Winter",
+        "Token": "10",
+        "GP": "1600",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wand of Wonder",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "War Horn of Valor",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Woodcarver,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Warrior's Passkey",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Tinker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Wayfarer's Boots",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Weaver,Leather.Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Weapon of Certain Death",
+        "Token": "7",
+        "GP": "1000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Weird Tank",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "White Chromatic Rose",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Woodcarver,Herbalism",
+        "Notes": null
+    },
+    {
+        "Item": "Wings of Flying",
+        "Token": "11",
+        "GP": "1900",
+        "Tools": "Weaver,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Woodcutter's Axe",
+        "Token": "9",
+        "GP": "1400",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Zephyr Armor",
+        "Token": "8",
+        "GP": "1200",
+        "Tools": "Leather,Smith,Enchanter",
+        "Notes": null
+    }
+]

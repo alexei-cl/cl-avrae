@@ -1,0 +1,870 @@
+[
+    {
+        "Item": "+3 Armor",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "+3 Fate Dealer's Deck",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Caligrapher,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Antimatter Rifle",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Apparatus of Kwalish",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Armor of Invulnerability",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Leatherworker,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ascendant Dragon Vessel",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Glassblower,Potter,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Ascendant Dragon-Touched Focus",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Smith,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Ascendant Dragon's Wrath Weapon",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ascendant Scaled Ornament",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Weaver,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Azuredge",
+        "Token": "19",
+        "GP": "250000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Belashyrra's Beholder Crown",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Jeweler,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Belt of Cloud Giant Strength",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Leatherworker,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Belt of Storm Giant Strength",
+        "Token": "18",
+        "GP": "235000",
+        "Tools": "Leatherworker,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Black Crystal Tablet",
+        "Token": "10",
+        "GP": "100000",
+        "Tools": "Jewler,Glassblower,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Blood Fury Tattoo",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Enchanter,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Bookmark",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Cloak of Invisibility",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Weaver,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Crystal Ball of Mind Reading",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Mason,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Crystal Ball of Telepathy",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Mason,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Crystal Ball of true Seeing",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Mason,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Cubic Gate",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Enchanter,Mason,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Dawnbringer",
+        "Token": "18",
+        "GP": "235000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Defender",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragonlance",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Dragonstaff of Aghairon",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Drown",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Efreeti Chain",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Enspelled Armor (6th Level)",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Armor (7th Level)",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Armor (8th Level)",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Staff (6th Level)",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Staff (7th Level)",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Staff (8th Level)",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Weapon (6th Level)",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Weapon (7th Level)",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Enspelled Weapon (8th Level)",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "You must know and have the spell prepared for the duration of the crafting."
+    },
+    {
+        "Item": "Euryale's Aegis",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Fane-Eater",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Flail of Tiamat",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Leatherworker,Smith,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Gloves of Soul Catching",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Leatherworker,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Gold Canary Figurine of Wondrous Power",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Mason,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Graz'tchat, the Decadent End",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Gurt's Greataxe",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Hammer of Thunderbolts",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Harp of Gilded Plenty",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Jeweler,Smith,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Hazirawn",
+        "Token": "17",
+        "GP": "220000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Helm of the Scavenger",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Leather",
+        "Notes": null
+    },
+    {
+        "Item": "Hither-Thither Staff",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Holy Avenger",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Holy Symbol of Ravenkind",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Jeweler,Woodcarver,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Horn of Valhalla, Iron",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Smith,Leatherworker,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Icon of Ravenloft",
+        "Token": "10",
+        "GP": "100000",
+        "Tools": "Mason,Glassblower,Jeweler",
+        "Notes": null
+    },
+    {
+        "Item": "Infernal Tack",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Smith,Leatherworker,Cobbler",
+        "Notes": null
+    },
+    {
+        "Item": "Instrument of the Bards, Ollamh Harp",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Woodcarver,Carpenter,Special",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Greater Absorption",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Mastery",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Ioun Stone, Regeneration",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Jeweler,Mason,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Iron Flask",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "Creatures above CR pet limit cannot remain in the flask beyond the end of the quest they were acquired, CL customs will confiscate your flask."
+    },
+    {
+        "Item": "Ironfang",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Jester's Mask",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Leather,Woodcarver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Longbow of the Healing Hearth",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Lost Crown of Besilmer",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Jeweler,Glassblower",
+        "Notes": null
+    },
+    {
+        "Item": "Luck Blade",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Enchanter",
+        "Notes": "When crafted, this weapon has 2 charges."
+    },
+    {
+        "Item": "Luxon Beacon",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Matalotok",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Nepenthe",
+        "Token": "18",
+        "GP": "235000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Nightfall Pearl",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Obsidian Flint Dragon Plate",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Orb of Skoraeus",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Orcsplitter",
+        "Token": "17",
+        "GP": "220000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Plate Armor of Etherealness",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Platinum Scarf",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Weaver,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Dragon's Majesty",
+        "Token": "10",
+        "GP": "100000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Giant Size",
+        "Token": "9",
+        "GP": "85000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Potion of Healing (Ultimate)",
+        "Token": "7",
+        "GP": "50000",
+        "Tools": "Special,Herbalism,Alchemist",
+        "Notes": "Failure does not consume materials. Crafting time reduced to 7 days."
+    },
+    {
+        "Item": "Potion of Storm Giant Strength",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Alchemist,Brewer,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Prehistoric Figurine of Wondrous Power, Jasper Tyrannosaurus Rex",
+        "Token": "17",
+        "GP": "220000",
+        "Tools": "Mason,Woodcarver,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Pyxis of Pandemonium",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Woodcarver,Carpenter",
+        "Notes": null
+    },
+    {
+        "Item": "Rakdos Riteknife",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Smith,Mason,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Reaper's Scream",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Air Elemental Command",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Djinni Summoning",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Earth Elemental Command",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Fire Elemental Command",
+        "Token": "17",
+        "GP": "220000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Invisibility",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Spell Turning",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Three Wishes",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Ring of Water Elemental Command",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Jeweler,Glassblower,Weaver",
+        "Notes": null
+    },
+    {
+        "Item": "Robe of the Archmagi",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Rod of Lordly Might",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Smith,Mason",
+        "Notes": null
+    },
+    {
+        "Item": "Rod of Resurrection",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Glassblower,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Ruby Weave Gem",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Glassblower,Enchanter",
+        "Notes": "Crafting this item also requires a ruby worth 5000GP."
+    },
+    {
+        "Item": "Scarab of Protection",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Jeweler,Potter,Woodcarver",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of the Comet",
+        "Token": "9",
+        "GP": "85000",
+        "Tools": "Calligrapher,Cartographer,Painter",
+        "Notes": null
+    },
+    {
+        "Item": "Scroll of Titan Summning",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Calligrapher, Enchanter",
+        "Notes": "Player's choice when crafting"
+    },
+    {
+        "Item": "Shield of the Blazing Dreadnought",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Shield of the Hidden Lord",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Mason,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Snicker-Snack",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sovereign Glue",
+        "Token": "8",
+        "GP": "70000",
+        "Tools": "Jeweler,Carpenter ,Cook",
+        "Notes": null
+    },
+    {
+        "Item": "Spell Bottle",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Glassblower,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Spell Gem (Diamond)",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Jeweler,Glassblower,Enchanter",
+        "Notes": "Crafting this item also requires a diamond worth 5000GP."
+    },
+    {
+        "Item": "Spell Gem (Ruby)",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Glassblower,Enchanter",
+        "Notes": "Crafting this item also requires a ruby worth 5000GP."
+    },
+    {
+        "Item": "Spell Gem (Star ruby)",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Jeweler,Glassblower,Enchanter",
+        "Notes": "Crafting this item also requires a ruby worth 1000GP."
+    },
+    {
+        "Item": "Spell Scroll (9th Level)",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Calligrapher, Enchanter",
+        "Notes": "Requires Proficiency in Arcana, Material Components for the spell, and ONE of the following: Wizard, Proficiency in Calligrapher's Tools, Proficiency in Enchanter's Tools."
+    },
+    {
+        "Item": "Sphere of Annihilation",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Mason,Glassblower,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Spindle of Fate",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Weaver,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Staff of the Magi",
+        "Token": "16",
+        "GP": "200000",
+        "Tools": "Woodcarver,Enchanter,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Stonebreaker's Breastplate",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sunsword",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Sword of Answering",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Smith,Calligrapher",
+        "Notes": "Pick one when you craft it."
+    },
+    {
+        "Item": "Sword of the Planes",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Talisman of Pure Good",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Glassblower,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Talisman of the Sphere",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Glassblower,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Talisman of Ultimate Evil",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Glassblower,Potter",
+        "Notes": null
+    },
+    {
+        "Item": "Telescopic Transporter",
+        "Token": "13",
+        "GP": "150000",
+        "Tools": "Glassblower,Smith,Tinker",
+        "Notes": null
+    },
+    {
+        "Item": "Tinderstrike",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Mason,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Tome of the Stilled Tongue",
+        "Token": "11",
+        "GP": "120000",
+        "Tools": "Leatherworker,Calligrapher",
+        "Notes": null
+    },
+    {
+        "Item": "Topaz Annihilator",
+        "Token": "15",
+        "GP": "185000",
+        "Tools": "Tinker,Smith",
+        "Notes": null
+    },
+    {
+        "Item": "Universal Solvent",
+        "Token": "10",
+        "GP": "100000",
+        "Tools": "Alchemist,Painter,Brewer",
+        "Notes": null
+    },
+    {
+        "Item": "Vorpal Sword",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Waythe",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Well of Many Worlds",
+        "Token": "12",
+        "GP": "135000",
+        "Tools": "Weaver,Leatherworker",
+        "Notes": null
+    },
+    {
+        "Item": "Whelm",
+        "Token": "17",
+        "GP": "220000",
+        "Tools": "Smith,Enchanter",
+        "Notes": null
+    },
+    {
+        "Item": "Windvane",
+        "Token": "14",
+        "GP": "170000",
+        "Tools": "Jeweler,Smith,Enchanter",
+        "Notes": null
+    }
+]

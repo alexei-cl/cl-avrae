@@ -1,0 +1,184 @@
+[
+    {
+        "Items": "Common Poison",
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Assassin's Blood",
+        "Tokens": "2 Common",
+        "Gp": "75",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": "Basic Poison",
+        "Tokens": "1 Common",
+        "Gp": "12.5",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury"
+    },
+    {
+        "Items": "Burnt Other Fumes",
+        "Tokens": "2 Common",
+        "Gp": "250",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Inhaled"
+    },
+    {
+        "Items": "Carrion Crawler Mucus",
+        "Tokens": "3 Common",
+        "Gp": "100",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Contact"
+    },
+    {
+        "Items": "Dreamlily",
+        "Tokens": "1 Common",
+        "Gp": "0.5",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": "Dust of the Mummy",
+        "Tokens": "2 Common",
+        "Gp": "100",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Inhaled"
+    },
+    {
+        "Items": "Lolth’s Sting",
+        "Tokens": "2 Common",
+        "Gp": "100",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury"
+    },
+    {
+        "Items": "Oil of Taqggit",
+        "Tokens": "2 Common",
+        "Gp": "200",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Contact"
+    },
+    {
+        "Items": "Serpent Venom",
+        "Tokens": "1 Common",
+        "Gp": "100",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury"
+    },
+    {
+        "Items": "Truth Serum",
+        "Tokens": "1 Common",
+        "Gp": "37.5",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": null,
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Uncommon Poison",
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Essence of Ether",
+        "Tokens": "1 Uncommon",
+        "Gp": "150",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Inhaled"
+    },
+    {
+        "Items": "Malice",
+        "Tokens": "2 Uncommon",
+        "Gp": "125",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Inhaled"
+    },
+    {
+        "Items": "Thessaltoxin",
+        "Tokens": "2 Uncommon",
+        "Gp": "100",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury or Ingested"
+    },
+    {
+        "Items": "Torpor",
+        "Tokens": "2 Uncommon",
+        "Gp": "300",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": "Wyvern Poison",
+        "Tokens": "1 Uncommon",
+        "Gp": "600",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury"
+    },
+    {
+        "Items": null,
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Rare Poison",
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Pale Tincture",
+        "Tokens": "1 Rare",
+        "Gp": "125",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": "Biza's Breath",
+        "Tokens": "2 Rare",
+        "Gp": "125",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Inhaled"
+    },
+    {
+        "Items": null,
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Very Rare Poison",
+        "Tokens": null,
+        "Gp": null,
+        "Proficiency": null,
+        "Type": null
+    },
+    {
+        "Items": "Midnight Tears",
+        "Tokens": "1 Very Rare",
+        "Gp": "750",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Ingested"
+    },
+    {
+        "Items": "Purple Worm Poison",
+        "Tokens": "2 Very Rare",
+        "Gp": "1,000",
+        "Proficiency": "Poisoner, Alchemist, Herbalist Kit",
+        "Type": "Injury"
+    }
+]

@@ -9,3 +9,4 @@ Scribe/read_csv.py
 Scribe/Spells.csv
 craft/craft_webhook.txt
 craft/gvar_splitter.py
+craft/dailyCraft.bat

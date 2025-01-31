@@ -1,0 +1,1605 @@
+[
+    {
+        "name": "+1 All Purpose Tool",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Ammunition",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Woodcarver",
+        "craftingNotes": "Crafting this item yields 10 rounds of ammunition"
+    },
+    {
+        "name": "+1 Amulet of the Devout",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Weaver,Woodcarver",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Arcane Grimoire",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Bloodhound Collar",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leather,Smith,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Bloodwell Vial",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Dragonhide Belt",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Moon Sickle",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Rhythm-Maker's Drum",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Rod of the Pact Keeper",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Shield",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Wand of the War Mage",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Weapon",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "+1 Wraps of Unarmed Power",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Leather,Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Adamantine Armor",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Adamantine Weapon",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Alchemy Jug",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Alchemy Jug (Blue)",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Cook,Brewer",
+        "craftingNotes": null
+    },
+    {
+        "name": "Alchemy Jug (Orange)",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Cook,Brewer",
+        "craftingNotes": null
+    },
+    {
+        "name": "Amulet of Proof against Detection and Location",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Weaver,Woodcarver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Amulet of Sweet Dreams",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Weaver,Woodcarver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Amulet of the Drunkard",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Brewer,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Armor of Fungal Spores",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Armor of the Fallen",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Armor of Weightlessness",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Azorius Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Baba Yaga's Dancing Broom",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Bag of Holding",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Weaver,Leatherworker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Bag of Tricks",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Weaver,Cobbler,Enchanter",
+        "craftingNotes": "You may choose the color of this item when crafting."
+    },
+    {
+        "name": "Balance of Harmony",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Balloon Pack",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Tinker,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Barrier Tattoo (Small)",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Enchanter,Calligrapher",
+        "craftingNotes": null
+    },
+    {
+        "name": "Belt of Blinkback",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Leather,Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Blood Spear",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Bloodrage Greataxe",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boomerang Shield",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boots of Elvenkind",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Cobbler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boots of Striding and Springing",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Cobbler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boots of the Vigilant",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Cobbler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boots of the Winterlands",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Leatherworker,Cobbler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Boros Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Bottled Breath",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Enchanter,Alchemist,Poisoner",
+        "craftingNotes": null
+    },
+    {
+        "name": "Bracers of Archery",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Leatherworker,Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Brooch of Living Essence",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Brooch of Shielding",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Broom of Flying",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Cap of Water Breathing",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Card Sharp's Deck",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Painter,Caligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Circlet of Blasting",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Circlet of Human Perfection",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Cloak of Elvenkind",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Cloak of Protection",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Cloak of the Manta Ray",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Coiling Grasp Tattoo",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Enchanter,Calligrapher",
+        "craftingNotes": null
+    },
+    {
+        "name": "Companion Collar",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Leatherworker, Weaver,",
+        "craftingNotes": null
+    },
+    {
+        "name": "Decanter of Endless Water",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Glassblower,Potter,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Deck of Illusions",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Painter",
+        "craftingNotes": "Crafting this item yields a full deck of 34 cards."
+    },
+    {
+        "name": "Dimir Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Dried Leech",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Enchanter",
+        "craftingNotes": "Crafting this item yields 10 rounds of ammunition"
+    },
+    {
+        "name": "Driftglobe",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Dust of Deliciousness",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Alchemist,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Dust of Dryness",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Cook,Mason",
+        "craftingNotes": "Crafting this item yields 7 pinches."
+    },
+    {
+        "name": "Dust of Sneezing and Choking",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Cook,Poisoner",
+        "craftingNotes": null
+    },
+    {
+        "name": "Earworm",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Cook,Herbalism",
+        "craftingNotes": null
+    },
+    {
+        "name": "Echo Stone",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Mason,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Elder Cartographer's Glossography",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Calligrapher,Cartographer",
+        "craftingNotes": null
+    },
+    {
+        "name": "Eldritch Claw Tattoo",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Special,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Elemental Gem",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Elemental Gem, Blue Sapphire",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Enchanter",
+        "craftingNotes": "Crafting this item also takes the appropriate gemstone worth 50GP or more."
+    },
+    {
+        "name": "Elemental Gem, Emerald",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Enchanter",
+        "craftingNotes": "Crafting this item also takes the appropriate gemstone worth 50GP or more."
+    },
+    {
+        "name": "Elemental Gem, Red Corundum",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Elemental Gem, Yellow Diamond",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Enchanter",
+        "craftingNotes": "Crafting this item also takes the appropriate gemstone worth 50GP or more."
+    },
+    {
+        "name": "Emerald Pen",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Calligrapher",
+        "craftingNotes": null
+    },
+    {
+        "name": "Enspelled Armor (1st Level)",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Enspelled Armor (Cantrip)",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Enspelled Staff (1st Level)",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Enspelled Staff (Cantrip)",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Enspelled Weapon (1st Level)",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Enspelled Weapon (Cantrip)",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": "You must know and have the spell prepared for the duration of the crafting"
+    },
+    {
+        "name": "Eversmoking Bottle",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Alchemist,Brewer,Glassblower",
+        "craftingNotes": null
+    },
+    {
+        "name": "Eyes of Charming",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Eyes of Minute Seeing",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Eyes of the Eagle",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Glassblower,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Fabulist Gem",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Feywild Shard",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Figurine of Wondrous Power, Silver Raven",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Finder's Goggles",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gauntlets of Ogre Power",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gem of Brightness",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": "Crafting this item requires any gem worth 50GP."
+    },
+    {
+        "name": "Glamerweave (Uncommon)",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gloves of Missile Snaring",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gloves of Swimming and Climbing",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gloves of Thievery",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Weaver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Goggles of Night",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Goggles of Object Reading",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Golgari Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Gruul Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Guardian Emblem",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Hat of Disguise",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Headband of Intellect",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Hellfire Weapon",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Helm of Comprehending Languages",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Smith,Enchanter,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Helm of Telepathy",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Helm of Underwater Action",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Hew",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "House of Cards",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Painter,Caligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Icicle Ring",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Enchanter,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Immovable Rod",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Infernal Puzzle Box",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Instrument of the Bards, Doss Lute",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Woodcarver,Carpenter,Special",
+        "craftingNotes": null
+    },
+    {
+        "name": "Instrument of the Bards, Fochlucan Bandore",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Carpenter,Special",
+        "craftingNotes": null
+    },
+    {
+        "name": "Instrument of the Bards, Mac-Fuirmidh Cittern",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Carpenter,Special",
+        "craftingNotes": null
+    },
+    {
+        "name": "Izzet Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Javelin of Lightning",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Keoghtom's Ointment",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Herbalism,Poisoner",
+        "craftingNotes": "Crafting this item yields 5 doses."
+    },
+    {
+        "name": "Lantern of Revealing",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Smith,Tinker,",
+        "craftingNotes": null
+    },
+    {
+        "name": "Lightbringer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Lorehold Primer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Mariner's Armor",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Mask of the Beast",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Painter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Medallion of Thoughts",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Mithral Armor",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Mizzium Apparatus",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Modern Ammunition (10)",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker,Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Nature's Mantle",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Necklace of Adaptation",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Night Caller",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Oil of Slipperiness",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Enchanter,Alchemist,Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Orc Stone",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Mason,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Orzhov Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Paper Bird",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Calligrapher,Painter,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Pearl of Power",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Periapt of Health",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Periapt of Wound Closure",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Philter of Love",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Enchanter,Alchemist,Poisoner",
+        "craftingNotes": null
+    },
+    {
+        "name": "Pipes of Haunting",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Pipes of the Sewers",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Pixie Dust",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Alchemist,Cook,Herbalism",
+        "craftingNotes": null
+    },
+    {
+        "name": "Plate of Knight's Fellowship",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Advantage",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Animal Friendship",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Fire Breath",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Greater Healing",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Special,Herbalism,Alchemist",
+        "craftingNotes": "Failure does not consume materials. Crafting time reduced to 1 day."
+    },
+    {
+        "name": "Potion of Growth",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Hill Giant Strength",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Poison",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Psionic Fortitude",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Pugilism",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Potion of Resistance",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": "You choose the damage resistance when you craft it. Note the damage type when crafting it."
+    },
+    {
+        "name": "Potion of Water Breathing",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Alchemist,Brewer,Cook",
+        "craftingNotes": null
+    },
+    {
+        "name": "Prehistoric Figurine of Wondrous Power, Pyrite Plesiosaurus",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Prismari Primer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Propeller Helm",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver,Enchanter,Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Psi Crystal",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Jeweler,Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Pyroconverger",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Quaal's Feather Token, Anchor",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Quaal's Feather Token, Fan",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Quaal's Feather Token, Tree",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Quandrix Primer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Quiver of Ehlonna",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Rakdos Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Rakdos Keyrune",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Mason,Potter,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Reszur",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Revolver",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Tinker,Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Jumping",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Mind Shielding",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Obscuring",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Puzzler's Wit",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Swimming",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of the Orator",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Truth Telling",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Warmth",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Ring of Water Walking",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Jeweler,Glassblower,Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Robe of Serpents",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver,Leatherworker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Rod of Mercurial Form",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Smith,Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Rod of Retribution",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Rope of Climbing",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Saddle of the Cavalier",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Leatherworker,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Scouter",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Tinker,Jeweler,Glassblower",
+        "craftingNotes": null
+    },
+    {
+        "name": "Seeker Dart",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Selesnya Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Sending Stone",
+        "tokenCost": "3",
+        "gpCrafting": "100",
+        "craftingTags": "Mason,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Sending Stones",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Mason,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Sentinel Shield",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Shatterspike",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Shotgun",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Tinker,Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Silverquill Primer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Simic Guild Signet",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Simic Keyrune",
+        "tokenCost": "4",
+        "gpCrafting": "150",
+        "craftingTags": "Mason,Potter,Jeweler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Skyblinder Staff",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Sling of Giant Felling",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Woodcarver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Slippers of Spider Climbing",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Leatherworker,Cobbler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Slumbering Dragon Vessel",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Glassblower,Potter,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Slumbering Dragon-Touched Focus",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Jeweler,Smith,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Slumbering Dragon's Wrath Weapon",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Slumbering Scaled Ornament",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Jeweler,Weaver,Woodcarver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Smokepowder",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Tinker,Smith",
+        "craftingNotes": null
+    },
+    {
+        "name": "Spell Gem (Lapis lazuli)",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Jeweler,Glassblower,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Spell Gem (Obsidian)",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Jeweler,Glassblower,Mason",
+        "craftingNotes": null
+    },
+    {
+        "name": "Spell Scroll (2nd Level)",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Special,Calligrapher,Enchanter",
+        "craftingNotes": "Requires Proficiency in Arcana, Material Components for the spell, and ONE of the following: Wizard, Proficiency in Calligrapher's Tools, Proficiency in Enchanter's Tools."
+    },
+    {
+        "name": "Spell Scroll (3rd Level)",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Special,Calligrapher,Enchanter",
+        "craftingNotes": "Requires Proficiency in Arcana, Material Components for the spell, and ONE of the following: Wizard, Proficiency in Calligrapher's Tools, Proficiency in Enchanter's Tools."
+    },
+    {
+        "name": "Spellwrought Tattoo (2nd Level)",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Special,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Spellwrought Tattoo (3rd Level)",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Special,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Spies' Murmur",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Staff of the Adder",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Staff of the Python",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Woodcarver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Stone of Good Luck",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Mason,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Storm Boomerang",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Leatherworker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Sword of Vengeance",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Travel Alchemical Kit",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Enchanter,Alchemist,Poisoner",
+        "craftingNotes": null
+    },
+    {
+        "name": "Trident of Fish Command",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Vanrak's Mithral Shirt",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wand of Entangle",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wand of Magic Detection",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wand of Magic Missiles",
+        "tokenCost": "9",
+        "gpCrafting": "400",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wand of Secrets",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wand of Web",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Woodcarver,Jeweler,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Weapon of Teleportation",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter,Tinker",
+        "craftingNotes": null
+    },
+    {
+        "name": "Weapon of Warning",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wheel of Wind and Water",
+        "tokenCost": "6",
+        "gpCrafting": "250",
+        "craftingTags": "Navigator,Carpenter,Cartographer",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wildspace Orrery",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Cartographer,Navigator",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wind Fan",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Weaver,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Winged Ammunition",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Smith,Woodcarver,Enchanter",
+        "craftingNotes": "Crafting this item yields 10 rounds of ammunition"
+    },
+    {
+        "name": "Winged Boots",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Leatherworker,Enchanter,Cobbler",
+        "craftingNotes": null
+    },
+    {
+        "name": "Wingwear",
+        "tokenCost": "5",
+        "gpCrafting": "200",
+        "craftingTags": "Weaver",
+        "craftingNotes": null
+    },
+    {
+        "name": "Winter's Dark Bite",
+        "tokenCost": "8",
+        "gpCrafting": "350",
+        "craftingTags": "Smith,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": "Witherbloom Primer",
+        "tokenCost": "7",
+        "gpCrafting": "300",
+        "craftingTags": "Calligrapher,Enchanter",
+        "craftingNotes": null
+    },
+    {
+        "name": null,
+        "tokenCost": null,
+        "gpCrafting": "#NUM!",
+        "craftingTags": null,
+        "craftingNotes": null
+    },
+    {
+        "name": null,
+        "tokenCost": null,
+        "gpCrafting": "#NUM!",
+        "craftingTags": null,
+        "craftingNotes": null
+    }
+]

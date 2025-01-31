@@ -1,0 +1,385 @@
+embed 
+<drac2>
+
+## Dict of Tools and their associated approved ability check modifiers
+jobInfoMap = {
+  'Alchemist':     {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
+  'Calligrapher':  {'jobValue': 30, 'jobStats': ["INT", "DEX", "CHA"]},
+  'Carpenter':     {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+  'Cartographer':  {'jobValue': 30, 'jobStats': ["INT", "DEX"]},
+  'Cobbler':       {'jobValue': 10, 'jobStats': ["CHA", "DEX"]},
+  'Cook':          {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Driver':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
+  'Enchanter':     {'jobValue': 20, 'jobStats': ["INT", "WIS"]},
+  'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
+  'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
+  'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
+  'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
+  'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
+  'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON", "DEX"]},
+  'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
+  'Woodcarver':    {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+}
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+dcMap = {
+  'Mundane':10,
+  'Common':10,
+  'Uncommon':15,
+  'Rare':20,
+  'Very Rare':25,
+  'Legendary':30,
+}
+
+timeMap = {
+  'Mundane':1,
+  'Common':1,
+  'Uncommon':2,
+  'Rare':4,
+  'Very Rare':8,
+  'Legendary':14,
+}
+
+craftingGvars = [ '44191f6f-cd83-4634-a159-b1f0d720df58', #Common
+                  'ed48a302-be6d-4830-9d42-a4712f3efba8', #Uncommon
+                  '175cd1e1-b321-4743-8696-ff01c699929a', #Rare
+                  'f25dc813-e988-44ba-b3eb-50d2dd579336', #Very Rare
+                  '0944bbe6-037e-4476-b33e-4a6af744bdd1', #Legendary
+                  'f1bee8bc-927f-4486-8274-bcf4907fb8ec'] #Poisons
+
+############################
+#         Functions        #
+############################
+def idMatch(id1,id2):
+  try:
+    return int(id1)==int(id2)
+  except:
+    return False
+      
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+def getJobInfo(argDayjob, target, jobInfoMap):
+  jobKey = findBestMatch(jobInfoMap, argDayjob)
+  if jobKey is not None:
+    jobInfo = jobInfoMap[jobKey]
+    jobValue = jobInfo['jobValue']
+    max_mod = -5
+    for stat in jobInfo['jobStats']:
+      mod_value = target.stats.get_mod(stat)
+      if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
+      if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return jobValue, useStat, jobKey
+  else:
+    return None, None, None
+
+def getDowntimeDays(days):
+  downtime_days = int(days)                               #how many days take this downtime activity
+  DAY = 86400                                     #seconds per day
+  CurTime = int(time())                           #get current time
+  busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+  return busyTime
+############################
+args = &ARGS&
+if len(args)>0:
+  item = str(args[0]).replace("'",'')
+else:
+  item = ''
+args = argparse(args,parse_ephem=False)
+ch = character()
+outMsg=''
+miscNotes=''
+foundItems=[]
+
+if len(&ARGS&)<1 or 'help' in args:
+  outMsg+=(f""" -title "Looking for some crafting recipes?" """)
+  outMsg+=(f""" -f "{ctx.alias.title()} is a tool for crafting and looking up crafting requirements!
+  
+  Lookup usage:
+  ```{ctx.prefix+ctx.alias} \\"<Item>\\" ```
+  ** __Example:__** 
+  ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\"```
+  
+  Crafting usage:
+  ```{ctx.prefix+ctx.alias} \\"<Item>\\" -with \\"Tool\\"```
+  ** __Example:__** 
+  ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\" -with \\"Smith\\"```
+  
+  **__But what about my bonuses?__**
+  Good news, it supports adding in all your bits and bobs. Add these to the end of your command.
+  
+  ```
+adv    Advantage to your Crafting Check
+lucky  Rerolls 1s on your Crafting Check (halfing)
+rel    A rogue's reliable talent (minimuim roll 10)
+indom  A barbarian's Indomitable Might
+royal  A Royal Mothfolk's Well Mannered
+-b X   For any other misc bonuses to your roll!
+-gift  For the Winter Event Crafting Boon (USE LAST!)
+```
+  "
+  """)
+  if ctx.channel.id == 946108279543713802:
+    outMsg+=(f""" -t 30 -f "Because a help message was called in #downtime-log, this message will self destruct in: <t:{int(time())+30}:R> seconds" """)
+  return outMsg + (""" -f "-# Crafting alias is in 'beta' pending testing and approval." """)
+
+for gid in craftingGvars: 
+  json=load_json(get_gvar(gid))
+  found=False
+  for craftable in json:
+    craftableName=craftable.get('name','')
+    identNum=craftable.get('id',-1)
+    foundID=( idMatch(identNum,args.get('id',-1)) or (idMatch(identNum,item.lower()) if item.lower().isdigit() else False) )
+    if (craftableName and item.lower() in craftableName.lower()) or foundID:
+      foundItems.append(craftable)
+      if foundID: #Searched by ID
+        foundItems=[craftable]
+        found=True
+        break
+  if found:
+    break
+        
+
+## Too many items found, give first 10
+if len(foundItems)>1:
+  outMsg = (f"""-title "Multiple Matches Found" """)
+  if 'True' in args.get('with') or len(args.get('with'))==0:
+    outMsg+= (f"""-f "Your input was: `{item}`Which one were you looking for? Rerun your command:\n```{ctx.prefix}{ctx.alias} 'Exact Name of Item'```
+    
+    Or run by id (the number in the square brackets). Example:
+    ```{ctx.prefix}{ctx.alias} 0```" """)
+  else:
+    outMsg+= (f"""-f "Your input was: `{item}`\n Which one were you looking for? Rerun your command:\n`{ctx.prefix}{ctx.alias} 'Exact Name of Item' -with 'Name of Tool' [prof/exp]`" """)
+  n = 1
+  outMsg += (f"""-f " """)
+  for craftable in foundItems:
+    outMsg += (f""" **[{craftable.get('id',n)}] {craftable.get('name')}**\n""")
+    n+=1
+    if n>10: break
+  outMsg += (f""" " """)
+  if ctx.channel.id == 946108279543713802:
+    outMsg+=(f""" -t 30 -f "Because a help message was called in #downtime-log, this message will self destruct in: <t:{int(time())+30}:R> seconds" """)
+
+
+elif len(foundItems)<1:
+  outMsg = (f"""-title "No Items Founds" """) + \
+           (f"""-f "Your input was: `{item}`\n Maybe this isn't craftable, or maybe check your spelling?" """)
+  if ctx.channel.id == 946108279543713802:
+    outMsg+=(f""" -t 30 -f "Because a help message was called in #downtime-log, this message will self destruct in: <t:{int(time())+30}:R> seconds" """)
+## one item found
+else: ##CRAFTING SPECS
+  foundItem=foundItems[0]
+  if 'True' in args.get('with') or len(args.get('with'))==0:
+    if ctx.channel and ctx.channel.id == 946108279543713802:
+      outMsg +=(f""" -t 45 """)
+    outMsg = (f"""-title "Crafting Specs: `{foundItem.get('name')}`" """)
+    outMsg+= (f"""-f "**Item:** `{foundItem.get('name','').replace('"','')}` """) #Name
+    outMsg+= (f"""\n*{foundItem.get('rarity','').replace('"','').title()} item* """) #Rarity
+    
+    if foundItem.get('reqattune'):
+      outMsg+= (f"""\n*Requires attunement {'' if foundItem.get('reqattune') in 'true' else foundItem.get('reqattune','').replace('"','')}* """)
+      
+    if foundItem.get('craftingTags'):
+      outMsg+= (f"""\n* **Token Cost:** `{(foundItem.get('tokenCost','') +" " + foundItem.get('rarity','')).replace('"','')}` """) #Token Cost
+      outMsg+= (f"""\n* **GP Cost:** `{foundItem.get('gpCrafting','')}gp` """) #Gp Cost
+      outMsg+= (f"""\n* **Crafting DC:** `{dcMap.get(foundItem.get('rarity','').replace('"','').title())}` """) #Days
+      outMsg+= (f"""\n* **Crafting Time:** `{timeMap.get(foundItem.get('rarity','').replace('"','').title())} days` """) #DC
+      outMsg+= (f"""\n* **Can be crafted with:** `{foundItem.get('craftingTags','').replace('"','')}` tools """) #Tools
+    else:
+      outMsg+= (f"""\nThis item is not craftable!" """)
+    if foundItem.get('craftingNotes'):
+      outMsg+= (f"""\n**Crafting Note:** {foundItem.get('craftingNotes','').replace('"','')} """)
+    outMsg+= (f"""" """)
+
+    if foundItem.get('description') and ('desc' in args):
+      outMsg+= (f"""-f "**Description:**|{foundItem.get('description','').replace('"','')[:975]}\n-# Source: {foundItem.get('source','').replace('"','')}" """) #Description
+    else:
+      outMsg+= (f"""-f "\n-# Source: {foundItem.get('source','').replace('"','')}" """) #Description
+      
+  else: ##they are crafting!!
+    #if ctx.author.id != 167439243147345921:
+    #  return (f"""-f "Sorry, actually doing the crafting part of things is not ready yet. Please just use me as a lookup tool!" "-t 15" """)
+    tool = args.get('with')
+    if foundItem.get('craftingTags'):
+      if tool[0].lower() in foundItem.get('craftingTags','').lower(): ## valid tool
+        ##shit we're in business!
+        dc=dcMap.get(foundItem.get('rarity','').replace('"','').title())
+        days=timeMap.get(foundItem.get('rarity','').replace('"','').title())
+        prof=1
+        if args.get('prof'):
+          prof=1
+        if args.get('exp'):
+          prof=2
+        
+        bonus=0
+        if args.get('b') and ('True' not in args.get('b')):
+          bonus=int(args.get('b')[0])
+        
+        
+        
+        gpDiscountMod=1.0
+        timeDiscountMod=1.0
+        dayBonus=0
+        miscNotes=' -f "Misc Notes|'
+        if (args.get('arti') or character().levels.get('Aritficer')>9) and (foundItem.get('rarity','').replace('"','').title()=='Common' or foundItem.get('rarity','').replace('"','').title()=='Uncommon'):
+          gpDiscountMod/=2
+          timeDiscountMod/=4
+          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half the cost in a quarter of the time due to artificer's Magic Item Adept!"
+        if args.get('scribes') and ('scroll' in foundItem.get('name','').replace('"','').lower()):
+          gpDiscountMod/=2
+          timeDiscountMod/=2
+          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
+        if args.get('gift') and int(time())<=1740808799:
+          if foundItem.get('rarity').lower() != 'legendary':
+            gpDiscountMod/=2
+            miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
+          dayBonus-=1
+          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
+        gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
+        tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
+        
+        days=(days)*8 #how many downtime hours
+        days=max(4,ceil(days*timeDiscountMod)+dayBonus*8) #how many downtime hours
+          
+        ##Okay, figure out what the best stat is for the tool in question##
+        
+        jobValue, useStat, useJobName = getJobInfo(tool[0], character(), jobInfoMap)
+        
+        ##Make da roll (see !downtime)
+        ## Check for adv in avrae ##
+        argRel=0
+        indom=False
+        reroll=False
+        
+        if 'adv' in args:
+          miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
+        #Reroll nat1
+        if 'halfling' in character().race.lower() or 'lucky' in args:
+          reroll=True
+          miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}"'
+        # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
+        if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
+          argRel=10
+          miscNotes+=f'\n{character().name} cannot roll below a 10 on roll with proficiency due to Rogue\'s Reliable Talent'
+        ##Else because 18 barb cannot be also be a 10 rogue
+        elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
+          indom=True
+          miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on Strength rolls due to Barbarian\'s Indomitable Might'
+        ##Royal Mothfolk
+        elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
+          argRel = 5 if argRel < 10 else 10
+          miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+        ## Roll Da Output
+        miscNotes+='"'
+        
+        useDice= (f"""{2 if 'adv' in args else 1}d20{'ro1' if reroll else ''}""") + \
+                 (f"""{'mi'+argRel if argRel > 0 else ''}{'kh1' if 'adv' in args else ''}""") + \
+                 (f"""+{character().stats.get_mod(attMap[useStat])}[{useStat}]+""") + \
+                 (f"""{character().stats.prof_bonus*prof}[prof]{"+"+bonus+"[misc]" if bonus!=0 else ''}""")
+        diceRoll=vroll(useDice)
+        total = diceRoll.total
+        success=0
+        if diceRoll.total>=dc:
+          success=1
+        elif dc-5>=diceRoll.total:
+          success=-1
+        else:
+          success=0
+        ## Give Da Results
+        
+        outMsg = (f""" -title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
+        outMsg+= (f"""-f "**Using {useJobName}[{useStat}], DC {dc}**" """)
+        outMsg+= (f"""-f "Crafting Check|{diceRoll} vs DC {dc}" """)
+        match success:
+          case -1:
+            outMsg+= (f"""-f "<:weh:586050062266794023> Failure by five or more! <:weh:586050062266794023>|Lose half the relevant crafting materials you'd use to craft the item." """)
+            outMsg+= (f"""-f "{character().name} loses: \n * {ceil(tokens/2)} {foundItem.get('rarity').replace('"','').title()} tokens and \n * {int(gpCost/2*100)/100}gp." """)
+          case 0:
+            outMsg+= (f"""-f "<:disgosting:807475930288619561> Failure! <:disgosting:807475930288619561>|But at least you don't lose any materials." """)
+          case 1:
+            outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
+            outMsg+= (f"""|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
+        
+        downtime_chunks = ceil(days/4)
+        downtime_days = floor(days/8)
+        chunk=days%8
+        
+        
+        HOUR = 3600
+        DAY = 86400                                     #seconds per day
+        CurTime = int(time())                           #get current time
+        busyTime = CurTime + ((downtime_days-1)*DAY)+chunk*HOUR  #calculate time when the activity ends
+        
+        outMsg+=(f"""-f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F>" """)
+        
+        
+        
+      else: ##invalid tool
+        outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
+        outMsg+= (f"""-f "Invalid tool|I'm sorry to say that `{tool[0]}` is not a tool you can use to craft `{foundItem.get('name','')}`" """)
+        outMsg+= (f"""-f "Try using one of these: `{foundItem.get('craftingTags','').replace('"','')}`" """)
+        outMsg+= (f"""-f "Or, look up the item in [#bot-testing](https://discord.com/channels/938988968404451339/941139522400448582): `{ctx.prefix}{ctx.alias} '{foundItem.get('name','')}'`" """)
+        outMsg +=(f""" -t 45 """)
+    else:
+      outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
+      outMsg+= (f"""-f "Item cannot be crafted|I'm sorry to say that `{foundItem.get('name','')}` is not a craftable item." """)
+      if ctx.channel.id == 946108279543713802:
+        outMsg+=(f""" -t 30 -f "This message will self destruct in: <t:{int(time())+30}:R> seconds" """)
+## -rarity
+
+# Arguments:
+# !craft "Name of Item"
+# -manual 
+# -rarity Mundane/Common/Uncommon/Rare/Very Rare/Legendary
+# -tool <x>
+##      Crafting rules require proficiency at minimum
+# -exp
+# -gp <x>
+# -tk <x>
+# -b <x>
+# -adv
+# -with STR/DEX/CON/INT/WIS/CHA
+#       IDK if there's anything like this applicable in downtime, but it's a thought
+
+##Weird Crafting Modifiers!
+# -scribe    -> for Scribes wizards on scrolls
+# -ogl       -> for Fey Wanderer Ranger
+
+##Weird Crafting Modifiers I can in theory catch automagically
+# -arti      -> for level 10 artificers on common/unc
+# -rel       -> for rogue 11
+# -indom     -> for Barbarian 18
+# -lucky     -> Halfling
+# -royal     -> Royal Mothfolk
+
+outMsg+=miscNotes
+return "embed" + outMsg + (""" -f "-# Crafting alias is in 'beta' pending testing and approval." """)
+
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"

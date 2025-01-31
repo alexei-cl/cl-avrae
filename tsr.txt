@@ -1,0 +1,103 @@
+<drac2>
+def getWeapons(char):
+  a = {}
+  for d in char.attacks:
+    try:
+      if 'Attack' in str(d):
+        b = str(d).find('Attack')+7
+        c = str(d).find('to hit')-1
+        a[d.raw['name']] = {'name':d.raw['name'],'attackBonus': roll(str(d)[b:c].replace(" ","").replace("+",""))}
+    except:
+      pass
+  return a
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if keyArgument.lower() in curKey.lower():
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return curKey
+  return bestMatch
+  
+ch=character()
+weapons=getWeapons(ch)
+chosenWeap=findBestMatch(getWeapons(ch),&ARGS&[0])
+varName=chosenWeap
+
+if typeof(chosenWeap)=='str':
+  varName=(''.join(char for char in chosenWeap if char.isalnum())).title()
+else:
+  varName=(''.join(char for char in &ARGS&[0] if char.isalnum())).title()
+  
+args = argparse(&ARGS&)
+
+out=''
+
+spellMod=0
+
+errMsg = f""" -title "**Use:
+`!a {chosenWeap} -ts <str|dex> -with <int|wis|cha>`
+to set up True Strike for this character.**" """
+
+if 'True' in args.get('with'):
+  if (ch.get_cvar("tsWith")):
+    spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
+  elif any(x for x in ch.spellbook.find("True Strike") if x.mod):
+    spellMod=ch.spellbook.find("True Strike")[0].mod
+  else:
+    spellMod=ch.spellbook.spell_mod
+elif args.get('with'):
+  tempName=args.get('with')[0]
+  for stat in ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']:
+    if tempName in stat:
+      tempName = stat
+      ch.set_cvar("tsWith",val=tempName)
+      spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
+      out+= f' -f "**True Strike Casting Stat for {ch.name} set to {stat}**|inline" '
+      break
+  if (ch.get_cvar('tsWith')):
+    spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
+  else:
+    return errMsg
+else:
+  if (ch.get_cvar('tsWith')):
+    spellMod = ch.stats.get_mod(ch.get_cvar('tsWith'))
+  else:
+    return errMsg
+
+
+mod=args.get('tsr')
+errMsg=f"""-title "**Use `!a {chosenWeap} -ts <str|dex>` to set up True Strike for this weapon**" """
+
+if 'True' in mod:
+  if (ch.get_cvar("ts"+varName.title())):
+    mod=ch.get_cvar("ts"+varName.title())
+  else:
+    return errMsg
+else:
+  mod=mod[0]
+  for stat in ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']:
+    if mod in stat:
+      mod = stat
+      ch.set_cvar('ts'+varName.title(),val=stat)
+      out+= f' -f "**True Strike Stat for {chosenWeap} set to {mod}**|You should now be good to use this weapon with `-ts` by itself!|inline" '
+      break
+  if (ch.get_cvar('ts'+varName.title())):
+    mod=ch.get_cvar('ts'+varName.title())
+  else:
+    return errMsg
+
+modVal = ch.stats.get_mod(mod)
+
+out+=f"""-b "-{modVal}[{mod}]+{spellMod}[{ch.get_cvar('tsWith') if ch.get_cvar('tsWith') else 'spellmod'}]" """
+out+=f'-d "-{modVal}+{spellMod}" '
+if level >4:
+ out+=f"""-d \"{'1d6' if level < 11 else '2d6' if level < 17 else '3d6'}[radiant]\" """
+out+=f""" -f \"True Strike|Guided by a flash of magical insight, you make one attack with the weapon used in the spell’s casting. The attack uses your spellcasting ability for the attack and damage rolls instead of using Strength or Dexterity. If the attack deals damage, it can be Radiant damage or the weapon’s normal damage type (your choice).
+
+***Cantrip Upgrade***. Whether you deal Radiant damage or the weapon’s normal damage type, the attack deals extra Radiant damage when you reach levels 5 (1d6), 11 (2d6), and 17 (3d6)|inline\" """
+out+=f'-dtype radiant -title "{ch.name} attacks with a {chosenWeap} using True Strike!" '
+out+='-f "|[True Strike 2024](<https://avrae.io/dashboard/workshop/66f5e02e9ffe45e0fd7e6297>) snippet by alexei"'
+return out
+</drac2>

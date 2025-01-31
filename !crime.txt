@@ -1,0 +1,552 @@
+embed
+<drac2>
+
+crimeMap = {
+  'Con':                      {'DC':10, 'PayoutFine':50,   'LongDesc':"run a street con",                                                 'JailTime':2},
+  'Robbery':                  {'DC':10, 'PayoutFine':50,   'LongDesc':"rob some suckers",                                        'JailTime':2},
+  'Minor Drugs':              {'DC':10, 'PayoutFine':50,   'LongDesc':"make and sell minor drugs",                                                          'JailTime':2},
+  'Grave Robbing':            {'DC':15, 'PayoutFine':100,  'LongDesc':"rob some graves",                                                    'JailTime':4},
+  'Forgery':                  {'DC':15, 'PayoutFine':100,  'LongDesc':"make and sell counterfeits or forgery",                            'JailTime':4},
+  'Blackmail':                {'DC':15, 'PayoutFine':100,  'LongDesc':"gather up some blackmail",                                                        'JailTime':4},
+  'Spying':                   {'DC':20, 'PayoutFine':200,  'LongDesc':"their hand at spying",                                                           'JailTime':8},
+  'Major Drugs':              {'DC':20, 'PayoutFine':200,  'LongDesc':"make and sell illicit drugs",                                      'JailTime':8},
+  'Cover Up':                 {'DC':20, 'PayoutFine':200,  'LongDesc':"cover up another crime",                                           'JailTime':8},
+  'Breaking and Entering':    {'DC':25, 'PayoutFine':500,  'LongDesc':"do some breaking and entering",                                            'JailTime':20},
+  'Money Laundering':         {'DC':25, 'PayoutFine':500,  'LongDesc':"launder money",                                                 'JailTime':20},
+  'Poison':                   {'DC':25, 'PayoutFine':500,  'LongDesc':"make and sell lethal poison",                                      'JailTime':20},
+  'Assassinate':              {'DC':30, 'PayoutFine':1000, 'LongDesc':"assassinate a target",                                             'JailTime':40},
+  'Heist':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"pull off a heist to rip off one of the wealthiest nobles in town", 'JailTime':40},
+  'Fraud':                    {'DC':30, 'PayoutFine':1000, 'LongDesc':"commit insurance fraud or tax evasion",                                      'JailTime':40},
+}
+
+availableCrimes = ', '.join(crimeMap.keys()) #For help Messages
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+toolSkillMap = {
+  'Forgery Kit':        ["CHA","DEX","INT"],
+  'Thieves\' Tools':    ["DEX","INT","WIS"],
+  'Thief\'s Tools':     ["DEX","INT","WIS"],
+  'Thiefs Tools':      ["DEX","INT","WIS"],
+  'Thieves Tools':     ["DEX","INT","WIS"],
+  'Disguise Kit':       ["CHA","DEX","INT","CON"],
+  'Poisoner\'s Kit':    ["CON","DEX","INT"],
+  'Poisoners Kit':  ["CON","DEX","INT"],
+}
+availableTools = ', '.join(toolSkillMap.keys()) #For help Messages
+
+availableTools.replace('Thiefs Tools, ',  '') #I'm evil and don't want to encourage people to use these spellings in help messages, even if I'll accept them as arguments.
+availableTools.replace('Thieves Tools, ', '')
+availableTools.replace('Thief\'s Tools, ','')
+
+
+checkThreeMap = {
+  'Investigation': 'INT',
+  'Perception': 'WIS',
+  'Athletics': 'STR',
+  'Deception': 'CHA',
+}
+availableSkills = ', '.join(checkThreeMap.keys())
+
+
+availableTools = ', '.join(toolSkillMap.keys())
+
+## If no tool provided, make a check with the best applicable modifier.
+def toolBestSkillAll(char, toolSkillMap):
+  toolName="uwu"
+  max_mod = -5
+  for toolKey in toolSkillMap:
+    for stat in toolSkillMap[toolKey]:
+      mod_value = char.stats.get_mod(stat)
+      if stat == 'CHA' and 'ogl' in args:
+        mod_value+=char.stats.get_mod("WIS")
+      if mod_value > max_mod:
+        max_mod = mod_value
+        finalStat = stat
+        toolName = toolKey
+  return finalStat, toolName
+
+#Choose which stat to use with the selected tool
+def toolBestSkill(argTool, char, toolSkillMap):
+  toolKey = findBestMatch(toolSkillMap, argTool)
+  if toolKey:
+    toolInfo = toolSkillMap[toolKey]
+    max_mod = -5
+    for stat in toolInfo:
+      mod_value = char.stats.get_mod(attMap[stat])
+      if 'CHA' in stat and 'ogl' in args:
+        mod_value += char.stats.get_mod(attMap['WIS'])
+      if char.skills[attMap[stat].lower()].adv: #advantage is equivalent to roughly +4-5
+        mod_value+=4
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return useStat, toolKey
+  else:
+    return None, None
+
+#Function to return the player's best choice for check #3
+def skillBestSkill(char, checkThreeMap):
+  skillName=""
+  skillMod=""
+  max_mod = -5
+  for skillKey in checkThreeMap:
+    mod_value = char.skills[skillKey.lower()].value
+    if char.skills[skillKey.lower()].adv: #advantage is equivalent to roughly +4-5
+        mod_value+=4
+    if mod_value > max_mod:
+      max_mod = mod_value
+      skillName = skillKey
+      skillMod = checkThreeMap[skillKey]
+  return  skillMod, skillName
+
+#Helper function...
+def getCrimeInfo(argCrime, target, crimeMap):
+  crimeKey = findBestMatch(crimeMap, argCrime)
+  if crimeKey is not None:
+    crimeInfo     = crimeMap[crimeKey]      #SafeDict
+    crimeDC       = crimeInfo['DC']         #int
+    crimePayout   = crimeInfo['PayoutFine'] #int
+    crimeLong     = crimeInfo['LongDesc']   #int
+    crimeJail     = crimeInfo['JailTime']   #int
+
+    return crimeInfo,crimeDC,crimePayout,crimeLong,crimeJail
+  else:
+    return None, None, None, None, None
+
+
+#knall ty this is very nice
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().replace("'",'').startswith(keyArgument.lower().replace("'",'')): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return bestMatch
+  return bestMatch
+
+#separate bonuses from gp from other bonuses
+def getInvestBonus(arg):
+  if '+' in arg:
+    investB = arg.find('+')
+    return int(arg[:investB]), arg[investB:]
+  elif '-' in arg:
+    investB = arg.find('-')
+    return int(arg[:investB]), arg[investB:]
+  else:
+    try:
+      int(arg)
+    except:
+      err("**I have an issue parsing your bonuses from GP spent; make sure you didn't miss a hyphen in there?**")
+    return int(arg),None
+
+#Helper function to make sure the player is spending their gold correctly!
+def validateInvest(gp,b1,b2,b3):
+  gpMax=(gp-25)/25*2
+  if (b1%2) > 0 or (b2%2) > 0 or (b3%2) > 0:
+    return -4
+  elif b1>6 or b2>6 or b3>6:
+    return -1 #-1 -> Max bonus is +6 to one roll
+  elif b1+b2+b3>gpMax:
+    return -2 #-2 -> Total bonus is too big for the amount spent
+  elif b1+b2+b3 < gpMax:
+    return -3 #-3 -> Total bonus is too big for the amount spent
+  else:
+    return 0
+
+# Command format: `!crime "<Crime Name>" -tool "<Tool>" -gp "<Info Fee>" -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+
+# Time calculations
+downtime_days = 5                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+args = &ARGS&
+
+defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activities
+
+  **__Usage__**:
+  `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+
+  **__Crime Names:__** `{availableCrimes}`
+  
+  **__Required Arguments__**
+  ** * `-gp X`** How much gold you're spending on investigation Min 25, Max 250.
+  For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
+  
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-tool '<Tool>'`** One of: `{availableTools}`
+  ** * `prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  **Avrae does not track tool proficiencies, so you have to supply this yourself.**
+  ** * `-b1 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your first check.
+  ** * `-b2 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your second check.
+  ** * `-b3 X`** X-> One of `0,2,4,6` indicating your bonus from gp spent to your third check.
+  
+  __Example__: `!{ctx.alias.title()} Con -gp 50 -b1 2`
+  """
+
+verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
+
+  **__Usage__**:
+  `!crime '<Crime Name>' -tool '<Tool>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+
+  **__Crime Names:__** `{availableCrimes}`
+  
+  **__Required Arguments__**
+  ** * `-gp X`** How much gold you're spending on investigation Min 25, Max 250.
+  For every 25gp you spend over 25, you gain a +2 bonus to one of the checks (max +6 one check)
+  
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-tool '<Tool>'`** One of: `{availableTools}`
+  ** * `prof/exp`** *Optional* Indicate if you have proficiency or expertise in the tool you're using (you technically don't need to be proficient to do crime!)
+  **Avrae does not track tool proficiencies, so you have to supply this yourself.**
+  ** * `-b1 X+Y`** X-> One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well. i.e. `0+1d4` for Mark of Shadow Stealth bonus die!
+  ** * `-b2 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses your character has here as well.
+  ** * `-b3 X+Y`** One of `0,2,4,6` indicating your bonus from gp spent.
+  Add any other downtime-applicable bonuses here as well added after your investigation bonus. i.e. `2+1d4` for Mark of Warding investigation.
+  ** * `inv/perc/ath/dec`** *Optional*. Indicate the skill you'd like to use for your third check. If not included, your best modifier will be used.
+  ** * `adv`** If you have advantage on ALL your checks (Such as from Foresight)
+  ** * `adv1` / `adv2` / `adv3`** To specify certain checks to have advantage
+  ** * `rel`** if you have Reliable Talent 
+  ** * `royal`** if you are a Royal Mothfolk
+  ** * `lucky`** if you are a Halfling who rerolls nat 1s
+  ** * `indom`** if you are a level 18 Barbarian
+  ** * `elo`** if you are an Eloquence Bard
+  * __Example__: `!{ctx.alias.title()} Con -gp 50 -tool thief -b1 2 rel`
+  """
+
+if '-v' in args:
+  return f"""embed -title "Looking to do something *bad*?" -desc "{verbose}" """
+
+if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
+  desc = defaultDesc
+  return f"""embed -title "Looking to do something *bad*?" -desc "{desc}" """
+
+####################################
+####################################
+##                                ##
+## PROCESS AND VALIDATE ARGUMENTS ##
+##                                ##
+####################################
+####################################
+
+ ##################################
+##     Argument 1: Crime Type     ##
+ ##################################
+argCrime = args[0]
+
+ch = character()
+
+#Get Crime Type!
+crimeInfo, crimeDC, crimePayout, crimeLong, crimeJail = getCrimeInfo(argCrime, ch, crimeMap)
+
+#Early Out -> No Crime Selected
+if crimeInfo is None:
+  return f'-title "Error: unknown <CrimeName>" -desc "**Use:** `{availableCrimes}`"'
+
+args = argparse(args,parse_ephem=False)               # Parse the remaining arguments
+
+ ##################################
+##            tool/prof            ##
+ ##################################
+
+#tool proficiency
+prof=0
+if 'prof' in args:
+  prof=1
+elif 'exp' in args:
+  prof=2
+elif ('jack' in args) or (character().levels.get('Bard')>=2):
+  prof=0.5
+
+ ##################################
+##     Argument 2: -tool Type     ##
+ ##################################
+
+toolName = args.get('tool',None)
+
+if not toolName:
+  toolStat,toolName = toolBestSkillAll(ch, toolSkillMap)
+  if prof > 0: #You can't just say you're proficient and NOT give a tool
+    return f'-title "Error: Tool you have Proficiency with not provided." -desc "**Use:** `{availableTools}`"'
+else:
+  toolName=toolName[0].replace("'",'') #unlist
+  toolStat,toolName= toolBestSkill(toolName, ch, toolSkillMap)
+
+if toolName is None: #Should not ever be None
+  return f'-title "Error: Unknown Tool {toolName}{toolStat}" -desc "**Use:** `{availableTools}`"'
+
+ #######################################
+## Argument 3+4: -gp and -b ephemerals ##
+ #######################################
+
+#Parse gp args
+gpSpent = args.get('gp',' ')
+gpSpent = int(gpSpent[0]) if typeof(gpSpent)=='SafeList' else 0
+
+#Parse -b args
+b1=args.get('b1')
+b2=args.get('b2')
+b3=args.get('b3')
+
+#Check if they're adding some extra bonuses a la Dragonmarks
+b1Invest, b1Bonus = getInvestBonus(b1[0]) if b1 else [0,0]
+b2Invest, b2Bonus = getInvestBonus(b2[0]) if b2 else [0,0]
+b3Invest, b3Bonus = getInvestBonus(b3[0]) if b3 else [0,0]
+
+#Error Catching
+if not gpSpent or gpSpent<25:
+  return f' -title "Error: Cheapskate" -desc "You must spend *at least* 25gp gathering information on potential targets before committing the intended crime."'
+if gpSpent%25>0 or gpSpent>250:
+  return f' -title "Error: You\'re wasting money." -desc "You\'re trying to spend {gpSpent}gp. Please make sure you spend in increments of 25gp and no more than 250gp. You\'re wasting money otherwise. "'
+if (errorCode:=validateInvest(gpSpent,b1Invest,b2Invest,b3Invest))<0: ##ERROR
+  if errorCode == -4:
+    return f' -title "Error: You\'re being a little *odd*?" -desc "You get bonuses in increments of **`+2`** for spending gp.\nYou tried to give yourself\n**__Roll 1:__ `+{b1Invest}`**\n**__Roll 2:__ `+{b2Invest}`**\n**__Roll 3__: `+{b3Invest}`**\nYou can see why this is a little odd, right?"'
+  if errorCode == -3:
+    return f' -title "Error: Give yourself more credit" -desc "You\'re trying to add a total of **`+{b1Invest+b2Invest+b3Invest}`** to your skill checks from gp spent.\nYou can get up to a total of **`+{int((gpSpent-25)/25*2)}`** spread out among all three.\nIf you\'re spending the money, get the bonus!" '
+  elif errorCode == -2:
+    return f' -title "Error: Feeling overconfident?" -desc "You\'re trying to add a total of **`+{int(b1Invest+b2Invest+b3Invest)}`** to your skill checks from gp spent.\nYou can get up to a total of **`+{int((gpSpent-25)/25*2)}`** spread out among all three.\nMake sure not to give yourself more than you\'ve paid for!" '
+  elif errorCode == -1:
+    return f' -title "Error: Spread the Love?" -desc "You can only get a total of +6 to one roll from gp spent casing targets. You tried to give yourself\n**__Roll 1__:`+{b1Invest}`**\n**__Roll 2:__ `+{b2Invest}`**\n**__Roll 3:__ `+{b3Invest}`**"'
+
+
+ #######################################
+## Argument 5: Check 3 skill           ##
+ #######################################
+
+skillThree=""
+skillThreeMod=""
+if 'inv' in args:
+  skillThree='Investigation'
+  skillThreeMod='INT'
+elif 'perc' in args:
+  skillThree='Perception'
+  skillThreeMod='WIS'
+elif 'ath' in args:
+  skillThree='Athletics'
+  skillThreeMod='STR'
+elif 'dec' in args:
+  skillThree='Deception'
+  skillThreeMod='CHA'
+else:
+  skillThreeMod,skillThree=skillBestSkill(ch,checkThreeMap)
+
+argAdv = args.adv(boolwise=True)    # Check if advantage is present
+                                    # Should figure out handling for specific advantage situations...
+
+stealthMod = character().skills['stealth'].value
+
+
+####################################
+####################################
+##                                ##
+##         MAKE YA ROLLS          ##
+##                                ##
+####################################
+####################################
+
+######################################
+## Checking for Reliable talent Etc ##
+######################################
+
+miscNotes=''
+
+d20Dict = {
+    'Dummy':    {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 1':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 3':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+    'Roll 2':   {'adv':None,   'reroll':None, 'min_val':None,   'mod_override':None},
+}
+
+## Check for Halfling; don't think there are ANY other reroll nat 1 features that workin downtime
+if ('halfling' in character().race.lower()) or 'lucky' in args:
+  for key in d20Dict:
+    d20Dict[key].update({'reroll':1})
+  miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}'
+
+## Check for advantage in avrae
+
+if character().skills['stealth'].adv:
+  d20Dict['Roll 1'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on Stealth (Dexterity) rolls for some reason (Set in Avrae)'
+
+if character().skills[attMap[toolStat]].adv:
+  d20Dict['Roll 2'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on {attMap[toolStat]} rolls for some reason (Set in Avrae)'
+
+if character().skills[skillThree.lower()].adv:
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on {skillThree} ({attMap[checkThreeMap[skillThree]]}) rolls for some reason (Set in Avrae)'
+  
+
+d20Dict['Roll 2'].update({'mod_override':get(f'{attMap[toolStat].lower()}Mod')})
+
+# adv, adv1, adv2, adv3
+
+if 'adv' in args:
+  d20Dict['Roll 1'].update({'adv':True})
+  d20Dict['Roll 2'].update({'adv':True})
+  d20Dict['Roll 3'].update({'adv':True})
+  miscNotes+=f'\n{character().name} has advantage on all of their rolls (Player passed the **`adv`** argument)'
+else:
+  if 'adv1' in args:
+    d20Dict['Roll 1'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their Stealth (Dexterity) roll (Player passed the **`adv1`** argument)'
+  if 'adv2' in args:
+    d20Dict['Roll 2'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their {toolName} ({attMap[toolStat]}) roll (Player passed the **`adv2`** argument)'
+  if 'adv3' in args:
+    d20Dict['Roll 3'].update({'adv':True})
+    miscNotes+=f'\n{character().name} has advantage their {skillThree} ({attMap[skillThreeMod]}) Roll (Player passed the **`adv3`** argument)'
+
+
+## Reliable Talents ##
+
+## Rogue ##
+if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: add `rel`
+  if ch.skills['stealth'].prof > 0.5:
+    d20Dict['Roll 1'].update({'min_val':10})
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
+  if prof>0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {toolName} rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 2'].update({'min_val':10})
+  if ch.skills[skillThree.lower()].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Rogue\'s Reliable Talent'
+    d20Dict['Roll 3'].update({'min_val':10})
+
+# Barbarian Indomitable Might #
+if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): #Imdomitable Might
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {skillThree} rolls due to Barbarian\'s Indomitable Might'
+
+  d20Dict['Roll 3'].update({'min_val':character().stats.strength})
+# Royal Mothfolk #
+if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
+  if 'CHA' in toolStat and prof > 0.5:
+    miscNotes+=f'\n"{character().name} cannot roll below a {5} on {attMap[skillThree]} ({toolName}) rolls due to being a {character().race}'
+    d20Dict['Roll 2'].update({'min_val':5})
+  if 'Deception' in skillThree and ch.skills[skillThree.lower()].prof > 0.5:
+    miscNotes+=f'\n{character().name} cannot roll below a {5} on {skillThree} rolls due to being a {character().race}'
+    d20Dict['Roll 3'].update({'min_val':5})
+
+# Eloquence Bard Silver Tongue #
+if skillThree == 'Deception':
+  if 'elo' in args: #Silver Tongue
+    miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Eloquence Bard\'s Silver Tongue!'
+    d20Dict['Roll 3'].update({'min_val':10})
+  if 'ogl' in args: #Otherworldly Glamor
+    d20Dict['Roll 3'].update({'mod_override':get('charismaMod')})
+    miscNotes+=f'\n{character().name} adds their Wisdom modifier **`+{get("wisdomMod")}`** to Charisma ({skillThree}) Ability Checks due to Fey Wanderer Ranger\'s Otherworldly Glamour'
+    newMod = int(d20Dict['Roll 3'].get('mod_override'))+int(get('wisdomMod'))+ int( get('proficiencyBonus') * ch.skills['deception'].prof )
+    d20Dict['Roll 3'].update({'mod_override':newMod})
+
+if 'ogl' in args:
+  if 'CHA' in toolStat:
+    d20Dict['Roll 2'].update( {'mod_override':get('charismaMod')} )
+    miscNotes+=f'\n{character().name} adds their Wisdom modifier **`+{get("wisdomMod")}`** to Charisma ({toolName}) Ability Checks due to Fey Wanderer Ranger\'s Otherworldly Glamour'
+    newMod = d20Dict['Roll 2'].get('mod_override')+get('wisdomMod')
+    d20Dict['Roll 2'].update({'mod_override':newMod})
+
+if miscNotes:
+  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
+
+#return miscNotes
+
+## Roll 1 - Stealth ##
+##Reworking this bit.
+
+useDice =  f"{'2' if d20Dict['Roll 1']['adv'] else '1'}d20{'kh1'if d20Dict['Roll 1']['adv'] else ''}"       #ADV
+useDice += f"{'ro1' if d20Dict['Roll 1']['reroll'] else ''}"                                                #REROLL 1s
+useDice += f"""{f"mi{d20Dict['Roll 1']['min_val']}" if d20Dict['Roll 1']['min_val'] else ''}"""             #RELIABLE TALENT (& SIMILAR)
+useDice += f"+{get('dexterityMod')}[dexterity]"                                                             #ABILITY MOD
+useDice += '' if ch.skills['stealth'].prof==0 else (f"+{ch.stats.prof_bonus * ch.skills['stealth'].prof}[{'jack of all trades' if typeof(ch.skills['stealth'].prof)=='Float' else ('prof' if ch.skills['stealth'].prof==1 else 'expertise')}]")
+useDice += (f"+{b1Invest}[gp bonus]" if b1 else '')
+useDice += (f"{b1Bonus}[misc bonus]" if b1Bonus else '')
+
+#return f" -f {vroll(useDice).total}"
+#useDice = f"{ch.skills['stealth'].d20( d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}"
+roll1 = vroll(useDice)
+#roll1 = vroll(f"{useDice}{f'+{b1Invest}[gp bonus]' if b1 else ''}{f'{b1bonus}[misc bonus]' if b1Bonus else ''}")
+
+## Roll 2 - Tool! ##
+
+useDice =  f"{'2' if d20Dict['Roll 2']['adv'] else '1'}d20{'kh1'if d20Dict['Roll 2']['adv'] else ''}"       #ADV
+useDice += f"{'ro1' if d20Dict['Roll 2']['reroll'] else ''}"                                                #REROLL 1s
+useDice += f"""{f"mi{d20Dict['Roll 2']['min_val']}" if d20Dict['Roll 2']['min_val'] else ''}"""             #RELIABLE TALENT (& SIMILAR)
+useDice += f"+{ch.stats.get_mod(attMap[toolStat])}[{attMap[toolStat]}]"                                      #ABILITY MOD
+useDice += '' if prof==0 else (f"+{ch.stats.prof_bonus * prof}[{'jack of all trades' if typeof(prof)=='Float' else ('prof' if prof==1 else 'expertise')}]")
+useDice += (f"+{b2Invest}[gp bonus]" if b2 else '')
+useDice += (f"{b2Bonus}[misc bonus]" if b2Bonus else '')
+
+roll2 = vroll(useDice)
+
+## Roll 3 - Skill of choice! ##
+
+useDice = f"{ch.skills[skillThree.lower()].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
+
+roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b3 else ''}{f'{b3Bonus}[misc bonus]' if b3Bonus else ''}")
+
+## Determine Success!
+
+crimeSuccess = 0
+if roll1.total >= crimeDC: crimeSuccess = crimeSuccess +1
+if roll2.total >= crimeDC: crimeSuccess = crimeSuccess +1
+if roll3.total >= crimeDC: crimeSuccess = crimeSuccess +1
+
+
+outTitle = (f'Crime <t:{CurTime}:D> - <t:{busyTime}:D>')
+
+introField =f"**{ch.name} is committing a crime!**\n They are going to try to __**{crimeLong}**__.\nDC: {crimeDC} \n Payout/Fine: {crimePayout} gp\n Jail Time: {crimeJail} days"
+
+outField1=f"__Check 1 - Dexterity(Stealth)__|**DC** {crimeDC}\n" + \
+         (f"**Check** {roll1}\n") + \
+        ((f":white_check_mark: *Success*") if roll1.total >= crimeDC else ":x: *no success*\n")
+
+outField2=f"__Check 2 - {attMap[toolStat].title()}({toolName})__|**DC** {crimeDC} \n" + \
+         (f"**Check** {roll2}\n") + \
+        ((f":white_check_mark: *Success*") if roll2.total >= crimeDC else ":x: *no success*\n")
+
+outField3=f"__Check 3 - {attMap[checkThreeMap[skillThree]].title()}({skillThree})__|**DC** {crimeDC}\n" + \
+         (f"**Check** {roll3}\n") + \
+        ((f":white_check_mark: *Success*") if roll3.total >= crimeDC else ":x: *no success*\n")
+
+
+
+outDescr = (f'\n**Character:** {ch.name}') +  \
+           (f'\n**Successes:** {str(crimeSuccess)} / 3')
+
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+match crimeSuccess:
+  case 3:
+    outDescr+=(f'\n**Complete Success:** **`{str(crimePayout)}` \* Tier {tier} --> `{crimePayout*tier}`** gp gained\n**Net Profit**: **`{crimePayout*tier-gpSpent}`** gp')
+    outDescr+=(f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
+  case 2:
+    outDescr+=(f'\n**Partial Success:** **`{int(crimePayout/2*100)/100}` \* Tier {tier} --> `{int(crimePayout/2*100)/100*tier}`** gp gained\n**Net Profit**: **`{int(crimePayout/2*100)/100*tier-gpSpent}`** gp')
+    outDescr+=(f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
+  case 1:
+    outDescr+=(f'\n**You got away...** Lose your initial investment of **`{gpSpent}`** gp')
+  case 0:
+    outDescr+=(f'\n**You got caught...!** Lose your initial investment of **`{gpSpent}`** gp\nEither pay the fine of **`{crimePayout}`** gp or spend **`{crimeJail}`** days in jail!')
+
+nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')
+
+return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}" -f "{outField3}" -f "__Result__|{outDescr}" {miscNotes} -f " \n{nextFreetime}" -f "-# Problems with this alias? Ping the developer \@alexei"'
+
+
+</drac2>
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}}"

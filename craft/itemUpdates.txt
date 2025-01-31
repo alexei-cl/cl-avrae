@@ -1,0 +1,143 @@
+multiline 
+<drac2>
+newItems = [
+    {
+        "name": "Assassin's Blood",
+        "tokenCost": "2 Common",
+        "gpCrafting": "75",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Basic Poison",
+        "tokenCost": "1 Common",
+        "gpCrafting": "12.5",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury"
+    },
+    {
+        "name": "Burnt Other Fumes",
+        "tokenCost": "2 Common",
+        "gpCrafting": "250",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Inhaled"
+    },
+    {
+        "name": "Carrion Crawler Mucus",
+        "tokenCost": "3 Common",
+        "gpCrafting": "100",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Contact"
+    },
+    {
+        "name": "Dreamlily",
+        "tokenCost": "1 Common",
+        "gpCrafting": "0.5",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Dust of the Mummy",
+        "tokenCost": "2 Common",
+        "gpCrafting": "100",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Inhaled"
+    },
+    {
+        "name": "Lolth’s Sting",
+        "tokenCost": "2 Common",
+        "gpCrafting": "100",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury"
+    },
+    {
+        "name": "Oil of Taqggit",
+        "tokenCost": "2 Common",
+        "gpCrafting": "200",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Contact"
+    },
+    {
+        "name": "Serpent Venom",
+        "tokenCost": "1 Common",
+        "gpCrafting": "100",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury"
+    },
+    {
+        "name": "Truth Serum",
+        "tokenCost": "1 Common",
+        "gpCrafting": "37.5",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Essence of Ether",
+        "tokenCost": "1 Uncommon",
+        "gpCrafting": "150",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Inhaled"
+    },
+    {
+        "name": "Malice",
+        "tokenCost": "2 Uncommon",
+        "gpCrafting": "125",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Inhaled"
+    },
+    {
+        "name": "Thessaltoxin",
+        "tokenCost": "2 Uncommon",
+        "gpCrafting": "100",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury or Ingested"
+    },
+    {
+        "name": "Torpor",
+        "tokenCost": "2 Uncommon",
+        "gpCrafting": "300",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Wyvern Poison",
+        "tokenCost": "1 Uncommon",
+        "gpCrafting": "600",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury"
+    },
+    {
+        "name": "Pale Tincture",
+        "tokenCost": "1 Rare",
+        "gpCrafting": "125",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Biza's Breath",
+        "tokenCost": "2 Rare",
+        "gpCrafting": "125",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Inhaled"
+    },
+    {
+        "name": "Midnight Tears",
+        "tokenCost": "1 Very Rare",
+        "gpCrafting": "750",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Ingested"
+    },
+    {
+        "name": "Purple Worm Poison",
+        "tokenCost": "2 Very Rare",
+        "gpCrafting": "1,000",
+        "craftingTags": "Poisoner, Alchemist, Herbalist Kit",
+        "craftingNotes": "Injury"
+    }
+]
+for item in newItems:
+  item['rarity']=item['tokenCost'][2:].lower()
+  item['tokenCost']=item['tokenCost'][:1]
+return f"!gvar edit f1bee8bc-927f-4486-8274-bcf4907fb8ec {dump_json(newItems)}"
+
+</drac2>

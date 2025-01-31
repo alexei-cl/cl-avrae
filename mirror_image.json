@@ -1,0 +1,307 @@
+{
+    "automation": [
+        {
+            "amount": "1",
+            "counter": {
+                "slot": 2
+            },
+            "errorBehaviour": "raise",
+            "type": "counter"
+        },
+        {
+            "effects": [
+                {
+                    "duration": "10",
+                    "name": "Mirror Image",
+                    "save_as": "MirrorImage",
+                    "type": "ieffect2"
+                },
+                {
+                    "attacks": [
+                        {
+                            "attack": {
+                                "_v": 2,
+                                "activation_type": 2,
+                                "automation": [
+                                    {
+                                        "amount": "0",
+                                        "counter": "arbitraryName",
+                                        "errorBehaviour": "ignore",
+                                        "type": "counter"
+                                    },
+                                    {
+                                        "dice": "1d6",
+                                        "fixedValue": true,
+                                        "hidden": true,
+                                        "name": "Roll1",
+                                        "type": "roll"
+                                    },
+                                    {
+                                        "dice": "1d6",
+                                        "fixedValue": true,
+                                        "hidden": true,
+                                        "name": "Roll2",
+                                        "type": "roll"
+                                    },
+                                    {
+                                        "dice": "1d6",
+                                        "fixedValue": true,
+                                        "hidden": true,
+                                        "name": "Roll3",
+                                        "type": "roll"
+                                    },
+                                    {
+                                        "condition": "(Roll1>2) or (Roll2>2) or (Roll3>2)",
+                                        "onFalse": [
+                                            {
+                                                "text": "__**Illusory Double:**__ 3d6 = ( {Roll1}, {Roll2}, {Roll3} )\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                "title": "The attack avoids an illusory double and strikes true!",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "onTrue": [
+                                            {
+                                                "type": "remove_ieffect"
+                                            },
+                                            {
+                                                "effects": [
+                                                    {
+                                                        "attacks": [
+                                                            {
+                                                                "attack": {
+                                                                    "_v": 2,
+                                                                    "automation": [
+                                                                        {
+                                                                            "amount": "0",
+                                                                            "counter": "idkmybffjill",
+                                                                            "errorBehaviour": "ignore",
+                                                                            "type": "counter"
+                                                                        },
+                                                                        {
+                                                                            "dice": "1d6",
+                                                                            "fixedValue": true,
+                                                                            "hidden": true,
+                                                                            "name": "Roll1",
+                                                                            "type": "roll"
+                                                                        },
+                                                                        {
+                                                                            "dice": "1d6",
+                                                                            "name": "Roll2",
+                                                                            "type": "roll"
+                                                                        },
+                                                                        {
+                                                                            "condition": "(Roll1>2) or (Roll2>2)",
+                                                                            "onFalse": [
+                                                                                {
+                                                                                    "text": "__**Illusory Double:**__ 2d6 = ( {Roll1}, {Roll2})\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                                                    "title": "The attack avoids an illusory double and strikes true!",
+                                                                                    "type": "text"
+                                                                                }
+                                                                            ],
+                                                                            "onTrue": [
+                                                                                {
+                                                                                    "type": "remove_ieffect"
+                                                                                },
+                                                                                {
+                                                                                    "effects": [
+                                                                                        {
+                                                                                            "attacks": [
+                                                                                                {
+                                                                                                    "attack": {
+                                                                                                        "_v": 2,
+                                                                                                        "automation": [
+                                                                                                            {
+                                                                                                                "amount": "0",
+                                                                                                                "counter": "stopreadingthis",
+                                                                                                                "errorBehaviour": "ignore",
+                                                                                                                "type": "counter"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "dice": "1d6",
+                                                                                                                "fixedValue": true,
+                                                                                                                "hidden": true,
+                                                                                                                "name": "Roll1",
+                                                                                                                "type": "roll"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "condition": "Roll1>2",
+                                                                                                                "onFalse": [
+                                                                                                                    {
+                                                                                                                        "text": "__**Illusory Double:**__ 1d6 = ( {Roll1} )\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                                                                                        "title": "The attack avoids an illusory double and strikes true!",
+                                                                                                                        "type": "text"
+                                                                                                                    }
+                                                                                                                ],
+                                                                                                                "onTrue": [
+                                                                                                                    {
+                                                                                                                        "removeParent": "always",
+                                                                                                                        "type": "remove_ieffect"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "text": "__**Illusory Double:**__ 1d6 = ( {Roll1} )\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                                                                                        "title": "An illusory double takes the hit!",
+                                                                                                                        "type": "text"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "condition": "lastCounterRequestedAmount>0",
+                                                                                                                        "errorBehaviour": "false",
+                                                                                                                        "onFalse": [
+                                                                                                                            {
+                                                                                                                                "text": "Next time, you can `!a \"Illusory Duplicate\" -amt X` to automatically regain hitpoints!",
+                                                                                                                                "title": "Heal back your damage!",
+                                                                                                                                "type": "text"
+                                                                                                                            }
+                                                                                                                        ],
+                                                                                                                        "onTrue": [
+                                                                                                                            {
+                                                                                                                                "effects": [
+                                                                                                                                    {
+                                                                                                                                        "damage": "-{lastCounterRequestedAmount}",
+                                                                                                                                        "fixedValue": true,
+                                                                                                                                        "type": "damage"
+                                                                                                                                    }
+                                                                                                                                ],
+                                                                                                                                "target": "self",
+                                                                                                                                "type": "target"
+                                                                                                                            }
+                                                                                                                        ],
+                                                                                                                        "type": "condition"
+                                                                                                                    }
+                                                                                                                ],
+                                                                                                                "type": "condition"
+                                                                                                            }
+                                                                                                        ],
+                                                                                                        "name": "Illusory Duplicate",
+                                                                                                        "proper": true,
+                                                                                                        "verb": "tries to avoid an attack with an"
+                                                                                                    }
+                                                                                                }
+                                                                                            ],
+                                                                                            "name": "Mirror Image: 1 Duplicate",
+                                                                                            "parent": "MirrorImage",
+                                                                                            "type": "ieffect2"
+                                                                                        }
+                                                                                    ],
+                                                                                    "target": "self",
+                                                                                    "type": "target"
+                                                                                },
+                                                                                {
+                                                                                    "text": "__**Illusory Double:**__ 2d6 = ( {Roll1}, {Roll2} )\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                                                    "title": "An illusory double takes the hit!",
+                                                                                    "type": "text"
+                                                                                },
+                                                                                {
+                                                                                    "condition": "lastCounterRequestedAmount>0",
+                                                                                    "errorBehaviour": "false",
+                                                                                    "onFalse": [
+                                                                                        {
+                                                                                            "text": "Next time, you can `!a \"Illusory Duplicate\" -amt X` to automatically regain hitpoints!",
+                                                                                            "title": "Heal back your damage!",
+                                                                                            "type": "text"
+                                                                                        }
+                                                                                    ],
+                                                                                    "onTrue": [
+                                                                                        {
+                                                                                            "effects": [
+                                                                                                {
+                                                                                                    "damage": "-{lastCounterRequestedAmount}",
+                                                                                                    "fixedValue": true,
+                                                                                                    "type": "damage"
+                                                                                                }
+                                                                                            ],
+                                                                                            "target": "self",
+                                                                                            "type": "target"
+                                                                                        }
+                                                                                    ],
+                                                                                    "type": "condition"
+                                                                                }
+                                                                            ],
+                                                                            "type": "condition"
+                                                                        }
+                                                                    ],
+                                                                    "name": "Illusory Duplicate",
+                                                                    "verb": "tries to avoid an attack with an"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "name": "Mirror Image: 2 Duplicates",
+                                                        "parent": "MirrorImage",
+                                                        "type": "ieffect2"
+                                                    }
+                                                ],
+                                                "target": "self",
+                                                "type": "target"
+                                            },
+                                            {
+                                                "text": "__**Illusory Double:**__ 3d6 = ( {Roll1}, {Roll2}, {Roll3} )\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\n\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+                                                "title": "An illusory double takes the hit!",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "condition": "lastCounterRequestedAmount>0",
+                                                "errorBehaviour": "false",
+                                                "onFalse": [
+                                                    {
+                                                        "text": "Next time, you can `!a \"Illusory Duplicate\" -amt X` to automatically regain hitpoints!",
+                                                        "title": "Heal back your damage!",
+                                                        "type": "text"
+                                                    }
+                                                ],
+                                                "onTrue": [
+                                                    {
+                                                        "effects": [
+                                                            {
+                                                                "damage": "-{lastCounterRequestedAmount }",
+                                                                "fixedValue": true,
+                                                                "type": "damage"
+                                                            }
+                                                        ],
+                                                        "target": "self",
+                                                        "type": "target"
+                                                    }
+                                                ],
+                                                "type": "condition"
+                                            }
+                                        ],
+                                        "type": "condition"
+                                    }
+                                ],
+                                "name": "Illusory Duplicate",
+                                "proper": true,
+                                "verb": "tries to avoid an attack with an"
+                            }
+                        }
+                    ],
+                    "name": "Mirror Images: 3 Duplicates",
+                    "parent": "MirrorImage",
+                    "target_self": true,
+                    "type": "ieffect2"
+                }
+            ],
+            "target": "self",
+            "type": "target"
+        },
+        {
+            "text": "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real.\n\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\n\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+            "title": "Mirror Image",
+            "type": "text"
+        }
+    ],
+    "casttime": "Action",
+    "classes": "Bard, Sorcerer, Warlock, Wizard",
+    "components": {
+        "material": "",
+        "somatic": true,
+        "verbal": true
+    },
+    "concentration": false,
+    "description": "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real.\nEach time a creature hits you with an attack roll during the spell's duration, roll a d6 for each of your remaining duplicates. If any of the d6s rolls a 3 or higher, one of the duplicates is hit instead of you, and the duplicate is destroyed. The duplicates otherwise ignore all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it has the Blinded condition, Blindsight, or Truesight.",
+    "duration": "1 minute",
+    "higherlevels": "",
+    "level": 2,
+    "name": "Mirror Image",
+    "range": "Self",
+    "ritual": false,
+    "school": "I",
+    "subclasses": ""
+}

@@ -1,0 +1,217 @@
+embed
+<drac2>
+
+# Time calculations
+downtime_days = 1                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+
+jobInfoMap = {
+  'Alchemist':     {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
+  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
+  'Calligrapher':  {'jobValue': 30, 'jobStats': ["INT", "DEX", "CHA"]},
+  'Carpenter':     {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+  'Cartographer':  {'jobValue': 30, 'jobStats': ["INT", "DEX"]},
+  'Cobbler':       {'jobValue': 10, 'jobStats': ["CHA", "DEX"]},
+  'Cook':          {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Driver':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
+  'Enchanter':     {'jobValue': 20, 'jobStats': ["INT", "WIS"]},
+  'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
+  'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
+  'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
+  'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
+  'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
+  'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
+  'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
+  'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON", "DEX"]},
+  'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
+  'Woodcarver':    {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+}
+availableJobs = ', '.join(jobInfoMap.keys())
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+def getJobInfo(argDayjob, target, jobInfoMap):
+  jobKey = findBestMatch(jobInfoMap, argDayjob)
+  if jobKey is not None:
+    jobInfo = jobInfoMap[jobKey]
+    jobValue = jobInfo['jobValue']
+    max_mod = -5
+    for stat in jobInfo['jobStats']:
+      mod_value = target.stats.get_mod(stat)
+      if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
+      if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return jobValue, useStat, jobKey
+  else:
+    return None, None, None
+
+def getJobMultiplier(dayjobRoll):
+  if dayjobRoll <= 9:
+    multiplier = 0.5
+  elif 10 <= dayjobRoll <= 14:
+    multiplier = 0.75
+  elif 15 <= dayjobRoll <= 20:
+    multiplier = 1
+  elif 21 <= dayjobRoll <= 25:
+    multiplier = 1.5
+  elif 26 <= dayjobRoll <= 30:
+    multiplier = 2.5
+  else:
+    multiplier = 4
+  return multiplier
+
+
+
+args = &ARGS&
+if '-v' in args: # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `adv`** if you roll with advantage
+  ** * `rel`** if you have reliable talent
+  ** * `lucky`** if you are a halfling
+  ** * `royal`** if you are a Royal Mothfolk
+  ** * `indom`** if you are a level 18 barbarian
+  ** __Example:__ `!{ctx.alias.title()} callig rel adv`**
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+
+if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0] in x) : # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** __Example:__ `!{ctx.alias.title()} callig`**
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+
+argDayjob = args[0]                 # Pull out the JobName
+args = argparse(args)               # Parse the remaining arguments
+targetName = args.get('char', name) # Get the specified target name, defaults to yourself
+argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+argAdv = args.adv(boolwise=True)    # Check if advantage is present
+miscNotes=''
+
+if (targetName == name):
+  target = character()
+else:
+  return f'-title "Error" -desc "-char argument was not found"'
+  ##target = character(f"{targetName}")   # Try to find the character with the specified name
+
+jobValue, useStat, useJobName = getJobInfo(argDayjob, target, jobInfoMap)
+if not useStat:
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** __Example:__ `!{ctx.alias.title()} callig`**
+  
+  """
+  return f"""embed -title "I just couldn't find the job you're looking for?" -desc "{desc}" """
+
+## Check for adv in avrae ##
+if 'adv' in args:
+  miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
+elif character().skills[attMap[useStat]].adv:
+  argAdv = True
+  miscNotes+=f'\n{character().name} has advantage on all {useStat} rolls for some reason (Set in Avrae)'
+
+#Reroll nat1
+if 'halfling' in character().race.lower() or 'lucky' in args:
+  reroll=1
+  miscNotes+=f'\n"{character().name} rerolls Nat 1s due to being a {character().race}"'
+
+if jobValue is None:
+  return f'-title "Error: unknown <JobName>" -desc "**Use:** `{availableJobs}`"'
+
+argRel=None
+reroll=None
+
+# .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
+if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
+  argRel=10
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on roll with proficiency due to Rogue\'s Reliable Talent'
+
+##Else because 18 barb cannot be also be a 10 rogue
+elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
+  argRel = character().stats.strength
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+##Royal Mothfolk
+elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
+  argRel = 5
+  miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+
+if miscNotes:
+  miscNotes = '-f "**__Misc Notes:__**'+miscNotes+'"'
+
+useDice = f"{target.skills[attMap[useStat]].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
+
+if (args.get('exp')) or 'exp' in &ARGS&:
+  dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+else:
+  dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+
+multiplier = getJobMultiplier(dayjobRoll.total)
+dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece
+dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver and copper pieces is my understanding
+
+level=character().levels.total_level
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+outTitle = (f'Dayjob')
+outDescr = (f'\n**Character:** {target.name}') +  \
+           (f'\n**Job:** {useJobName} ({useStat})') +  \
+           (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
+           (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
+           (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
+		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n')
+
+argument=""" %*% """
+
+return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei"'
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer """{{ctx.prefix}}{{ctx.alias}}{{"%*%".replace('"','\"')}}"""

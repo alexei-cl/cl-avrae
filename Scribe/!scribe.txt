@@ -1,0 +1,101 @@
+<drac2>
+
+gvars= ['981c76e0-f465-413a-9b73-d1a20ba9f41c','8ff118c6-54dd-48ff-b956-dee2da56d791','9a4f2735-affc-4ae7-914e-be5c72d86940','02ba67a9-827f-49d9-8781-3c62f605e647','75ec3933-80cc-42c6-945f-6dd75451e8ea','21d662e0-9289-4550-823f-f38cf1239d0f']
+
+############################
+#         Functions        #
+############################
+def sanitize(string):
+  return string.replace('"',"").replace("'",'')
+def idMatch(id1,id2):
+  try:
+    return int(id1)==int(id2)
+  except:
+    return False
+
+def getDowntimeDays(days):
+  downtime_days = int(days)                               #how many days take this downtime activity
+  DAY = 86400                                     #seconds per day
+  CurTime = int(time())                           #get current time
+  busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+  return busyTime
+############################
+#Usage: !scribe ["Spell 1", "Spell 2", "Spell 3"] * (scribes/school of magic)
+
+sargs = &ARGS&[0:&ARGS&.index("*")] if '*' in &ARGS& else &ARGS&[0:]  # make a list of our spell arguments, splitting on * if supplied
+cargs = &ARGS&[&ARGS&.index("*")+1:] if '*' in &ARGS& else []  # make a list of our subclass args args
+
+newline="\n"
+
+if len(sargs)<1:
+  return f"""embed -title "Help me scribe!" -f 'Usage: `!scribe "Spell 1" "Spell 2" "etc" * "subclass"` {newline} For subclass, use: `scribes` for the school of scribes discount, or the school of magic you have a discount for.' """
+
+spells=argparse(sargs)
+
+keys =['Name', 'Source', 'Page', 'Level', 'Casting Time', 'Duration', 'School', 'Range', 'Components', 'Classes', 'Optional/Variant Classes', 'Text', 'At Higher Levels']
+
+spellCost=0
+spellTime=0
+spellLibrary=[]
+scribedSpells=[]
+
+
+for gvar in gvars:
+  json=load_json(get_gvar(gvar))
+  for spell in json:
+    spellLibrary.append(spell)
+
+for spell in sargs:
+  for tome in spellLibrary:
+    spellDiscount=False
+    if cargs:
+      for carg in cargs:
+        if carg.lower() in tome.get('School').lower():
+          spellDiscount=True
+    if spell.lower() in tome.get('Name').lower():
+      if 'scribes' in cargs:
+        scribedSpells.append({'Name':tome.get('Name'),
+                              'Cost':(int(tome.get('Level')[:1])*50),
+                              'Time':(int(tome.get('Level')[:1])*2*60), 
+                              'Note':"Scribed at 2min/level due to Scribes Wizard!"})
+        spellCost+=int(tome.get('Level')[:1])*50
+        spellTime+=(int(tome.get('Level')[:1])*2*60)
+      elif spellDiscount:
+          if carg.lower() in tome.get('School').lower():
+            scribedSpells.append({'Name':tome.get('Name'),
+                                  'Cost':(int(tome.get('Level')[:1])*25),
+                                  'Time':(int(tome.get('Level')[:1])*60*60),
+                                  'Note':f"Scribed at half cost/time due to being of the {tome.get('School')} school of magic!"})
+            spellCost+=int(tome.get('Level')[:1])*25
+            spellTime+=(int(tome.get('Level')[:1])*60*60)
+      else:
+        scribedSpells.append({'Name':tome.get('Name'),
+                              'Cost':(int(tome.get('Level')[:1])*50),
+                              'Time':(int(tome.get('Level')[:1])*2*60*60),
+                              'Note':""})
+        spellCost+=int(tome.get('Level')[:1])*50
+        spellTime+=(int(tome.get('Level')[:1])*2*60*60)
+            
+outputString=f""" -title "{sanitize(character().name)} scribes some wizard spells!" """ + \
+             f""" -f "Scribing the following spells: """
+
+for spell in scribedSpells:
+    timestring = (f"{spell['Time']/3600} hours") if spell['Time']>=3600 else (f"{spell['Time']/60} minutes") 
+    outputString+=f""" \n * {sanitize(spell['Name'])}: **{spell['Cost']}gp and {timestring} {f"**{newline}{sanitize(spell['Note'])}" if spell['Note'] else '**'} """
+outputString+='"'
+
+CurTime = int(time())
+HOUR = 3600
+DAY = 86400
+
+outputString+=f""" -f "Total Cost: **{spellCost}gp and {floor(spellTime/HOUR)} hours** {f" and {(spellTime%HOUR)/60} minutes" if spellTime%HOUR else '' } {newline} Done: <t:{CurTime+spellTime}:R>" """
+
+return "embed" + outputString + (""" -f "-# This scribing utility is made by @alexei" """)
+
+
+
+</drac2>
+
+-thumb <image>
+-color <color>
+-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"

@@ -10,3 +10,4 @@ Scribe/Spells.csv
 craft/craft_webhook.txt
 craft/gvar_splitter.py
 craft/dailyCraft.bat
+craft/cl_webhook.txt

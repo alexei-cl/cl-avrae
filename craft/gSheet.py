@@ -96,6 +96,10 @@ unix = int(rawTime.timestamp())
 
 with open("craft_webhook.txt") as file:
   webhook = file.readline().strip() #Discord webhook to post crafting sheet updates
+  
+with open("cl_webhook.txt") as file:
+  server_webhook = file.readline().strip() #Discord webhook to post crafting sheet upda
+
 headers = {"Content-Type": "application/json"}  # Headers should be a dictionary
 
 

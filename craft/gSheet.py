@@ -217,14 +217,23 @@ payload = {
 #if len(added)+len(removed)+len(updated):
 #   do something, post to mod-chat?
 
-response = requests.post(webhook,json=payload)
+if (len(added)+len(removed)+len(updated)):
+  postToCL=False
+else
+  postToCL=True
 
+response = requests.post(webhook,json=payload)
+if postToCL: 
+  response = requests.post(server_webhook,json=payload)
+  
 payload = {
     'username':'Crafting Bot - Admin',
     'content':summaryString
 }
 
 response = requests.post(webhook,json=payload)
+if postToCL: 
+  response = requests.post(server_webhook,json=payload)
 
 print(response)
 print(response.text)
@@ -263,7 +272,6 @@ else:
     print()
 
 updateStrings=[]
-
 itemDeets=f"Items added: "
 for row in added: #add new items
   print(f"Adding New Item {row.get('name')}")
@@ -291,3 +299,5 @@ for msg in updateStrings:
     'content':msg[:1999]
   }
   response = requests.post(webhook,json=payload)
+  if postToCL:
+    response = requests.post(server_webhook,json=payload)

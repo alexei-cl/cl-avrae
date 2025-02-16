@@ -210,6 +210,9 @@ payload = {
     'content':"``` ```"
 }
 
+#if len(added)+len(removed)+len(updated):
+#   do something, post to mod-chat?
+
 response = requests.post(webhook,json=payload)
 
 payload = {

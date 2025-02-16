@@ -1,5 +1,13 @@
 embed
 <drac2>
+argString=""" %*% """.strip()
+if argString:
+  if argString[0] =='"':
+    argString=argString[1:]
+  if argString[-1]=='"':
+    argString=argString[:-1]
+  
+footer =f""" -footer '{ctx.prefix}{ctx.alias} {argString}' """
 
 # Time calculations
 downtime_days = 1                               #how many days take this downtime activity
@@ -63,6 +71,7 @@ def getJobInfo(argDayjob, target, jobInfoMap):
       mod_value = target.stats.get_mod(stat)
       if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
       if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
+      if stat=='CHA' and ('ogl' in &ARGS&): mod_value+=(max(1,character().stats.get_mod('wisdom')))
       if mod_value > max_mod:
         max_mod = mod_value
         useStat = stat
@@ -103,9 +112,11 @@ if '-v' in args: # Early out for help
   ** * `lucky`** if you are a halfling
   ** * `royal`** if you are a Royal Mothfolk
   ** * `indom`** if you are a level 18 barbarian
+  ** * `ogl`** if you are a fey wanderer ranger
+  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
   ** __Example:__ `!{ctx.alias.title()} callig rel adv`**
   """
-  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
 
 if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0] in x) : # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
@@ -117,9 +128,10 @@ if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0
   ** * `-v`** To see advanced arguments
   ** * `-exp`** = if you have Expertise in this Job.
   ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
   ** __Example:__ `!{ctx.alias.title()} callig`**
   """
-  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
 
 argDayjob = args[0]                 # Pull out the JobName
 args = argparse(args)               # Parse the remaining arguments
@@ -135,6 +147,7 @@ else:
   ##target = character(f"{targetName}")   # Try to find the character with the specified name
 
 jobValue, useStat, useJobName = getJobInfo(argDayjob, target, jobInfoMap)
+      
 if not useStat:
   desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
   `{ctx.prefix+ctx.alias} <JobName> [args]`
@@ -148,7 +161,12 @@ if not useStat:
   ** __Example:__ `!{ctx.alias.title()} callig`**
   
   """
-  return f"""embed -title "I just couldn't find the job you're looking for?" -desc "{desc}" """
+  return f"""embed -title "I just couldn't find the job you're looking for?" -desc "{desc}" {footer}"""
+
+if args.get('with') and args.get('with') !='True':
+  for statAbrv in attMap.keys():
+    if (args.get('with')[0].lower() in attMap[statAbrv]) and (statAbrv in jobInfoMap.get(useJobName).get('jobStats')):
+      useStat=statAbrv
 
 ## Check for adv in avrae ##
 if 'adv' in args:
@@ -181,6 +199,10 @@ elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom'
 elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
   argRel = 5
   miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+  
+if 'ogl' in &ARGS& and useStat=='CHA':
+  argBonus=(argBonus + f" + {max(1,character().stats.get_mod('wisdom'))}[wisdom]") if argBonus else (f"{max(1,character().stats.get_mod('wisdom'))}[wisdom]")
+  miscNotes+=f"""\n{character().name} adds their Wisdom Modifier (+{max(character().stats.get_mod("wisdom"),1) }) to Charisma Checks due to their Otherworldy Glamour!"""
 
 if miscNotes:
   miscNotes = '-f "**__Misc Notes:__**'+miscNotes+'"'
@@ -209,9 +231,5 @@ outDescr = (f'\n**Character:** {target.name}') +  \
 
 argument=""" %*% """
 
-return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei"'
+return f'-title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei" {footer}'
 </drac2>
-
--thumb <image>
--color <color>
--footer """{{ctx.prefix}}{{ctx.alias}}{{"%*%".replace('"','\"')}}"""

@@ -218,9 +218,9 @@ payload = {
 #   do something, post to mod-chat?
 
 if (len(added)+len(removed)+len(updated)):
-  postToCL=False
-else
   postToCL=True
+else:
+  postToCL=False
 
 response = requests.post(webhook,json=payload)
 if postToCL: 

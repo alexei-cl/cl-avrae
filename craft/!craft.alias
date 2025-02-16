@@ -138,7 +138,6 @@ rel    A rogue's reliable talent (minimuim roll 10)
 indom  A barbarian's Indomitable Might
 royal  A Royal Mothfolk's Well Mannered
 -b X   For any other misc bonuses to your roll!
--gift  For the Winter Event Crafting Boon (USE LAST!)
 ```
   "
   """)
@@ -252,12 +251,14 @@ else: ##CRAFTING SPECS
           gpDiscountMod/=2
           timeDiscountMod/=2
           miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
-        if args.get('gift') and int(time())<=1740808799:
-          if foundItem.get('rarity').lower() != 'legendary':
-            gpDiscountMod/=2
-            miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
-          dayBonus-=1
-          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
+          
+        #if args.get('gift') and int(time())<=1740808799: Leaving the 2024-2025 winter gift in and commented in case we do a future crafting boon
+        #  if foundItem.get('rarity').lower() != 'legendary':
+        #    gpDiscountMod/=2
+        #    miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
+        #  dayBonus-=1
+        #  miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
+        
         gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
         tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
         

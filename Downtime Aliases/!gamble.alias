@@ -268,7 +268,7 @@ if miscNotes:
 
 roll1= vroll( f"{ch.skills['insight'].d20(d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}")
 roll2= vroll(f"{ch.skills[skill2].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}")
-roll3= vroll(f"{ch.skills['persuasion'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}")
+roll3= vroll(f"{ch.skills['intimidation'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}")
 
 cheats=1
 cheatNotes = ''

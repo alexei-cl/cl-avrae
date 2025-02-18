@@ -28,7 +28,12 @@ cargs = &ARGS&[&ARGS&.index("*")+1:] if '*' in &ARGS& else []  # make a list of 
 newline="\n"
 
 if len(sargs)<1:
-  return f"""embed -title "Help me scribe!" -f 'Usage: `!scribe "Spell 1" "Spell 2" "etc" * "subclass"` {newline} For subclass, use: `scribes` for the school of scribes discount, or the school of magic you have a discount for.' """
+  return f"""embed -title "Help me scribe!" -f 'Usage: `!scribe "Spell 1" "Spell 2" "etc" * "subclass"` {newline} For subclass, use: `scribes` for the school of scribes discount, or the school of magic you have a discount for.
+  
+  If you're going to scribe more than 24 hours straight, [you typically need to take a long rest](https://discord.com/channels/938988968404451339/1085490520182247474/1306705235770609694) or you'll suffer exhaustion. This tool assumes you're not self destructive and will pause to take an 8 hour long rest.
+  If you get to take long rests in only 4 hours, put `elf` after the asterisk to only take a 4 hour nap. ex: `!scribe "Foresight" "Gate" * elf`
+  If you're willing to forgo a rest, put the word `bender` after the asterisk. ex: `!scribe "Foresight" "Gate" * bender' You will make con saves.
+    """
 
 spells=argparse(sargs)
 
@@ -87,6 +92,39 @@ outputString+='"'
 CurTime = int(time())
 HOUR = 3600
 DAY = 86400
+
+if 'elf' in cargs:
+  long_rest = HOUR*4
+else:
+  long_rest = HOUR*8
+
+long_rests=0
+
+if 'bender' in cargs:
+  num_saves=floor(spellTime/DAY)
+  dc=10
+  if num_saves>0:
+    outputString+=f""" -f "Going on a wizard bender|"""
+    exhaust=0
+    for i in range(1,num_saves+1):    
+      save=vroll(character().saves.get('Constitution').d20())
+      outputString+=f"""Day {i} DC {dc}: {save}"""
+      if save.total>=dc:
+        outputString+=f""" **Success**!{newline}"""
+      else:
+        outputString+=f""" **Failure**!{newline}"""
+        exhaust+=1
+      dc+=5
+    outputString+=f""" " """
+    outputString+=f""" -f "{character().name} decides to scribe spells for {num_saves} day straight and gained {exhaust} exhaustion in the process. Please, take better care of yourself." """
+else:
+  while (spellTime/DAY)>1:
+    long_rests+=1
+    spellTime-=DAY
+  spellTime+=DAY*long_rests+long_rest*long_rests
+
+if long_rests:
+  outputString+=f""" -f "Taking Breaks|{character().name}'s scribing time increased by {floor(long_rest*long_rests/HOUR)} hours, taking {long_rests} long rests at {long_rest/HOUR} hours a piece" """
 
 outputString+=f""" -f "Total Cost: **{spellCost}gp and {floor(spellTime/HOUR)} hours** {f" and {(spellTime%HOUR)/60} minutes" if spellTime%HOUR else '' } {newline} Done: <t:{CurTime+spellTime}:R>" """
 

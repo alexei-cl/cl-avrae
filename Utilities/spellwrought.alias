@@ -1,0 +1,231 @@
+multiline <drac2>
+
+############################
+#         Functions        #
+############################
+
+def levenshtein_distance(s1, s2):
+    len_s1, len_s2 = len(s1), len(s2)
+    
+    # Create a matrix (len_s1+1 x len_s2+1) initialized with 0s
+    dp = [[0 for _ in range(len_s2 + 1)] for _ in range(len_s1 + 1)]
+
+    # Initialize base cases: transforming to/from empty strings
+    for i in range(len_s1 + 1):
+        dp[i][0] = i  # Cost of deleting all characters from s1
+    for j in range(len_s2 + 1):
+        dp[0][j] = j  # Cost of inserting all characters into s1
+
+    # Fill the matrix
+    for i in range(1, len_s1 + 1):
+        for j in range(1, len_s2 + 1):
+            cost = 0 if s1[i - 1] == s2[j - 1] else 1  # No cost if characters match
+
+            dp[i][j] = min(
+                dp[i - 1][j] + 1,      # Deletion
+                dp[i][j - 1] + 1,      # Insertion
+                dp[i - 1][j - 1] + cost  # Substitution
+            )
+
+    return dp[len_s1][len_s2]  # The bottom-right cell is the edit distance
+
+def sanitize(string):
+  return string.replace('"',"").replace("'",'')
+def idMatch(id1,id2):
+  try:
+    return int(id1)==int(id2)
+  except:
+    return False
+
+def getSpellLibrary():
+  gvars= ['981c76e0-f465-413a-9b73-d1a20ba9f41c','8ff118c6-54dd-48ff-b956-dee2da56d791','9a4f2735-affc-4ae7-914e-be5c72d86940','02ba67a9-827f-49d9-8781-3c62f605e647','75ec3933-80cc-42c6-945f-6dd75451e8ea','21d662e0-9289-4550-823f-f38cf1239d0f'] # Spells
+  spellLibrary=[]
+  for gvar in gvars:
+    json=load_json(get_gvar(gvar))
+    for spell in json:
+      spellLibrary.append(spell)
+  return spellLibrary
+
+############################
+#Usage: !spellwrought -> Help Message
+
+#Usage: !spellwrought tattoo -> Subcommand for managing spellwrought tattoos
+#   #   Subcommands:
+#   #       * Add - Adds a spell to the tatto cvar data struct
+#   #           Ex !spellwrought tatoo add "Haste" * link to item acquisition
+#   #       * Remove - Removes a spell from the cvar data struct by tattoo_id
+#   #           Ex !spellwrought tatoo remove 12
+#   #       * Cast - Looks for a target spell (either by id or by name) in your tattoo inventory, and then casts it (with optional spell targets)
+#   #           Ex !spellwrought tatoo cast "Cure Wounds" * [cast args]
+
+#Usage: !spellwrought glyph  -> Subcommand for managing glyph of warding inventory
+#   #   Subcommands:
+#   #       * Add - Adds a spell to the tatto cvar data struct
+#   #           Ex !spellwrought glyph add "Haste" * link
+#   #       * Remove - Removes a spell from the cvar data struct by tattoo_id
+#   #           Ex !spellwrought glyph remove 12
+#   #       * Cast - Looks for a target spell (either by id or by name) in your tattoo inventory, and then casts it (with optional spell targets)
+#   #           Ex !spellwrought glyph cast "Cure Wounds" * [cast args]
+
+#Usage: !spellwrought gem  -> Subcommand for managing spell gem inventory
+#   #   Subcommands:
+#   #       * Add - Adds a new spell gem to the character's inventory
+#   #           Ex !spellwrought gem add "Bloodstone" * link
+#   #       * Remove - Removes a spell gem from the character's inventory (by id)
+#   #           Ex !spellwrought gem remove 12
+#   #       * Fill - Fills a spell gem from the character's inventory
+#   #           Ex !spellwrought gem fill "Cure Wounds" * [Cast Args!]
+#   #       * Cast - Looks for a target spell (either by id or by name) in your tattoo inventory, and then casts it (with optional spell targets)
+#   #           Ex !spellwrought gem cast "Cure Wounds" * [cast args]
+
+
+#Usage: !scribe ["Spell 1", "Spell 2", "Spell 3"] * link
+
+args=&ARGS&
+sargs = &ARGS&[0:&ARGS&.index("*")] if '*' in &ARGS& else &ARGS&[0:]  # make a list of our spell arguments, splitting on * if supplied
+cargs = &ARGS&[&ARGS&.index("*")+1:] if '*' in &ARGS& else []  # make a list of our subclass args args
+newline="\n"
+empty=" "
+cvars=['alexTattoos','alexGlyphs','alexGems','gemSpells']
+
+spellLibrary=getSpellLibrary() #Load in DND Spell info
+
+if len(args)<1 or args[0] in 'help' or args[0] not in ['tattoo','glyph','gem']:
+  #Usage: !spellwrought -> Help Message
+  output=f""" -title "Alex's Magic Inventory Manager" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)
+  Usage:
+  ```
+  {ctx.prefix}{ctx.alias}         display this help message
+  {ctx.prefix}{ctx.alias} tattoo  manage spellwrought tattoos
+  {ctx.prefix}{ctx.alias} glyph   manage glyphs of warding
+  {ctx.prefix}{ctx.alias} gems    manage spell gems```
+  -# Ping @alexei for more" 
+  """
+  return f"{newline}!embed" + output
+
+#############################################
+##########                         ##########
+##########      SPELL TATTOOS      ##########
+##########                         ##########
+#############################################
+elif args[0] in 'tattoo':
+  #Usage: !spellwrought tattoo -> Subcommand for managing spellwrought tattoos
+  if len(args)<2 or args[1] in 'help' or args[1] not in ['add','remove','cast','list']:
+    output = (
+f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)
+Usage:
+``` {ctx.prefix}{ctx.alias} tattoo add
+ -> add a new Spellwrought Tattoo to your inventory
+ 
+ {ctx.prefix}{ctx.alias} tattoo remove
+ -> remove a Spellwrought Tattoo from your inventory
+ 
+ {ctx.prefix}{ctx.alias} tattoo cast
+ -> cast a spell from a Spellwrought Tattoo
+ 
+ {ctx.prefix}{ctx.alias} tattoo list
+ -> return a list of all your Spellwrought Tattoos```
+-# Ping @alexei for more"
+"""
+)
+    return f"{newline}!embed " + output.strip()
+  elif args[1] in 'add':
+    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'remove':
+    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'cast':
+    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'list':
+    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+
+############################################
+##########                        ##########
+##########      SPELL GLYPHS      ##########
+##########                        ##########
+############################################
+elif args[0] in 'glyph':
+  if len(args)<2 or args[1] in 'help' or args[1] not in ['add','remove','cast','list']:
+    output = (
+f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)
+Usage:
+``` {ctx.prefix}{ctx.alias} glyph add
+ -> add a new Spell Glyph to your inventory
+ 
+ {ctx.prefix}{ctx.alias} glyph remove
+ -> remove a Spell Glyph from your inventory
+ 
+ {ctx.prefix}{ctx.alias} glyph cast
+ -> cast a spell from a Spell Glyph
+ 
+ {ctx.prefix}{ctx.alias} glyph list
+ -> return a list of all your Spell Glyphs```
+-# Ping @alexei for more"
+"""
+)
+    return f"{newline}!embed " + output
+  elif args[1] in 'add':
+    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'remove':
+    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'cast':
+    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'list':
+    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  
+##########################################
+##########                      ##########
+##########      SPELL GEMS      ##########
+##########                      ##########
+##########################################
+elif args[0] in 'gem':
+  if len(args)<2 or args[1] in 'help' or args[1] not in ['add','remove','cast','fill','list']:
+    output = (
+f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)
+Usage:
+``` {ctx.prefix}{ctx.alias} gem add
+ -> add a new Spell Gem to your inventory
+ 
+ {ctx.prefix}{ctx.alias} gem remove
+ -> remove a Spell Gem from your inventory
+ 
+ {ctx.prefix}{ctx.alias} gem cast
+ -> cast a spell from a Spell Gem
+ 
+ {ctx.prefix}{ctx.alias} gem fill
+ -> fills a spell gem with a given spell
+ {ctx.prefix}{ctx.alias} gem list
+ -> return a list of all your Spell Gems```
+-# Ping @alexei for more"
+"""
+)
+    return f"{newline}!embed " + output
+  elif args[1] in 'add':
+    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'remove':
+    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'cast':
+    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'fill':
+    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Fill" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  elif args[1] in 'list':
+    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    return f"{newline}!embed " + output
+  
+return f"{newline}!embed -f 'Error' "
+
+</drac2>
+#-thumb <image>
+#-color <color>
+#-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"multiline <drac2>

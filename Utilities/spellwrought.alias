@@ -51,21 +51,9 @@ def findSpellById(spellName,spellLibrary):
     spellId=spellName.get('id',None)
     if spellId:
       for spell in spellLibrary:
-        if int(spellID)==int(spell.get('id')):
-          return bestMatch
-    else:
-      foundSpells=[]
-      dist=float('inf')
-      for spell in spellLibrary:
-        if spellName.lower() in spell.get('Name').lower():
-          foundSpells.append(spell)
-      bestMatch=None
-      for spell in foundSpells:
-        this_dist=levenshtein_distance( spellName,spell.get('Name') )
-        if this_dist<dist:
-          dist=this_dist
-          bestMatch=spell
-      return bestMatch
+        if int(spellId)==int(spell.get('id')):
+          return spell
+      return None
   except:
     foundSpells=[]
     dist=float('inf')
@@ -82,6 +70,7 @@ def findSpellById(spellName,spellLibrary):
         bestMatch = spell
     return bestMatch
 
+  
 ############################
 #Usage: !spellwrought -> Help Message
 
@@ -179,7 +168,8 @@ Usage:
     
      spell=findSpellById(args[2].strip() , spellLibrary) # @SafeDict
      
-     #return f"{newline}!test '{spell.get('Name')}'"
+     if not spell:
+       return f"""{newline}!embed -title "Error: Spell not Found!" -f "Maybe check your spelling?" """
      
      if cargs:
        link = cargs[0]
@@ -222,7 +212,7 @@ Usage:
        
        embedOutput+=f""" -f "{sanitize(spell.get('Name'))}|*{spell.get('Level')}-level {spell.get('School')}*{newline}**Casting Time:** {spell.get('Casting Time')}{newline}**Range:** {spell.get('Range')}{newline}**Duration:** {spell.get('Duration')}" """
        
-       embedOutput+=f""" -f "Tattos of {sanitize(spell.get('Name'))}: {number} -> {number+1}" """
+       embedOutput+=f""" -f "Tattoos of {sanitize(spell.get('Name'))}: {number} -> {number+1}" """
        return f"{embedOutput}"
        
      else:
@@ -238,7 +228,22 @@ Usage:
     return f"{newline}!embed " + output
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if 'alexTattoos' in cvars:
+      embedOutput=f""" -title "{sanitize(character().name)}'s Tattoos" -f " """
+      tattDict=load_json(cvars.get('alexTattoos'))
+      for tattoo in tattDict:
+        spell = findSpellById(tattDict.get(tattoo),spellLibrary)
+        embedOutput+=f"""{newline} * [{tattDict.get(tattoo).get('tattooId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ tattDict.get(tattoo).get('link') }>) """
+      embedOutput+=""" " """
+      embedOutput+=(
+f""" -f "Cast this by using: 
+```!spellwrought tattoo cast <'Name of Spell'/Tattoo Number>```
+"
+"""
+)
+    else:
+      embedOutput=f""" -title "You don't have any Spellwrought Tattoos!" """
+    return f"{newline}!embed " + embedOutput
 
 ############################################
 ##########                        ##########

@@ -45,6 +45,42 @@ def getSpellLibrary():
     for spell in json:
       spellLibrary.append(spell)
   return spellLibrary
+  
+def findSpellById(spellName,spellLibrary):
+  try:
+    spellId=spellName.get('id',None)
+    if spellId:
+      for spell in spellLibrary:
+        if int(spellID)==int(spell.get('id')):
+          return bestMatch
+    else:
+      foundSpells=[]
+      dist=float('inf')
+      for spell in spellLibrary:
+        if spellName.lower() in spell.get('Name').lower():
+          foundSpells.append(spell)
+      bestMatch=None
+      for spell in foundSpells:
+        this_dist=levenshtein_distance( spellName,spell.get('Name') )
+        if this_dist<dist:
+          dist=this_dist
+          bestMatch=spell
+      return bestMatch
+  except:
+    foundSpells=[]
+    dist=float('inf')
+    for spell in spellLibrary:
+      if sanitize(spellName.lower()) in sanitize(spell.get('Name').lower()):
+        foundSpells.append(spell)
+    
+    bestMatch=None
+    
+    for spell in foundSpells:
+      this_dist=levenshtein_distance( spellName,spell.get('Name') )
+      if this_dist<dist:
+        dist=this_dist
+        bestMatch = spell
+    return bestMatch
 
 ############################
 #Usage: !spellwrought -> Help Message
@@ -86,8 +122,8 @@ sargs = &ARGS&[0:&ARGS&.index("*")] if '*' in &ARGS& else &ARGS&[0:]  # make a l
 cargs = &ARGS&[&ARGS&.index("*")+1:] if '*' in &ARGS& else []  # make a list of our subclass args args
 newline="\n"
 empty=" "
-cvars=['alexTattoos','alexGlyphs','alexGems','gemSpells']
-
+aliasCvars=['alexTattoos','alexGlyphs','alexGems','gemSpells']
+cvars=character().cvars
 spellLibrary=getSpellLibrary() #Load in DND Spell info
 
 if len(args)<1 or args[0] in 'help' or args[0] not in ['tattoo','glyph','gem']:
@@ -130,8 +166,70 @@ Usage:
 )
     return f"{newline}!embed " + output.strip()
   elif args[1] in 'add':
-    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```!{ctx.prefix}{ctx.alias} tattoo add 'Name of Spell' * 'discord link where you got it'```"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ## DO ADDING LOGIC!
+    
+    
+     spell=findSpellById(args[2].strip() , spellLibrary) # @SafeDict
+     
+     #return f"{newline}!test '{spell.get('Name')}'"
+     
+     if cargs:
+       link = cargs[0]
+       
+       #####    Everything is good, time to add things!    #####
+       #####    1. Embed Output                            #####
+       #####    2. !cvar set -> Add tattoo to              #####
+       #####    3. Custom Counter Set ->                   #####
+       
+       ## 1. Embed Output ##
+       embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} gets a Tattoo of {sanitize(spell.get('Name'))}!" -f "They got it [here](<{link}>)" """
+       
+       ## 2. cvar set ##
+       if 'alexTattoos' in cvars:
+         tattDict=load_json(cvars.get('alexTattoos'))
+         numberOfThisSpell=0 #Counting out how many tattoos of this spell there are
+         thisID,maxID,tattIds=0,0,[]
+         
+         number=0
+         for entry in tattDict: #Count how many times you have this tattoo...
+           tattIds.append(int(entry))
+           maxID=(max(int(maxID),int(entry)))
+           if int(tattDict.get(entry).get('id'))==int(spell.get('id')):
+             number+=1
+         
+         for i in range(maxID+1)[1:]: #Insert into the next available ID space
+           if i not in tattIds:
+             thisID=i
+             break
+         thisID=thisID if thisID else maxID+1
+         
+         spell.update( {'tattooId':thisID, 'link':f'{link}'} )
+         tattDict.update( {thisID: { 'id':spell.get('id'), 'tattooId':thisID,'link':f'{link}' } } )
+         character().set_cvar('alexTattoos',val=dump_json(tattDict))
+         
+       else:
+         spell.update( {'tattooId':1,'link':f'{link}'} )
+         tattDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}' } }
+         character().set_cvar('alexTattoos',val=dump_json(tattDict))
+       
+       embedOutput+=f""" -f "{sanitize(spell.get('Name'))}|*{spell.get('Level')}-level {spell.get('School')}*{newline}**Casting Time:** {spell.get('Casting Time')}{newline}**Range:** {spell.get('Range')}{newline}**Duration:** {spell.get('Duration')}" """
+       
+       embedOutput+=f""" -f "Tattos of {sanitize(spell.get('Name'))}: {number} -> {number+1}" """
+       return f"{embedOutput}"
+       
+     else:
+       errorOutput=f"Error: Use did not supply link to where they got this spell tattoo of {spell.get('Name')}{newline}Please use `{ctx.prefix}{ctx.alias} tattoo add help for more information."
+       return f"{newline}!techo 10 {errorOutput}"
+     return f"{newline}!embed " + output
+     
   elif args[1] in 'remove':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
@@ -225,7 +323,8 @@ Usage:
   
 return f"{newline}!embed -f 'Error' "
 
-</drac2>
 #-thumb <image>
 #-color <color>
 #-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"multiline <drac2>
+</drac2>
+

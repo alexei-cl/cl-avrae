@@ -206,6 +206,7 @@ Usage:
          character().set_cvar('alexTattoos',val=dump_json(tattDict))
          
        else:
+         number = 0
          spell.update( {'tattooId':1,'link':f'{link}'} )
          tattDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}' } }
          character().set_cvar('alexTattoos',val=dump_json(tattDict))
@@ -223,6 +224,11 @@ Usage:
   elif args[1] in 'remove':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
+    try:
+      pass
+    except:
+      pass
+    
   elif args[1] in 'cast':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
@@ -271,7 +277,78 @@ Usage:
 )
     return f"{newline}!embed " + output
   elif args[1] in 'add':
-    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spell Glyphs- Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} tattoo add 'Name of Spell' * 'discord link where you got it'```"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ## DO ADDING LOGIC!
+    
+    
+     spell=findSpellById(args[2].strip() , spellLibrary) # @SafeDict
+     
+     if not spell:
+       return f"""{newline}!embed -title "Error: Spell not Found!" -f "Maybe check your spelling?" """
+     
+     if cargs:
+       link = cargs[0]
+       
+       #####    Everything is good, time to add things!    #####
+       #####    1. Embed Output                            #####
+       #####    2. !cvar set -> Add tattoo to              #####
+       #####    3. Custom Counter Set ->                   #####
+       
+       ## 1. Embed Output ##
+       embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} creates a Spell Glyph of {sanitize(spell.get('Name'))}!" -f "They got it [here](<{link}>)" """
+       note=''
+       if argparse(cargs).get('note') and argparse(cargs).get('note')[0] not in 'True':
+         note=argparse(cargs).get('note')[0]
+       
+       ## 2. cvar set ##
+       if 'alexGlyphs' in cvars:
+         glyphDict=load_json(cvars.get('alexGlyphs'))
+         numberOfThisSpell=0 #Counting out how many tattoos of this spell there are
+         thisID,maxID,glyphIds=0,0,[]
+         
+         number=0
+         for entry in glyphDict: #Count how many times you have this tattoo...
+           glyphIds.append(int(entry))
+           maxID=(max(int(maxID),int(entry)))
+           if int(glyphDict.get(entry).get('id'))==int(spell.get('id')):
+             number+=1
+         
+         for i in range(maxID+1)[1:]: #Insert into the next available ID space
+           if i not in glyphIds:
+             thisID=i
+             break
+         thisID=thisID if thisID else maxID+1
+         
+         spell.update( {'glyphId':thisID, 'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab} )
+         glyphDict.update( {thisID: { 'id':spell.get('id'), 'glyphId':thisID,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab } } )
+         if note:
+           glyphDict.update( {thisID: { 'id':spell.get('id'), 'glyphId':thisID,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab,'n':sanitize(note) } } )
+         character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+         
+       else:
+         number = 0
+         spell.update( {'tattooId':1,'link':f'{link}'} )
+         glyphDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab } }
+         if note:
+           glyphDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab,'n':sanitize(note) } }
+         character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+       
+       embedOutput+=f""" -f "{sanitize(spell.get('Name'))}|*{spell.get('Level')}-level {spell.get('School')}*{newline}**Casting Time:** {spell.get('Casting Time')}{newline}**Range:** {spell.get('Range')}{newline}**Duration:** {spell.get('Duration')}{newline}**Spell DC/SAB**: DC {character().spellbook.dc}/+{character().spellbook.sab} to-hit{f"{newline}**Note:** {sanitize(note)}" if note else ""}" """
+       
+       embedOutput+=f""" -f "Glyphs of {sanitize(spell.get('Name'))}: {number} -> {number+1}" """
+       return f"{embedOutput}"
+       
+     else:
+       errorOutput=f"Error: Use did not supply link to where they got this spell tattoo of {spell.get('Name')}{newline}Please use `{ctx.prefix}{ctx.alias} tattoo add help for more information."
+       return f"{newline}!techo 10 {errorOutput}"
+     return f"{newline}!embed " + output
     return f"{newline}!embed " + output
   elif args[1] in 'remove':
     output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
@@ -280,8 +357,23 @@ Usage:
     output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
   elif args[1] in 'list':
-    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Spell Glyph - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
+    if 'alexGlyphs' in cvars:
+      embedOutput=f""" -title "{sanitize(character().name)}'s Tattoos" -f " """
+      glyphDict=load_json(cvars.get('alexGlyphs'))
+      for glyph in glyphDict:
+        spell = findSpellById(glyphDict.get(glyph),spellLibrary)
+        embedOutput+=f"""{newline} * [{glyphDict.get(glyph).get('glyphId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ glyphDict.get(glyph).get('link') }>) - DC {glyphDict.get(glyph).get('dc')} - SAB +{glyphDict.get(glyph).get('sab')} to-hit{f" - **Note:** {glyphDict.get(glyph).get('n')}" if glyphDict.get(glyph).get('n') else ""}"""
+      embedOutput+=""" " """
+      embedOutput+=(
+f""" -f "Cast this by using: 
+```!spellwrought glyph cast <'Name of Spell'/Glyph Number>```
+"
+"""
+)
+    else:
+      embedOutput=f""" -title "You don't have any Spell Glyphs!" """
+    return f"{newline}!embed " + embedOutput
   
 ##########################################
 ##########                      ##########

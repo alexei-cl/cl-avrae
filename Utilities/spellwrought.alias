@@ -106,6 +106,16 @@ def findSpellById(spellName,spellLibrary):
 
 #Usage: !scribe ["Spell 1", "Spell 2", "Spell 3"] * link
 
+spellwroughtDCMap={
+0: {'level':0,'dc':13,'sab':5},
+1: {'level':1,'dc':13,'sab':5},
+2: {'level':2,'dc':13,'sab':5},
+3: {'level':3,'dc':15,'sab':7},
+4: {'level':4,'dc':15,'sab':7},
+5: {'level':5,'dc':17,'sab':9}
+}
+
+
 args=&ARGS&
 sargs = &ARGS&[0:&ARGS&.index("*")] if '*' in &ARGS& else &ARGS&[0:]  # make a list of our spell arguments, splitting on * if supplied
 cargs = &ARGS&[&ARGS&.index("*")+1:] if '*' in &ARGS& else []  # make a list of our subclass args args
@@ -126,7 +136,7 @@ if len(args)<1 or args[0] in 'help' or args[0] not in ['tattoo','glyph','gem']:
   {ctx.prefix}{ctx.alias} gems    manage spell gems```
   -# Ping @alexei for more" 
   """
-  return f"{newline}!embed" + output
+  return f"{newline}!embed " + output
 
 #############################################
 ##########                         ##########
@@ -217,7 +227,7 @@ Usage:
        return f"{embedOutput}"
        
      else:
-       errorOutput=f"Error: Use did not supply link to where they got this spell tattoo of {spell.get('Name')}{newline}Please use `{ctx.prefix}{ctx.alias} tattoo add help for more information."
+       errorOutput=f"Error: User did not supply link to where they got this spell tattoo of {spell.get('Name')}{newline}Please use `{ctx.prefix}{ctx.alias} tattoo add help for more information."
        return f"{newline}!techo 10 {errorOutput}"
      return f"{newline}!embed " + output
      
@@ -230,8 +240,52 @@ Usage:
       pass
     
   elif args[1] in 'cast':
-    output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} tattoo cast 'Name of Spell/Tattoo ID' * '!cast arguments (-t etc)'```
+
+Use `{ctx.prefix}{ctx.alias} tattoo list` so see what you have!"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ##do casting logic!
+      try:##try to find a spell id
+        tattooId=int(args[2])
+        tattDict=load_json(cvars.get('alexTattoos'))
+        if tattooId in tattDict.keys():
+          spell=findSpellById(tattDict.get(tattooId).get('id'),spellLibrary)
+          if not spell:
+            return f"""{newline}!embed -f "Error! I think your tattoo list is borked. You might want to ask me for help." """
+        else:
+          return f"""{newline}!embed -f"Error! I didn't find a tattoo with that id. Maybe try casting with the spell's name, or maybe look at your list of tattoos with `{ctx.prefix}{ctx.alias} tattoo list`?" """
+      except: ##errored out
+        tattDict=load_json(cvars.get('alexTattoos'))
+        targetCast=None
+        tattooLibrary=[]
+        for tattoo in tattDict:
+          tempSpell=findSpellById(tattDict.get(tattoo),spellLibrary)
+          tattooLibrary.append(tempSpell)
+        spell=findSpellById(args[2],tattooLibrary)
+        if not spell:
+          return f"""{newline}!embed -f "Error! I didn't find a spell with that name. Maybe you spelled it wrong or you don't have that tattoo?" """
+        for tattoo in tattDict:
+          if int(spell.get('id'))==int(tattDict.get(tattoo).get('id')): #found spell:
+            targetCast=tattoo
+            break
+        if targetCast:
+          levelString=spell.get('Level')
+          level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+          castArgs=''
+          for carg in cargs:
+            castArgs+=f" '{carg}'"
+          castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {spellwroughtDCMap[level]['dc']} -mod {spellwroughtDCMap[level]['sab']-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spellwrought tattoo!" -phrase "Tattoo was acquired [here](<{tattDict.get(targetCast).get('link')}>)!" -f "Tattoo Removed from Spellwrought Inventory" """
+          tattDict.pop(targetCast)
+          character().set_cvar('alexTattoos',val=dump_json(tattDict))
+          ## Remove the spell from your tattoo list!
+          return castOutput
+      return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexTattoos' in cvars:
@@ -243,7 +297,7 @@ Usage:
       embedOutput+=""" " """
       embedOutput+=(
 f""" -f "Cast this by using: 
-```!spellwrought tattoo cast <'Name of Spell'/Tattoo Number>```
+```!spellwrought tattoo cast <'Name of Spell'/Tattoo Number> * <any arguments you'd use when using !cast, ex: -t 'Innocent Goblin'>```
 "
 """
 )
@@ -354,8 +408,52 @@ Usage:
     output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
   elif args[1] in 'cast':
-    output=f""" -title "Alex's Magic Inventory Manager - Glyphs of Warding - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spell Glyphs - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} glyph cast 'Name of Spell/Tattoo ID' * '!cast arguments (-t etc)'```
+
+Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ##do casting logic!
+      try:##try to find a spell id
+        glyphId=int(args[2])
+        glyphDict=load_json(cvars.get('alexGlyphs'))
+        if glyphId in glyphDict.keys():
+          spell=findSpellById(glyphDict.get(tattooId).get('id'),spellLibrary)
+          if not spell:
+            return f"""{newline}!embed -f "Error! I think your tattoo list is borked. You might want to ask me for help." """
+        else:
+          return f"""{newline}!embed -f"Error! I didn't find a tattoo with that id. Maybe try casting with the spell's name, or maybe look at your list of tattoos with `{ctx.prefix}{ctx.alias} tattoo list`?" """
+      except: ##errored out
+        glyphDict=load_json(cvars.get('alexGlyphs'))
+        targetCast=None
+        glyphLibrary=[]
+        for glyph in glyphDict:
+          tempSpell=findSpellById(glyphDict.get(glyph),spellLibrary)
+          glyphLibrary.append(tempSpell)
+        spell=findSpellById(args[2],glyphLibrary)
+        if not spell:
+          return f"""{newline}!embed -f "Error! I didn't find a spell with that name. Maybe you spelled it wrong or you don't have that tattoo?" """
+        for glyph in glyphDict:
+          if int(spell.get('id'))==int(glyphDict.get(glyph).get('id')): #found spell:
+            targetCast=glyph
+            break
+        if targetCast:
+          levelString=spell.get('Level')
+          level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+          castArgs=''
+          for carg in cargs:
+            castArgs+=f" '{carg}'"
+          castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {glyphDict.get(targetCast).get('dc')} -mod {glyphDict.get(targetCast).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spellwrought tattoo!" -phrase "Tattoo was acquired [here](<{glyphDict.get(targetCast).get('link')}>)!" -f "Tattoo Removed from Spellwrought Inventory" """
+          tattDict.pop(targetCast)
+          character().set_cvar('alexTattoos',val=dump_json(tattDict))
+          ## Remove the spell from your tattoo list!
+          return castOutput
+      return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Spell Glyph - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexGlyphs' in cvars:

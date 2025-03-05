@@ -449,15 +449,15 @@ Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
           for carg in cargs:
             castArgs+=f" '{carg}'"
           castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {glyphDict.get(targetCast).get('dc')} -mod {glyphDict.get(targetCast).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spellwrought tattoo!" -phrase "Tattoo was acquired [here](<{glyphDict.get(targetCast).get('link')}>)!" -f "Tattoo Removed from Spellwrought Inventory" """
-          tattDict.pop(targetCast)
-          character().set_cvar('alexTattoos',val=dump_json(tattDict))
+          glyphDict.pop(targetCast)
+          character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
           ## Remove the spell from your tattoo list!
           return castOutput
       return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Spell Glyph - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexGlyphs' in cvars:
-      embedOutput=f""" -title "{sanitize(character().name)}'s Tattoos" -f " """
+      embedOutput=f""" -title "{sanitize(character().name)}'s Spell Glyphs" -f " """
       glyphDict=load_json(cvars.get('alexGlyphs'))
       for glyph in glyphDict:
         spell = findSpellById(glyphDict.get(glyph),spellLibrary)

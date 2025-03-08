@@ -457,11 +457,20 @@ Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Spell Glyph - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexGlyphs' in cvars:
-      embedOutput=f""" -title "{sanitize(character().name)}'s Spell Glyphs" -f " """
+      embedOutput=f""" -title "{sanitize(character().name)}'s Spell Glyphs" -f "|"""
+      lenEmbed=1
+      baseLength=len(embedOutput)
       glyphDict=load_json(cvars.get('alexGlyphs'))
       for glyph in glyphDict:
         spell = findSpellById(glyphDict.get(glyph),spellLibrary)
-        embedOutput+=f"""{newline} * [{glyphDict.get(glyph).get('glyphId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ glyphDict.get(glyph).get('link') }>) - DC {glyphDict.get(glyph).get('dc')} - SAB +{glyphDict.get(glyph).get('sab')} to-hit{f" - **Note:** {glyphDict.get(glyph).get('n')}" if glyphDict.get(glyph).get('n') else ""}"""
+        tempString=f"""{newline} * [{glyphDict.get(glyph).get('glyphId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ glyphDict.get(glyph).get('link') }>) - DC {glyphDict.get(glyph).get('dc')} - SAB +{glyphDict.get(glyph).get('sab')} to-hit{f" - **Note:** {glyphDict.get(glyph).get('n')}" if glyphDict.get(glyph).get('n') else ""}"""
+        if len(tempString)+lenEmbed<1000:
+          embedOutput+=tempString
+          lenEmbed+=len(tempString)
+        else:
+          embedOutput+=""" " -f "|"""
+          embedOutput+=tempString
+          lenEmbed=1
       embedOutput+=""" " """
       embedOutput+=(
 f""" -f "Cast this by using: 

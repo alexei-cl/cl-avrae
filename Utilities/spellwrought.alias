@@ -4,6 +4,26 @@ multiline <drac2>
 #         Functions        #
 ############################
 
+def sort_dict(d, reverse=False):
+    keys = list(d.keys())
+    n = len(keys)
+
+    for i in range(n):
+        min_index = i
+        for j in range(i + 1, n):
+            if int(keys[j]) < int(keys[min_index]):  # Standard ascending order check
+                min_index = j  # Update index of smallest key
+
+        # Swap elements
+        keys[i], keys[min_index] = keys[min_index], keys[i]
+
+    # Rebuild dictionary with sorted keys
+    sorted_dict = {}
+    for key in keys:
+        sorted_dict[key] = d[key]
+
+    return sorted_dict
+
 def levenshtein_distance(s1, s2):
     len_s1, len_s2 = len(s1), len(s2)
     
@@ -47,28 +67,36 @@ def getSpellLibrary():
   return spellLibrary
   
 def findSpellById(spellName,spellLibrary):
-  try:
+  try: #This tries to find it when passing a Dict object
     spellId=spellName.get('id',None)
     if spellId:
       for spell in spellLibrary:
         if int(spellId)==int(spell.get('id')):
           return spell
-      return None
+    return None
   except:
-    foundSpells=[]
-    dist=float('inf')
-    for spell in spellLibrary:
-      if sanitize(spellName.lower()) in sanitize(spell.get('Name').lower()):
-        foundSpells.append(spell)
+    try: #try int lookup
+      spellId=int(spellName.strip())
+      if spellId:
+        for spell in spellLibrary:
+          if int(spellId)==int(spell.get('id')):
+            return spell
+      return None
+    except: #try name-based lookup
+      foundSpells=[]
+      dist=float('inf')
+      for spell in spellLibrary:
+        if sanitize(spellName.lower()) in sanitize(spell.get('Name').lower()):
+          foundSpells.append(spell)
     
-    bestMatch=None
+      bestMatch=None
     
-    for spell in foundSpells:
-      this_dist=levenshtein_distance( spellName,spell.get('Name') )
-      if this_dist<dist:
-        dist=this_dist
-        bestMatch = spell
-    return bestMatch
+      for spell in foundSpells:
+        this_dist=levenshtein_distance( spellName,spell.get('Name') )
+        if this_dist<dist:
+          dist=this_dist
+          bestMatch = spell
+      return bestMatch
 
   
 ############################
@@ -114,6 +142,44 @@ spellwroughtDCMap={
 4: {'level':4,'dc':15,'sab':7},
 5: {'level':5,'dc':17,'sab':9}
 }
+
+# Cantrip  | Obsidian     | Uncommon  |     13 |       +5
+#| 1st     | Lapis lazuli | Uncommon  |     13 |       +5
+#| 2nd     | Quartz       | Rare      |     13 |       +5
+#| 3rd     | Blood Stone  | Rare      |     15 |       +7
+#| 4th     | Amber        | Very rare |     15 |       +9
+#| 5th     | Jade         | Very rare |     17 |       +9
+#| 6th     | Topaz        | Very rare |     17 |      +10
+#| 7th     | Star ruby    | Legendary |     18 |      +10
+#| 8th     | Ruby         | Legendary |     18 |      +10
+#| 9th     | Diamond      | Legendary |     19 |      +11
+
+gemNameMap={
+'Obsidian':     0,
+'Lapis Lazuli': 1,
+'Quartz':       2,
+'Blood Stone':  3,
+'Amber':        4,
+'Jade':         5,
+'Topaz':        6,
+'Star Ruby':    7,
+'Ruby':         8,
+'Diamond':      9
+}
+
+gemMap={
+0:{'dc':13,   'sab':5,  'Name':'Obsidian'       },
+1:{'dc':13,   'sab':5,  'Name':'Lapiz Lazuli'   },
+2:{'dc':13,   'sab':5,  'Name':'Quartz'         },
+3:{'dc':15,   'sab':7,  'Name':'Blood Stone'    },
+4:{'dc':15,   'sab':9,  'Name':'Amber'          },
+5:{'dc':17,   'sab':9,  'Name':'Jade'           },
+6:{'dc':17,   'sab':10, 'Name':'Topaz'          },
+7:{'dc':18,   'sab':10, 'Name':'Star Ruby'      },
+8:{'dc':18,   'sab':10, 'Name':'Ruby'           },
+9:{'dc':19,   'sab':11, 'Name':'Diamond'        }
+}
+
 
 
 args=&ARGS&
@@ -190,7 +256,7 @@ Usage:
        #####    3. Custom Counter Set ->                   #####
        
        ## 1. Embed Output ##
-       embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} gets a Tattoo of {sanitize(spell.get('Name'))}!" -f "They got it [here](<{link}>)" """
+       embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} gets a Glyph of {sanitize(spell.get('Name'))}!" -f "They got it [here](<{link}>)" """
        
        ## 2. cvar set ##
        if 'alexTattoos' in cvars:
@@ -212,13 +278,13 @@ Usage:
          thisID=thisID if thisID else maxID+1
          
          spell.update( {'tattooId':thisID, 'link':f'{link}'} )
-         tattDict.update( {thisID: { 'id':spell.get('id'), 'tattooId':thisID,'link':f'{link}' } } )
+         sort_dict(tattDict.update( {thisID: { 'id':spell.get('id'), 'tattooId':thisID,'link':f'{link}' } } ))
          character().set_cvar('alexTattoos',val=dump_json(tattDict))
          
        else:
          number = 0
          spell.update( {'tattooId':1,'link':f'{link}'} )
-         tattDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}' } }
+         sort_dict(tattDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}' } })
          character().set_cvar('alexTattoos',val=dump_json(tattDict))
        
        embedOutput+=f""" -f "{sanitize(spell.get('Name'))}|*{spell.get('Level')}-level {spell.get('School')}*{newline}**Casting Time:** {spell.get('Casting Time')}{newline}**Range:** {spell.get('Range')}{newline}**Duration:** {spell.get('Duration')}" """
@@ -282,6 +348,7 @@ Use `{ctx.prefix}{ctx.alias} tattoo list` so see what you have!"
             castArgs+=f" '{carg}'"
           castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {spellwroughtDCMap[level]['dc']} -mod {spellwroughtDCMap[level]['sab']-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spellwrought tattoo!" -phrase "Tattoo was acquired [here](<{tattDict.get(targetCast).get('link')}>)!" -f "Tattoo Removed from Spellwrought Inventory" """
           tattDict.pop(targetCast)
+          tattDict=sort_dict(tattDict)
           character().set_cvar('alexTattoos',val=dump_json(tattDict))
           ## Remove the spell from your tattoo list!
           return castOutput
@@ -290,7 +357,7 @@ Use `{ctx.prefix}{ctx.alias} tattoo list` so see what you have!"
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Tattoos - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexTattoos' in cvars:
       embedOutput=f""" -title "{sanitize(character().name)}'s Tattoos" -f " """
-      tattDict=load_json(cvars.get('alexTattoos'))
+      tattDict=sort_dict(load_json(cvars.get('alexTattoos')))
       for tattoo in tattDict:
         spell = findSpellById(tattDict.get(tattoo),spellLibrary)
         embedOutput+=f"""{newline} * [{tattDict.get(tattoo).get('tattooId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ tattDict.get(tattoo).get('link') }>) """
@@ -363,8 +430,8 @@ Usage:
        
        ## 2. cvar set ##
        if 'alexGlyphs' in cvars:
-         glyphDict=load_json(cvars.get('alexGlyphs'))
-         numberOfThisSpell=0 #Counting out how many tattoos of this spell there are
+         glyphDict=sort_dict(load_json(cvars.get('alexGlyphs')))
+         numberOfThisSpell=0 #Counting out how many glyphs of this spell there are
          thisID,maxID,glyphIds=0,0,[]
          
          number=0
@@ -384,15 +451,15 @@ Usage:
          glyphDict.update( {thisID: { 'id':spell.get('id'), 'glyphId':thisID,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab } } )
          if note:
            glyphDict.update( {thisID: { 'id':spell.get('id'), 'glyphId':thisID,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab,'n':sanitize(note) } } )
-         character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+         character().set_cvar('alexGlyphs',val=dump_json(sort_dict(glyphDict)))
          
        else:
          number = 0
-         spell.update( {'tattooId':1,'link':f'{link}'} )
-         glyphDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab } }
+         spell.update( {'glyphId':1,'link':f'{link}'} )
+         glyphDict = { 1 : { 'id':spell.get('id'), 'glyphId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab } }
          if note:
-           glyphDict = { 1 : { 'id':spell.get('id'), 'tattooId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab,'n':sanitize(note) } }
-         character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+           glyphDict = { 1 : { 'id':spell.get('id'), 'glyphId':1,'link':f'{link}','dc':character().spellbook.dc,'sab':character().spellbook.sab,'n':sanitize(note) } }
+         character().set_cvar('alexGlyphs',val=dump_json(sort_dict(glyphDict)))
        
        embedOutput+=f""" -f "{sanitize(spell.get('Name'))}|*{spell.get('Level')}-level {spell.get('School')}*{newline}**Casting Time:** {spell.get('Casting Time')}{newline}**Range:** {spell.get('Range')}{newline}**Duration:** {spell.get('Duration')}{newline}**Spell DC/SAB**: DC {character().spellbook.dc}/+{character().spellbook.sab} to-hit{f"{newline}**Note:** {sanitize(note)}" if note else ""}" """
        
@@ -420,16 +487,50 @@ Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
       return f"{newline}!embed " + output.strip()
     else: ##do casting logic!
       try:##try to find a spell id
-        glyphId=int(args[2])
-        glyphDict=load_json(cvars.get('alexGlyphs'))
+        glyphId=str(args[2]).strip()
+        glyphDict=sort_dict(load_json(cvars.get('alexGlyphs')))
+        targetCast=None
         if glyphId in glyphDict.keys():
-          spell=findSpellById(glyphDict.get(tattooId).get('id'),spellLibrary)
+          targetCast=glyphDict.get(glyphId)
+          spell=findSpellById(glyphDict.get(glyphId).get('id'),spellLibrary)
           if not spell:
-            return f"""{newline}!embed -f "Error! I think your tattoo list is borked. You might want to ask me for help." """
+            return f"""{newline}!embed -f "Error! I think your tattoo list is borked. You might want to ask me for help. { glyphDict.get(glyphId) } / {glyphDict.keys()}" """
+          #cast spell
+          levelString=spell.get('Level')
+          level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+          castArgs=''
+          for carg in cargs:
+            castArgs+=f" '{carg}'"
+          castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {glyphDict.get(glyphId).get('dc')} -mod {glyphDict.get(glyphId).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spell Glyph!" -phrase "Glyph was made [here](<{glyphDict.get(glyphId).get('link')}>)!" -f "Spell Glyph Removed from Spellwrought Inventory" """
+          glyphDict.pop(glyphId)
+          glyphDict=sort_dict(glyphDict)
+          character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+          return castOutput
         else:
-          return f"""{newline}!embed -f"Error! I didn't find a tattoo with that id. Maybe try casting with the spell's name, or maybe look at your list of tattoos with `{ctx.prefix}{ctx.alias} tattoo list`?" """
+            glyphLibrary=[]
+            for glyph in glyphDict:
+              tempSpell=findSpellById(glyphDict.get(glyph),spellLibrary)
+              glyphLibrary.append(tempSpell)
+            spell=findSpellById(args[2],glyphLibrary)
+            if not spell:
+              return f"""{newline}!embed -f "Error! I didn't find a spell with that name. Maybe you spelled it wrong or you don't have that tattoo?" """
+            for glyph in glyphDict:
+              if int(spell.get('id'))==int(glyphDict.get(glyph).get('id')): #found spell:
+                targetCast=glyph
+                break
+            if targetCast:
+              levelString=spell.get('Level')
+              level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+              castArgs=''
+              for carg in cargs:
+                castArgs+=f" '{carg}'"
+              castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {glyphDict.get(targetCast).get('dc')} -mod {glyphDict.get(targetCast).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spell Glyph!" -phrase "Glyph was made [here](<{glyphDict.get(targetCast).get('link')}>)!" -f "Spell Glyph removed from Spellwrought Inventory" """
+              glyphDict.pop(targetCast)
+              glyphDict=sort_dict(glyphDict)
+              character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+              return castOutput
       except: ##errored out
-        glyphDict=load_json(cvars.get('alexGlyphs'))
+        glyphDict=sort_dict(load_json(cvars.get('alexGlyphs')))
         targetCast=None
         glyphLibrary=[]
         for glyph in glyphDict:
@@ -450,21 +551,21 @@ Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
             castArgs+=f" '{carg}'"
           castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {glyphDict.get(targetCast).get('dc')} -mod {glyphDict.get(targetCast).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} from a {levelString} Spellwrought tattoo!" -phrase "Tattoo was acquired [here](<{glyphDict.get(targetCast).get('link')}>)!" -f "Tattoo Removed from Spellwrought Inventory" """
           glyphDict.pop(targetCast)
+          glyphDict=sort_dict(glyphDict)
           character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
-          ## Remove the spell from your tattoo list!
           return castOutput
-      return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
+        return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spellwrought Spell Glyph - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     if 'alexGlyphs' in cvars:
       embedOutput=f""" -title "{sanitize(character().name)}'s Spell Glyphs" -f "|"""
       lenEmbed=1
       baseLength=len(embedOutput)
-      glyphDict=load_json(cvars.get('alexGlyphs'))
+      glyphDict=sort_dict(load_json(cvars.get('alexGlyphs')))
       for glyph in glyphDict:
         spell = findSpellById(glyphDict.get(glyph),spellLibrary)
         tempString=f"""{newline} * [{glyphDict.get(glyph).get('glyphId')}] { sanitize(spell.get('Name')) } - { spell.get('Level') }-level - Obtained [here](<{ glyphDict.get(glyph).get('link') }>) - DC {glyphDict.get(glyph).get('dc')} - SAB +{glyphDict.get(glyph).get('sab')} to-hit{f" - **Note:** {glyphDict.get(glyph).get('n')}" if glyphDict.get(glyph).get('n') else ""}"""
-        if len(tempString)+lenEmbed<1000:
+        if len(tempString)+lenEmbed<750:
           embedOutput+=tempString
           lenEmbed+=len(tempString)
         else:
@@ -510,20 +611,232 @@ Usage:
 )
     return f"{newline}!embed " + output
   elif args[1] in 'add':
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spell Gems- Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} gem add 'Type of Gem' * 'discord link where you got it'```"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ## DO ADDING LOGIC!
+      if args[2].strip().lower() in '0123456789':##
+        gemType=int(args[2].strip()) ## Gem type as max storable level
+      elif args[2].strip().title() in gemNameMap.keys():
+        gemType=gemNameMap.get(args[2].strip().title())
+      else: ##Error, Return
+        return f"""{newline}!embed -title "Error: Gem type not Found!" -f "|Try `!spellwrought gem add <Spell level 0-9|Precise name of Spell Gem>`" """     
+      if cargs:
+        link = cargs[0]
+        #####    Everything is good, time to add things!    #####
+        #####    1. Embed Output                            #####
+        #####    2. !cvar set -> Add tattoo to              #####
+        #####    3. Custom Counter Set ->                   #####
+      
+        ## 1. Embed Output ##
+        embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} acquires a {gemMap.get(gemType).get('Name')} Spell Gem!" -f "They got it [here](<{link}>)" """
+        
+        ## 2. cvar set ##
+        if 'alexGems' in cvars:
+          gemDict=sort_dict(load_json(cvars.get('alexGems')))
+          numberOfThisGem=0 #Counting out how many X Spell Gems you have
+          thisID,maxID,gemIds=0,0,[]
+         
+          number=0
+          for entry in gemDict: #Count how many times you have this tattoo...
+            gemIds.append(int(entry))
+            maxID=(max(int(maxID),int(entry)))
+            if int(gemDict.get(entry).get('gemType'))==gemType:
+              number+=1
+          for i in range (maxID+1)[1:]:
+            if i not in gemIds:
+              thisID=i
+              break
+          thisID=thidID if thisID else maxID+1
+          gemDict.update( {thisID: { 'id':thisID, 'gemType':gemType, 'link':link } } )
+          character().set_cvar('alexGems',val=dump_json(sort_dict(gemDict)))
+        else:
+          gemDict = { 1: { 'id':1, 'gemType':gemType, 'link':link } }
+          character().set_cvar('alexGems',val=dump_json(sort_dict(gemDict)))
+        return embedOutput
+    
+    
     output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Add" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
   elif args[1] in 'remove':
     output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Remove" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
     return f"{newline}!embed " + output
   elif args[1] in 'cast':
-    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spell Gems - Cast" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} gem cast 'Name of Spell/Gem ID' * '!cast arguments (-t etc)'```
+
+Use `{ctx.prefix}{ctx.alias} glyph list` so see what you have!"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ##do casting logic!
+      filledDict=sort_dict(load_json(cvars.get('gemSpells')))
+      gemDict=sort_dict(load_json(cvars.get('alexGems')))
+      try:##try to find a gem id
+        gemId=str(args[2]).strip()
+        gemType=gemDict.get(gemId).get('gemType')
+        targetCast=None
+        if gemId in filledDict.keys():
+          targetCast=filledDict.get(gemId) # Dict object for Spell
+          spell=findSpellById(targetCast.get('spell_id'),spellLibrary)
+          if not spell:
+            return f"""{newline}!embed -f "Error! I think your tattoo list is borked. You might want to ask me for help. { glyphDict.get(glyphId) } / {glyphDict.keys()}" """
+          #cast spell
+          levelString=targetCast.get('level')
+          level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+          castArgs=''
+          for carg in cargs:
+            castArgs+=f" '{carg}'"
+          castArgs+=f" '-l {level}'"
+          castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {gemMap.get(gemType).get('dc')} -mod {gemMap.get(gemType).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} at level {level} from a {gemMap.get(gemType).get('Name')} Spell Gem!" -phrase "The gem was filled made [here](<{targetCast.get('link')}>)!" -f "Spell Gem Emptied in Spellwrought Inventory" """
+          filledDict.pop(gemId)
+          filledDict=sort_dict(filledDict)
+          character().set_cvar('gemSpells',val=dump_json(filledDict))
+          return castOutput
+        else:
+            gemLibrary=[]
+            for gem in filledDict:
+              tempSpell=findSpellById(filledDict.get(gem).get('spell_id'),spellLibrary)
+              gemLibrary.append(tempSpell)
+            spell=findSpellById(args[2],gemLibrary)
+            if not spell:
+              return f"""{newline}!embed -f "Error! I didn't find a spell with that name. Maybe you spelled it wrong or you don't have that tattoo? try->else" """
+            for gem in filledDict:
+              if int(spell.get('id'))==int(filledDict.get(gem).get('spell_id')): #found spell:
+                targetCast=gem
+                break
+            if targetCast:
+              gemType=gemDict.get(gem).get('gemType')
+              targetCast=filledDict.get(gem)
+              levelString=targetCast.get('level')
+              level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+              castArgs=''
+              for carg in cargs:
+                castArgs+=f" '{carg}'"
+              castArgs+=f" '{level}'"
+              castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {gemMap.get(gemType).get('dc')} -mod {gemMap.get(gemType).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} at level {level} from a {gemMap.get(gemType).get('Name')} Spell Gem!" -phrase "The gem was filled made [here](<{targetCast.get('link')}>)!" -f "Spell Gem Emptied in Spellwrought Inventory" """
+              filledDict.pop(gemId)
+              filledDict=sort_dict(filledDict)
+              character().set_cvar('gemSpells',val=dump_json(filledDict))
+              return castOutput
+      except: ##errored out
+        targetCast=None
+        gemLibrary=[]
+        for gem in filledDict:
+          tempSpell=findSpellById(filledDict.get(gem).get('spell_id'),spellLibrary)
+          gemLibrary.append(tempSpell)
+        spell=findSpellById(args[2],gemLibrary)
+        if not spell:
+          return f"""{newline}!embed -f "Error! I didn't find a spell with that name. Maybe you spelled it wrong or you don't have that spell? except->fail spell" """
+        for gem in filledDict:
+          if int(spell.get('id'))==int(filledDict.get(gem).get('spell_id')): #found spell:
+            targetCast=gem
+            break
+        if targetCast:
+          gemType=gemDict.get(gem).get('gemType')
+          targetCast=filledDict.get(gem)
+          levelString=targetCast.get('level')
+          level=0 if levelString[0]=='C' else int(levelString[0]) ##Get spell's level as an int
+          castArgs=''
+          for carg in cargs:
+            castArgs+=f" '{carg}'"
+          castArgs+=f" '{level}'"
+          castOutput=f"""{newline}!cast "{spell.get('Name')}" -i {castArgs} -dc {gemMap.get(gemType).get('dc')} -mod {gemMap.get(gemType).get('sab')-proficiencyBonus} -title "{sanitize(character().name)} casts {sanitize(spell.get('Name'))} at level {level} from a {gemMap.get(gemType).get('Name')} Spell Gem!" -phrase "The gem was filled made [here](<{targetCast.get('link')}>)!" -f "Spell Gem Emptied in Spellwrought Inventory" """
+          #glyphDict.pop(targetCast)
+          #glyphDict=sort_dict(glyphDict)
+          #character().set_cvar('alexGlyphs',val=dump_json(glyphDict))
+          return castOutput
+        return f"""{newline}!embed -f "Error: Unexpected Exit {spell.get('id')} / {tattDict}" """
   elif args[1] in 'fill':
-    output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - Fill" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if len(args)<3 or args[2] in 'help':
+      output=(
+f""" -title "Alex's Magic Inventory Manager - Spell Gems- Fill" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems) 
+Usage:
+```{ctx.prefix}{ctx.alias} gem fill 'Name of Spell' * <'discord link where you got it'> [-t gemID]```"
+"""
+)
+      return f"{newline}!embed " + output.strip()
+    else: ## DO ADDING LOGIC!
+      if not cvars.get('alexGems'):
+        return f"""{newline}!embed -title "Error: No Spell Gems!" -f "You can't fill what you don't have" """
+      spell=findSpellById(args[2].strip() , spellLibrary) # @SafeDict
+      if not spell:
+        return f"""{newline}!embed -title "Error: Spell not Found!" -f "Maybe check your spelling?" """
+      if cargs:
+        link = cargs[0]
+        level=spell.get('Level')[0] if spell.get('Level')[0] in '123456789' else 0
+        if argparse(cargs).get('l') and argparse(cargs).get('l') is not 'True':
+          level=argparse(cargs).get('l')[0]
+        gemDict=sort_dict(   load_json(cvars.get('alexGems' )))
+        if cvars.get('gemSpells'):
+          filledDict=sort_dict(load_json(cvars.get('gemSpells')))
+        else:
+          filledDict={}
+        bestGem,lowestGem,gemKeys=None,10,filledDict.keys()
+        for gem in gemDict:
+          gem=gemDict.get(gem)
+          gemID=gem.get('id')
+          gemLevel=gem.get('gemType')
+          if str(gemID) not in gemKeys:
+            if gemLevel==level:
+              bestGem=gem.get('id')
+              break
+            elif int(gemLevel)>=int(level) and int(gemLevel)<int(lowestGem):
+              lowestGem=gemLevel
+              bestGem=gem.get('id')
+        if not bestGem:
+          return f"""{newline}!embed -title "Error: No Valid Spell Gems!" -f "No free gems of sufficient level for {spell.get('Name')}" """
+        filledDict.update( { bestGem: {'spell_id': spell.get('id'), 'level':level, 'link':link } } )
+        ## 1. Embed Output ##
+        embedOutput=f"""{newline}!embed -title "{sanitize(character().name)} fills a {gemMap.get(gemDict.get(str(bestGem)).get('gemType')).get('Name')} (ID: {bestGem}) Spell Gem with {level}-level {sanitize(spell.get('Name'))}!" -f "
+        They got the gem [here](<{gemDict.get(str(bestGem)).get('link')}>)
+        They filled it [here](<{link}>)" """
+        ## 2. Update Cvars ##
+        character().set_cvar('gemSpells',val=dump_json(sort_dict(filledDict)) )
+        return embedOutput
   elif args[1] in 'list':
     output=f""" -title "Alex's Magic Inventory Manager - Spell Gems - List" -f "`{ctx.prefix}{ctx.alias}` is a tool to help manage and cast from consumable magic items (tattoos, glyphs of warding, spell gems)" """
-    return f"{newline}!embed " + output
+    if not cvars.get('alexGems'):
+      return f"""{newline}!embed -title "Error: No Spell Gems!" -f "There's nothing to see here." """
+    
+    embedOutput=f""" -title "{sanitize(character().name)}'s Spell Gems" -f "|"""
+    lenEmbed=1
+    baseLength=len(embedOutput)
+      
+    gemDict=sort_dict(   load_json(cvars.get('alexGems' )))
+    if cvars.get('gemSpells'):
+      filledDict=sort_dict(load_json(cvars.get('gemSpells')))
+    else:
+      filledDict={}
+    for gem in gemDict:
+      gemID=gem
+      gem=gemDict.get(gem)
+      gemType=gemMap.get(gem.get('gemType')).get('Name')
+      spell,level=None,None
+      tempString=f"""{newline} * [{gemID}] { gemType } - Obtained [Here](<{gem.get('link')}>)"""
+      if gemID in filledDict:
+        spell = findSpellById(filledDict.get(gemID).get('spell_id'),spellLibrary)
+        level = filledDict.get(gemID).get('level')
+        link  = filledDict.get(gemID).get('link')
+        tempString+=f""": Level {level} {spell.get('Name')}, filled [Here](<{link}>)"""
+      if len(tempString)+lenEmbed<750:
+        embedOutput+=tempString
+        lenEmbed+=len(tempString)
+      else:
+        embedOutput+=""" " -f "|"""
+        embedOutput+=tempString
+        lenEmbed=1
+    embedOutput+=""" " """
+    
+    return f"{newline}!embed " + embedOutput
   
 return f"{newline}!embed -f 'Error' "
 

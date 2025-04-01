@@ -1,0 +1,287 @@
+embed
+<drac2>
+
+# Full mapping for printable ASCII characters (32-126)
+char_map = {
+    " ": 32, "!": 33, "\"": 34, "#": 35, "$": 36, "%": 37, "&": 38, "'": 39, "(": 40, ")": 41,
+    "*": 42, "+": 43, ",": 44, "-": 45, ".": 46, "/": 47, "0": 48, "1": 49, "2": 50, "3": 51,
+    "4": 52, "5": 53, "6": 54, "7": 55, "8": 56, "9": 57, ":": 58, ";": 59, "<": 60, "=": 61,
+    ">": 62, "?": 63, "@": 64, "A": 65, "B": 66, "C": 67, "D": 68, "E": 69, "F": 70, "G": 71,
+    "H": 72, "I": 73, "J": 74, "K": 75, "L": 76, "M": 77, "N": 78, "O": 79, "P": 80, "Q": 81,
+    "R": 82, "S": 83, "T": 84, "U": 85, "V": 86, "W": 87, "X": 88, "Y": 89, "Z": 90, "[": 91,
+    "\\": 92, "]": 93, "^": 94, "_": 95, "`": 96, "a": 97, "b": 98, "c": 99, "d": 100, "e": 101,
+    "f": 102, "g": 103, "h": 104, "i": 105, "j": 106, "k": 107, "l": 108, "m": 109, "n": 110,
+    "o": 111, "p": 112, "q": 113, "r": 114, "s": 115, "t": 116, "u": 117, "v": 118, "w": 119,
+    "x": 120, "y": 121, "z": 122, "{": 123, "|": 124, "}": 125, "~": 126
+}
+
+
+timestamp=int(time())
+SECRET_KEY='-BJSMk"snDM@~+YL$Y#^o6H!&pD]Hs*#&AMrW$6/raJLp&5=IJGb=arWdBC9bmN'
+
+def simple_hash(s: str, salt: str) -> int:
+    """Custom hash function using character mappings and bitwise ops."""
+    hash_val = 0
+    for i, c in enumerate(s + salt):
+        char_value = char_map.get(c.lower(), 0)  # Use .lower() for case-insensitivity
+        hash_val = (hash_val * 31 + char_value) & 0xFFFFFFFF  # Mixing step
+        hash_val ^= (hash_val >> 13)  # Bitwise scrambling
+    return f"{s};{hash_val}"
+
+def generate_signature(user_id: str, value: int) -> str:
+    """Creates a tamper-resistant signature."""
+    timestamp = time.time() // 86400  # Hour-based timestamp
+    data = f"{user_id}|{value}|{int(timestamp)}"
+    
+    # Generate hash using a secret salt
+    hash_part = simple_hash(data, SECRET_KEY)  # Change salt per server
+    
+    # Create the final signature
+    signature = f"{data}|{hash_part}"
+    return signature
+
+
+
+argString=""" %*% """.strip()
+
+def sanitize(string):
+  return string.replace('"',"").replace("'",'')
+
+if argString:
+  if argString[0] =='"':
+    argString=argString[1:]
+  if argString[-1]=='"':
+    argString=argString[:-1]
+  
+footer =f""" -footer '{ctx.prefix}{ctx.alias} {argString}' """
+
+# Time calculations
+downtime_days = 1                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+jobInfoMap = {
+  'Calligrapher':  {'jobValue': 30,   'jobStats': ["INT", "DEX", "CHA"], 'msg':'replacing lost waypoints, street signs, and banners.',           'emoji':'📜'},
+  'Carpenter':     {'jobValue': 10,   'jobStats': ["STR", "DEX"],        'msg':'rebuilding homes, inns, and lost strongholds.',                  'emoji':'🏠'},
+  'Cobbler':       {'jobValue': 10,   'jobStats': ["CHA", "DEX"],        'msg':'providing sturdy boots to workers clearing the wreckage.',       'emoji':'👢'},
+  'Cook':          {'jobValue': 10,   'jobStats': ["INT", "WIS"],        'msg':'keeping the labor force fed and morale high.',                   'emoji':'🍲'},
+  'Enchanter':     {'jobValue': 20,   'jobStats': ["INT", "WIS"],        'msg':'weaving protective wards against future threats.',               'emoji':'🔮'},
+  'Glassblower':   {'jobValue': 20,   'jobStats': ["CHA", "CON"],        'msg':'restoring shattered windows in homes and halls.',                'emoji':'🪟'},
+  'Herbalist':     {'jobValue': 10,   'jobStats': ["INT", "WIS"],        'msg':'regrowing burned gardens and medicinal herb patches.',           'emoji':'🌿'},
+  'Mason':         {'jobValue': 20,   'jobStats': ["CON", "STR"],        'msg':'repairing roads, fortifying defenses, and raising new walls.',   'emoji':'🧱'},
+  'Painter':       {'jobValue': 30,   'jobStats': ["CHA", "DEX"],        'msg':'bringing color back to ruined settlements with murals.',         'emoji':'🎨'},
+  'Potter':        {'jobValue': 15,   'jobStats': ["CHA", "DEX"],        'msg':'crafting mosaics and decorative pieces to honor the fallen.',    'emoji':'🏺'},
+  'Smith':         {'jobValue': 15,   'jobStats': ["CON", "STR"],        'msg':'forging tools, weapons, and armor for laborers and defenders.',  'emoji':'⚒️'},
+  'Tinkerer':      {'jobValue': 15,   'jobStats': ["INT", "CON", "DEX"], 'msg':'restoring plumbing, streetlights, and infrastructure.',          'emoji':'🔧'},
+  'Weaver':        {'jobValue': 10,   'jobStats': ["CHA", "WIS"],        'msg':'crafting fresh clothing, banners, and flags of unity.',          'emoji':'🧵'},
+  'Woodcarver':    {'jobValue': 10,   'jobStats': ["STR", "DEX"],        'msg':'rebuilding totems, statues, and intricate décor.',               'emoji':'🪵'},
+}
+availableJobs = ', '.join(jobInfoMap.keys())
+
+attMap = {
+  'STR':  'strength',
+  'DEX':  'dexterity',
+  'CON':  'constitution',
+  'INT':  'intelligence',
+  'WIS':  'wisdom',
+  'CHA':  'charisma',
+}
+
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+def getJobInfo(argDayjob, target, jobInfoMap):
+  jobKey = findBestMatch(jobInfoMap, argDayjob)
+  if jobKey is not None:
+    jobInfo = jobInfoMap[jobKey]
+    jobValue = jobInfo['jobValue']
+    max_mod = -5
+    for stat in jobInfo['jobStats']:
+      mod_value = target.stats.get_mod(stat)
+      if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
+      if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
+      if stat=='CHA' and ('ogl' in &ARGS&): mod_value+=(max(1,character().stats.get_mod('wisdom')))
+      if mod_value > max_mod:
+        max_mod = mod_value
+        useStat = stat
+    return jobValue, useStat, jobKey
+  else:
+    return None, None, None
+
+def getJobMultiplier(dayjobRoll):
+  if dayjobRoll <= 9:
+    multiplier = 0.5
+  elif 10 <= dayjobRoll <= 14:
+    multiplier = 0.75
+  elif 15 <= dayjobRoll <= 20:
+    multiplier = 1
+  elif 21 <= dayjobRoll <= 25:
+    multiplier = 1.5
+  elif 26 <= dayjobRoll <= 30:
+    multiplier = 2.5
+  else:
+    multiplier = 4
+  return multiplier
+
+
+
+args = &ARGS&
+if '-v' in args: # Early out for help
+  desc = f"""{ctx.alias.title()} lets you help rebuild the Crystal Library!
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `adv`** if you roll with advantage
+  ** * `rel`** if you have reliable talent
+  ** * `lucky`** if you are a halfling
+  ** * `royal`** if you are a Royal Mothfolk
+  ** * `indom`** if you are a level 18 barbarian
+  ** * `ogl`** if you are a fey wanderer ranger
+  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
+  ** __Example:__ `!{ctx.alias.title()} callig rel adv`**
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
+
+if not (args) or any(x for x in ['help','?'] if args[0] in x) : # Early out for help
+  desc = f"""{ctx.alias.title()} lets you help rebuild the Crystal Library!
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** if you have Expertise in this Job.
+  ** * `-b <bonus>`** if you have an additional bonus. (1d8+5)
+  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
+  ** __Example:__ `!{ctx.alias.title()} callig`**
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
+
+argDayjob = args[0]                 # Pull out the JobName
+args = argparse(args)               # Parse the remaining arguments
+targetName = args.get('char', name) # Get the specified target name, defaults to yourself
+argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
+argAdv = args.adv(boolwise=True)    # Check if advantage is present
+miscNotes=''
+
+if (targetName == name):
+  target = character()
+else:
+  return f'-title "Error" -desc "-char argument was not found"'
+  ##target = character(f"{targetName}")   # Try to find the character with the specified name
+
+jobValue, useStat, useJobName = getJobInfo(argDayjob, target, jobInfoMap)
+      
+if not useStat:
+  desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
+  `{ctx.prefix+ctx.alias} <JobName> [args]`
+  
+  **JobName:** `{availableJobs}`
+
+  **__Valid Arguments__**
+  ** * `-v`** To see advanced arguments
+  ** * `-exp`** = if you have Expertise in this Job.
+  ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** __Example:__ `!{ctx.alias.title()} callig`**
+  
+  """
+  return f"""embed -title "I just couldn't find the job you're looking for?" -desc "{desc}" {footer}"""
+
+if args.get('with') and args.get('with') !='True':
+  for statAbrv in attMap.keys():
+    if (args.get('with')[0].lower() in attMap[statAbrv]) and (statAbrv in jobInfoMap.get(useJobName).get('jobStats')):
+      useStat=statAbrv
+
+## Check for adv in avrae ##
+if 'adv' in args:
+  miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
+elif character().skills[attMap[useStat]].adv:
+  argAdv = True
+  miscNotes+=f'\n{character().name} has advantage on all {useStat} rolls for some reason (Set in Avrae)'
+
+#Reroll nat1
+if 'halfling' in character().race.lower() or 'lucky' in args:
+  reroll=1
+  miscNotes+=f'\n"{character().name} rerolls Nat 1s due to being a {character().race}"'
+
+if jobValue is None:
+  return f'-title "Error: unknown <JobName>" -desc "**Use:** `{availableJobs}`"'
+
+argRel=None
+reroll=None
+
+# .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
+if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
+  argRel=10
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on roll with proficiency due to Rogue\'s Reliable Talent'
+
+##Else because 18 barb cannot be also be a 10 rogue
+elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
+  argRel = character().stats.strength
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+##Royal Mothfolk
+elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
+  argRel = 5
+  miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+  
+if 'ogl' in &ARGS& and useStat=='CHA':
+  argBonus=(argBonus + f" + {max(1,character().stats.get_mod('wisdom'))}[wisdom]") if argBonus else (f"{max(1,character().stats.get_mod('wisdom'))}[wisdom]")
+  miscNotes+=f"""\n{character().name} adds their Wisdom Modifier (+{max(character().stats.get_mod("wisdom"),1) }) to Charisma Checks due to their Otherworldy Glamour!"""
+
+if miscNotes:
+  miscNotes = '-f "**__Misc Notes:__**'+miscNotes+'"'
+
+useDice = f"{target.skills[attMap[useStat]].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
+
+if (args.get('exp')) or 'exp' in &ARGS&:
+  dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+else:
+  dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
+
+multiplier = getJobMultiplier(dayjobRoll.total)
+event_success=3
+rebuild='You manage to make some progress, but not enough to advance the rebuilding effort. Still, please, let us pay you!'
+
+if dayjobRoll.total >= 25:
+  event_success=2
+  rebuild='You manage to make a lot of progress! __**+2 Rebuilding progress**__'
+elif dayjobRoll.total >= 15:
+  event_success=1
+  rebuild='You manage to make some progress! __**+1 Rebuilding progress**__'
+
+
+dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece
+dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver and copper pieces is my understanding
+
+sig=f"{ctx.author.id};{sanitize(character().name)};{int(event_success*timestamp/86400)};{timestamp}"
+level=character().levels.total_level
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+outTitle = (f'{jobInfoMap.get(useJobName).get("emoji")} {sanitize(character().name)} helps `!rebuild` by {jobInfoMap.get(useJobName).get("msg")} {jobInfoMap.get(useJobName).get("emoji")}')
+outDescr = (f'\n**Character:** {target.name}') +  \
+           (f'\n**Job:** {useJobName} ({useStat})') +  \
+           (f'\n**DC:** 15') +  \
+           (f'\n**Result:** {rebuild}') +  \
+           (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
+           (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
+           (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
+		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n\n') + \
+           (f'\n\n**To get credit for your hard work, copy and paste this:**```-rebuild {sig}```')
+
+argument=""" %*% """
+
+return f' -title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei" {footer}'
+</drac2>

@@ -252,7 +252,7 @@ else:
   dayjobRoll = vroll(f'{useDice}+{target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
 
 multiplier = getJobMultiplier(dayjobRoll.total)
-event_success=3
+event_success=0
 rebuild='You manage to make some progress, but not enough to advance the rebuilding effort. Still, please, let us pay you!'
 
 if dayjobRoll.total >= 25:
@@ -261,7 +261,10 @@ if dayjobRoll.total >= 25:
 elif dayjobRoll.total >= 15:
   event_success=1
   rebuild='You manage to make some progress! __**+1 Rebuilding progress**__'
-
+if event_success:
+  yagpdb=f'\n\n**__To get credit for your hard work, please log your contribution with:__**\n\n`-rebuild {event_success}`'
+else:
+  yagpdb=''
 
 dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece
 dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver and copper pieces is my understanding
@@ -279,9 +282,9 @@ outDescr = (f'\n**Character:** {target.name}') +  \
            (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
            (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
 		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n\n') + \
-           (f'\n\n**To get credit for your hard work, copy and paste this:**```-rebuild {sig}```')
+           (yagpdb)
 
 argument=""" %*% """
-
+newline="\n"
 return f' -title "{outTitle}" -desc "{outDescr}" {miscNotes} -f "-# Problems with this alias? Ping the developer \@alexei" {footer}'
 </drac2>

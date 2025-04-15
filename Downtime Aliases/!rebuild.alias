@@ -222,7 +222,7 @@ if jobValue is None:
 
 argRel=None
 reroll=None
-
+indom=False
 # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
 if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
   argRel=10
@@ -230,8 +230,9 @@ if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: ad
 
 ##Else because 18 barb cannot be also be a 10 rogue
 elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
-  argRel = character().stats.strength
-  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+  #argRel = character().stats.strength
+  indom=True
+  miscNotes+=f'\n{character().name} cannot get below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
 ##Royal Mothfolk
 elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
   argRel = 5
@@ -254,11 +255,19 @@ else:
 multiplier = getJobMultiplier(dayjobRoll.total)
 event_success=0
 rebuild='You manage to make some progress, but not enough to advance the rebuilding effort. Still, please, let us pay you!'
+if indom and dayjobRoll.total<=character().stats.strength:
+  indom=True
+  result=character().stats.strength
+else:
+  indom=False
+  result=dayjobRoll.total
 
-if dayjobRoll.total >= 25:
+
+
+if result >= 25:
   event_success=2
   rebuild='You manage to make a lot of progress! __**+2 Rebuilding progress**__'
-elif dayjobRoll.total >= 15:
+elif result >= 15:
   event_success=1
   rebuild='You manage to make some progress! __**+1 Rebuilding progress**__'
 if event_success:
@@ -278,7 +287,7 @@ outDescr = (f'\n**Character:** {target.name}') +  \
            (f'\n**Job:** {useJobName} ({useStat})') +  \
            (f'\n**DC:** 15') +  \
            (f'\n**Result:** {rebuild}') +  \
-           (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
+           (f'\n**Roll:** {f"{dayjobRoll}" if not indom else f"~~{dayjobRoll}~~->__{character().stats.strength}__" }--> **{multiplier*100}%**') +  \
            (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
            (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
 		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n\n') + \

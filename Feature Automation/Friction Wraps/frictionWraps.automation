@@ -1,0 +1,87 @@
+name: Friction Wraps
+automation:
+  - type: counter
+    counter: dummyCounter
+    amount: "0"
+    allowOverflow: false
+    errorBehaviour: ignore
+  - type: variable
+    name: hitsThisAction
+    value: "0"
+  - type: variable
+    name: howManyHits
+    value: "{lastCounterRequestedAmount}"
+    onError: "0"
+  - type: variable
+    name: iterOrSingle
+    value: "0"
+  - type: target
+    target: all
+    effects:
+      - type: attack
+        hit:
+          - type: variable
+            name: hitsThisAction
+            value: hitsThisAction+1
+          - type: variable
+            name: damageDice
+            value: min(max(0,howManyHits+hitsThisAction-1),3)
+            onError: "0"
+          - type: damage
+            damage: 1[bludgeoning]+{strengthMod}[bludgeoning]+1[bludgeoning]+{damageDice}d8[fire]
+            overheal: false
+        miss: []
+        attackBonus: strengthMod+proficiencyBonus+1
+      - type: variable
+        name: iterOrSingle
+        value: targetIterations
+  - type: variable
+    name: iterator
+    value: (hitsThisAction+howManyHits)-hitsThisAction
+    onError: "0"
+  - type: target
+    target: self
+    effects:
+      - type: condition
+        condition: targetIteration==targetIterations
+        onTrue:
+          - type: damage
+            damage: "{min(max(iterator-2,0),1)}d8[fire]"
+            fixedValue: true
+        onFalse:
+          - type: counter
+            counter: ""
+            amount: "0"
+  - type: variable
+    name: hits
+    value: "{lastCounterRemaining}"
+  - type: text
+    text: >-
+      You have a +1 bonus to attack rolls and damage rolls with your unarmed
+      strikes while wearing these wraps.
+
+
+      Punching with these wraps generates intense heat that is diffused into the target with each subsequent blow. When you hit with an unarmed strike while wearing these wraps, and starting on the second, unarmed strikes you make before the end of this turn deal an extra 1d8 fire damage. This damage stacks with itself, to a maximum 3d8 extra fire damage on a single hit. Starting on the third attack, each instance of fire damage, you take 1d8 fire damage.
+
+
+      ```
+
+      # Of Hits   Bonus Damage    Self Damage
+
+      1           0               0
+
+      2           1d8             0
+
+      3           1d8             1d8
+
+      4+          2d8             1d8```
+    title: Effect
+  - type: text
+    text: |-
+      * Self Damage should be automated!
+      * You can multitarget or `-rr X`!
+      * If you need to break up your attacks after this one, you can do:
+      ```!a Friction -amt {hitsThisAction+howManyHits}```
+    title: "Testing Automation Usage Instructions (give feedback):"
+_v: 2
+proper: true

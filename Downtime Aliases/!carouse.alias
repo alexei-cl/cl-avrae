@@ -43,7 +43,7 @@ def findBestMatch(lookupMap, keyArgument):
 args1 = &ARGS&
 args = argparse(args1)               # Parse the remaining arguments
 
-if not args or any(x for x in ['help','?'] if args1[0] in x) or (not args.get('gp')) or args.get('gp')[0] is 'True' : # Early out for help
+if not args or any(x for x in ['help','?'] if args1[0] in x) or (not args.get('gp')) or args.get('gp')[0] is 'True' or args.get('gp')[0]<20: # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for spending your time in style.
   
   Characters can spend their downtime engaged in a variety of hedonistic activities such as attending parties, binge drinking, gambling, or anything else that helps them cope with the perils they face on their adventures.
@@ -66,13 +66,13 @@ gpChange=0
 match output:
   case 0:
     eventDice=vroll("1d4")
-    gpChange=eventDice.total*10
+    gpChange=-eventDice.total*10
   case 1:
     eventDice=vroll("3d6")
-    gpChange=eventDice.total*10
+    gpChange=-eventDice.total*10
   case 2:
     eventDice=vroll("1d6")
-    gpChange=eventDice.total*5
+    gpChange=-eventDice.total*5
   case 3:
     eventDice=None
     gpChange=0

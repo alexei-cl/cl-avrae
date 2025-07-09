@@ -1,0 +1,113 @@
+embed
+<drac2>
+
+# Time calculations
+downtime_days = 1                               #how many days take this downtime activity
+DAY = 86400                                     #seconds per day
+CurTime = int(time())                           #get current time
+busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
+
+argString=""" %*% """.strip()
+if argString:
+  if argString[0] =='"':
+    argString=argString[1:]
+  if argString[-1]=='"':
+    argString=argString[:-1]
+  
+footer =f""" -footer "{ctx.prefix}{ctx.alias} {argString}" """
+
+resultMap = {
+    0: 'You are jailed for 1d4 days at the end of the downtime period on charges of disorderly conduct and disturbing the peace. Alternatively, pay 10gp per day to avoid going to jail.',
+    1: 'You regain consciousness in a strange place with no memory of how you got there, and you have been robbed of 3d6 x 10gp',
+    2: 'You are caught up in a bar fight and cause damage to the local tavern. Lose 1d6 x 5g',
+    3: 'Your week of carousing is not a particular success nor a particular failure. You pay your fair share of the drinks and other fun, and you come away with memories of good fun. Gain 1 common crafting token.',
+    4: 'You earn modest winnings from gambling and recuperate your lifestyle expenses for the time spent carousing. Gain 20gp.',
+    5: 'You earn modest winnings from gambling and recuperate your lifestyle expenses for the time spent carousing. Gain 20gp.',
+    6: 'You earn modest winnings from gambling and recuperate your lifestyle expenses for the time spent carousing. Gain 20gp.',
+    7: 'You earn modest winnings from gambling and recuperate your lifestyle expenses for the time spent carousing. Gain 20gp.',
+    8: 'You earn modest winnings from gambling. You recuperate your lifestyle expenses for the time spent carousing and gain 1d20 x 4 gp',
+    9: 'You make a small fortune gambling. You recuperate your lifestyle expenses for the time spent carousing and gain 4d6 x 10 gp. Your carousing becomes the stuff of local legengs.',
+}
+
+
+def findBestMatch(lookupMap, keyArgument):
+  bestMatch = None
+  for curKey in lookupMap.keys():
+    if curKey.lower().startswith(keyArgument.lower()): # leftside match
+      if bestMatch is None:
+        bestMatch = curKey
+      else:
+        return None
+  return bestMatch
+
+args1 = &ARGS&
+args = argparse(args1)               # Parse the remaining arguments
+
+if not args or any(x for x in ['help','?'] if args1[0] in x) or (not args.get('gp')) or args.get('gp')[0] is 'True' : # Early out for help
+  desc = f"""{ctx.alias.title()} is a tool for spending your time in style.
+  
+  Characters can spend their downtime engaged in a variety of hedonistic activities such as attending parties, binge drinking, gambling, or anything else that helps them cope with the perils they face on their adventures.
+  
+  Resources. A character must spend one day and at least 20 gp to go carousing. During this time, the character may not participate in other downtime activities such as crafting, jobs or training.
+  
+**__Usage__**:
+  `!carouse -gp X`
+
+  """
+  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+
+carousSpent=int(args.get('gp')[0])
+
+useDice = vroll(f"1d100+{character().levels.total_level}[level]")
+output = min(int(useDice.total/10),9)
+resultString=''
+eventDice=None
+gpChange=0
+match output:
+  case 0:
+    eventDice=vroll("1d4")
+    gpChange=eventDice.total*10
+  case 1:
+    eventDice=vroll("3d6")
+    gpChange=eventDice.total*10
+  case 2:
+    eventDice=vroll("1d6")
+    gpChange=eventDice.total*5
+  case 3:
+    eventDice=None
+    gpChange=0
+  case 4:
+    eventDice=None
+    gpChange=20+carousSpent
+  case 5:
+    eventDice=None
+    gpChange=20+carousSpent
+  case 6:
+    eventDice=None
+    gpChange=20+carousSpent
+  case 7:
+    eventDice=None
+    gpChange=20+carousSpent
+  case 8:
+    eventDice=vroll("1d20")
+    gpChange=carousSpent+eventDice.total*4
+  case 9:
+    eventDice=vroll("4d6")
+    gpChange=carousSpent+eventDice.total*10
+netGP=gpChange-carousSpent
+
+
+outTitle = (f'{character().name} goes carousing!')
+outDescr = (f'\n**Character:** {character().name}') +  \
+           (f'\n**Roll:** {useDice}') + \
+           (f'\n**Result:** \n{resultMap.get(output)}') +  \
+           (f'\n**Die Roll:** {eventDice}' if eventDice else "") +  \
+           (f'\n**Net GP Change:** **`{netGP}`gp**') +  \
+		   (f'\n\n**Next downtime use:**\n <t:{busyTime + DAY}:F> \n')
+
+
+return f'-title "{outTitle}" -desc "{outDescr}" {footer}'
+</drac2>
+
+-thumb <image>
+-color <color>

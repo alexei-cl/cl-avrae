@@ -54,7 +54,7 @@ if not args or any(x for x in ['help','?'] if args1[0] in x) or (not args.get('g
   `!carouse -gp X`
 
   """
-  return f"""embed -title "Looking for some earnings?" -desc "{desc}" """
+  return f"""embed -title "Looking for some fun?" -desc "{desc}" """
 
 carousSpent=int(args.get('gp')[0])
 

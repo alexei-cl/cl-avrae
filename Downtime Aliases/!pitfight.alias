@@ -289,19 +289,19 @@ if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: 
     miscNotes+=f'\n{character().name} cannot roll below a 10 on Constitution rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 3'].update({'min_val':10})
 
-# Barbarian #
-if character().levels.get('Barbarian')>=18 or 'indom' in args: #Imdomitable Might
-  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on Athletics rolls due to Barbarian\'s Indomitable Might'
-  d20Dict['Roll 1'].update({'min_val':character().stats.strength})
-  
-if miscNotes:
-  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
-
-
 
 roll1= vroll( f"{ch.skills['athletics'].d20(d20Dict['Roll 1']['adv'], d20Dict['Roll 1']['reroll'], d20Dict['Roll 1']['min_val'], d20Dict['Roll 1']['mod_override'])}")
 roll2= vroll(f"{ch.skills['acrobatics'].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}")
 roll3= vroll(f"{ch.skills['constitution'].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}+1d{maxHitDie}")
+
+# Barbarian #
+indom=False
+if character().levels.get('Barbarian')>=18 or 'indom' in args: #Imdomitable Might
+  indom=True
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on Athletics rolls due to Barbarian\'s Indomitable Might'
+  
+if miscNotes:
+  miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
 
 weapRoll = vroll((("2d20kh1+") if d20Dict['Roll W']['adv'] else ("1d20+")) +charWeapBonus)
 
@@ -314,7 +314,9 @@ match replaceWhichRoll:
     roll3 = weapRoll
 
 pitfightSuccess = 0
-if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1
+roll1Total = character().stats.strength if indom else roll1.total
+
+if roll1Total >= DC1.total: pitfightSuccess = pitfightSuccess +1
 if roll2.total >= DC2.total: pitfightSuccess = pitfightSuccess +1
 if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
 
@@ -331,7 +333,7 @@ outDescr = (f'\n**Character:** {ch.name}') +  \
 
 weaponField = (f'__Check {replaceWhichRoll} - Weapon Attack - {charWeaponName}__|**Target** {weapDC} \n **Attack Roll** {weapRoll}')
 
-outField1 = weaponField if replaceWhichRoll==1 else (f"__Check 1 - STR(Athletics)__|**DC** {DC1} \n**Check** {roll1}\n")
+outField1 = weaponField if replaceWhichRoll==1 else (f"__Check 1 - STR(Athletics)__|**DC** {DC1} \n**Check** {'~~' if indom and roll1.total<character().stats.strength else ''}{roll1}{f'~~ **{character().stats.strength}**' if indom and roll1.total<character().stats.strength else ''}\n")
 outField1 += (f'\n{":white_check_mark: *Success*" if roll1.total >= DC1.total else ":x: *no Success*"}\n')
 
 outField2 = weaponField if replaceWhichRoll==2 else (f"__Check 2 - DEX(Acrobatics)__|**DC** {DC2} \n**Check** {roll2}\n")

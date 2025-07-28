@@ -260,6 +260,13 @@ if 'rel' in args or character().levels.get('Rogue')>=7: #reliable talent TODO: a
     miscNotes+=f'\n{character().name} cannot roll below a 10 on Intimidation rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 3'].update({'min_val':10})
 
+# Harp of Gilded Plenty #
+if 'harp' in args:
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on {skill2.title()} rolls due to being attuned to the Harp of Gilded Plenty'
+  d20Dict['Roll 2'].update({'min_val':10})
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on Intimidation rolls due to being attuned to the Harp of Gilded Plenty'
+  d20Dict['Roll 3'].update({'min_val':10})
+
 
 if miscNotes:
   miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'
@@ -291,7 +298,7 @@ else: #Cheat Logic
   
   dc_Diff = int(DC1.total) - roll1.total
   
-  checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
+  checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff) #Odds that cheating will result in a 2d4 which will make this check pass
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
   checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC1.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   

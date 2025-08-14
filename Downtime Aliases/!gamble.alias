@@ -70,7 +70,6 @@ args=&ARGS&
 
 args = argparse(args)               # Parse the remaining arguments
 argBonus = args.join('b', ' + ')    # If a bonus is provided, add it
-weapon = args.join('w', ' ')        # If a Weapon is provided, log it
 weaponReplace = args.join('wn', ' ',)
 
 ch=character()
@@ -406,7 +405,7 @@ else: #Cheat Logic
   
   checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
-  checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC2.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
+  checkOdd1 = cheatOddPlus1 * (1 if (roll2.total+ 1 >= int(DC2.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   
   finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
   
@@ -511,7 +510,7 @@ else: #Cheat Logic
   
   checkOdd2d4 = cheatOddPlus2d4 * getOddsRolls('2d4',dc_Diff)#odds a 1d4 
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
-  checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC3.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
+  checkOdd1 = cheatOddPlus1 * (1 if (roll3.total+ 1 >= int(DC3.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   
   finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
   

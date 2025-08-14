@@ -301,7 +301,7 @@ else: #Cheat Logic
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
   checkOdd1 = cheatOddPlus1 * (1 if (roll1.total+ 1 >= int(DC1.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   
-  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  finalCheatOdds = min(1,checkOdd2d4+checkOdd1d4+checkOdd1)
   
   miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
   DC Differential: **{dc_Diff}**
@@ -407,7 +407,7 @@ else: #Cheat Logic
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
   checkOdd1 = cheatOddPlus1 * (1 if (roll2.total+ 1 >= int(DC2.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   
-  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  finalCheatOdds = min(1,checkOdd2d4+checkOdd1d4+checkOdd1)
   
   miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
   DC Differential: **{dc_Diff}**
@@ -512,7 +512,7 @@ else: #Cheat Logic
   checkOdd1d4 = cheatOddPlus1d4 * getOddsRolls('1d4',dc_Diff) #Odds that cheating will result in a 1d4 which will make this check pass
   checkOdd1 = cheatOddPlus1 * (1 if (roll3.total+ 1 >= int(DC3.total) ) else 0) # Odds that cheating will result in a +1 bonus which will make this pass
   
-  finalCheatOdds = max(checkOdd2d4,checkOdd1d4,checkOdd1)
+  finalCheatOdds = min(1,checkOdd2d4+checkOdd1d4+checkOdd1)
   
   miscNotes= miscNotes +  f""" -f "**Cheat Odds Testing**: 
   DC Differential: **{cheatDCMap[cheats]}**

@@ -266,6 +266,10 @@ if 'harp' in args:
   miscNotes+=f'\n{character().name} cannot roll below a 10 on Intimidation rolls due to being attuned to the Harp of Gilded Plenty'
   d20Dict['Roll 3'].update({'min_val':10})
 
+# Silver Tongue #
+if 'silver' in &ARGS&:
+  miscNotes+=f'\n{character().name} cannot roll below a 10 on {skill2.title()} rolls due to Eloquence Bard\'s Silver Tongue'
+  d20Dict['Roll 2'].update({'min_val':10})
 
 if miscNotes:
   miscNotes =' -f "**__Misc Notes:__**' + miscNotes + '"'

@@ -1,0 +1,42 @@
+!snippet kaz <drac2>
+## Okay I guess this ends up on here so I don't lose it
+## BUT I guess it can be a template for if you want to make a 'super snippet' for a character
+## Basically I use this snippet any time this character attacks; 
+## it tries to be smart and parse what information it can see and add damage riders 
+## as applicable based on the weapon, status effects, and subarguments
+
+args = &ARGS&
+effects = combat().me.effects
+char=character()
+gwf = False
+
+display_types={
+ 'bubble':['◉','〇'], #full, empty; for if any use a counter
+ 'square':['▣','▢'], 
+ 'hex':['★','☆'],
+ 'star':['⬢','⬡']
+}
+
+for x in ['gwf','Greatsword']:
+  if x in args:
+    gwf = True 
+    # {"mi3" if gwf else ""}
+    # {" (Great Weapon Fighting)" if gwf else ""}
+output=""
+
+for effect in effects:
+  if effect.name == "Favor of the Divine":
+    output+=f""" -d 1d4{"mi3" if gwf else ""}[radiant] -f "Divine Favor {" (Great Weapon Fighting)" if gwf else ""}|Until the spell ends, your attacks with weapons deal an extra 1d4 Radiant damage on a hit.|inline" """
+  if effect.name[:7] == "Infused" and not 'nogift' in args:
+    dtype=''
+    if effect.name[16:].replace(')','') in ['acid','cold','fire','lightning','poison']:
+      dtype=effect.name[16:].replace(')','')
+    output+=f""" -d "1d4{"mi3" if gwf else "" }{ "[{dtype]" if len(dtype)>0 else "" }" -f "Chromatic Infusion{ " (Great Weapon Fighting)" if gwf else "" }|As a bonus action, you can touch a simple or martial weapon and infuse it with one of the following damage types: acid, cold, fire, lightning, or poison. For the next minute, the weapon deals an extra 1d4 damage of the chosen type when it hits. After you use this bonus action, you can't do so again until you finish a long rest." """
+  if effect.name == "Eldritch Maul":
+    output+=f""" -d 1d6{"mi3" if gwf else ""}[force] -f "Eldritch Maul {" (Great Weapon Fighting)" if gwf else ""}|In addition, your melee attacks deal an extra 1d6 force damage on a hit|inline" """
+if 'sol' in args and char.cc('Precise Strike').value>0:
+  output+=f""" adv1 -d1 1d8 -f "Precise Strike|Once per turn, when you make a weapon attack roll against a creature, you can cause the attack roll to have advantage. If the attack hits, you roll a d8 and add the number rolled as a bonus to the attack's damage roll. You can use this benefit a number of times equal to your proficiency bonus, but a use is expended only if the attack hits. You regain all expended uses when you finish a long rest
+  __**If it hits, you must deduct counter**__:
+  ```!cc Precise -1```" """
+return f'{output}'
+</drac2>

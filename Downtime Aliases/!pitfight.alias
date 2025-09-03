@@ -137,7 +137,7 @@ if '-v' in args:
   return f"""embed -title "Looking for a fight?" -desc "{verbose}" """
 
 
-if (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
+if (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a pitfight earning.
   `{ctx.prefix+ctx.alias} [args]`
 

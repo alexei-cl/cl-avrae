@@ -11,3 +11,6 @@ craft/craft_webhook.txt
 craft/gvar_splitter.py
 craft/dailyCraft.bat
 craft/cl_webhook.txt
+avrae.py
+\!duration.alias
+avrae_test.py

@@ -324,17 +324,24 @@ else: ##CRAFTING SPECS
             outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
             outMsg+= (f"""|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
         
-        downtime_chunks = ceil(days/4)
-        downtime_days = floor(days/8)
+        downtime_chunks = ceil(days/4.0)
+        downtime_days = floor(days/8.0)
         chunk=days%8
         
         
         HOUR = 3600
         DAY = 86400                                     #seconds per day
         CurTime = int(time())                           #get current time
-        busyTime = CurTime + ((downtime_days-1)*DAY)+chunk*HOUR  #calculate time when the activity ends
+        if days<=8: ##Done is a day or less! It's ready when the crafting time is done.
+          busyTime = CurTime + days*HOUR
+          nextTime = CurTime+DAY
+          downtime_days=0
+        else:
+          busyTime = CurTime + ((downtime_days-1)*DAY)+8*HOUR  #calculate time when the activity ends
+          nextTime = CurTime+downtime_days*DAY
         
-        outMsg+=(f"""-f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F>" """)
+        outMsg+=( f"""-f "**Item complete in: in {downtime_days} day(s) {f'and {chunk} hours' if chunk>0 else (f' and {days} hours' if days<=8 else '') }**\n <t:{busyTime}:F>" """ )
+        outMsg+=( f"""-f "**Next downtime use: in {downtime_days+1} day(s):**\n <t:{nextTime + DAY}:F>" """ )
         
         
         

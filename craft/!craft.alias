@@ -21,6 +21,7 @@ jobInfoMap = {
   'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
   'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
   'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
+  'Poisoner':      {'jobValue': 15, 'jobStats': ["INT", "DEX", "CON"]},
   'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
   'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON", "DEX"]},
   'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
@@ -138,6 +139,7 @@ rel    A rogue's reliable talent (minimuim roll 10)
 indom  A barbarian's Indomitable Might
 royal  A Royal Mothfolk's Well Mannered
 -b X   For any other misc bonuses to your roll!
+-gift  For the Winter Event Crafting Boon (USE LAST!)
 ```
   "
   """)
@@ -166,7 +168,7 @@ for gid in craftingGvars:
 if len(foundItems)>1:
   outMsg = (f"""-title "Multiple Matches Found" """)
   if 'True' in args.get('with') or len(args.get('with'))==0:
-    outMsg+= (f"""-f "Your input was: `{item}`Which one were you looking for? Rerun your command:\n```{ctx.prefix}{ctx.alias} 'Exact Name of Item'```
+    outMsg+= (f"""-f "Your input was: `{item}`\n Which one were you looking for? Rerun your command:\n```{ctx.prefix}{ctx.alias} 'Exact Name of Item'```
     
     Or run by id (the number in the square brackets). Example:
     ```{ctx.prefix}{ctx.alias} 0```" """)
@@ -251,14 +253,12 @@ else: ##CRAFTING SPECS
           gpDiscountMod/=2
           timeDiscountMod/=2
           miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
-          
-        #if args.get('gift') and int(time())<=1740808799: Leaving the 2024-2025 winter gift in and commented in case we do a future crafting boon
-        #  if foundItem.get('rarity').lower() != 'legendary':
-        #    gpDiscountMod/=2
-        #    miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
-        #  dayBonus-=1
-        #  miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
-        
+        if args.get('gift') and int(time())<=1740808799:
+          if foundItem.get('rarity').lower() != 'legendary':
+            gpDiscountMod/=2
+            miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
+          dayBonus-=1
+          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
         gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
         tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
         
@@ -309,6 +309,8 @@ else: ##CRAFTING SPECS
           success=-1
         else:
           success=0
+
+        
         ## Give Da Results
         
         outMsg = (f""" -title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
@@ -324,24 +326,18 @@ else: ##CRAFTING SPECS
             outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
             outMsg+= (f"""|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
         
-        downtime_chunks = ceil(days/4.0)
-        downtime_days = floor(days/8.0)
+        downtime_chunks = ceil(days/4)
+        downtime_days = floor(days/8) if (success >=1) else (1)
         chunk=days%8
         
         
         HOUR = 3600
         DAY = 86400                                     #seconds per day
         CurTime = int(time())                           #get current time
-        if days<=8: ##Done is a day or less! It's ready when the crafting time is done.
-          busyTime = CurTime + days*HOUR
-          nextTime = CurTime+DAY
-          downtime_days=0
-        else:
-          busyTime = CurTime + ((downtime_days-1)*DAY)+8*HOUR  #calculate time when the activity ends
-          nextTime = CurTime+downtime_days*DAY
+        busyTime = (CurTime + ((downtime_days-1)*DAY)+chunk*HOUR) if (success > 0) else (CurTime)  #calculate time when the activity ends
         
-        outMsg+=( f"""-f "**Item complete in: in {downtime_days} day(s) {f'and {chunk} hours' if chunk>0 else (f' and {days} hours' if days<=8 else '') }**\n <t:{busyTime}:F>" """ )
-        outMsg+=( f"""-f "**Next downtime use: in {downtime_days+1} day(s):**\n <t:{nextTime + DAY}:F>" """ )
+        outMsg+=(f""" -f "**Item Done: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime}:F><t:{busyTime}:R> " """) if (success>0) else ''
+        outMsg+=(f""" -f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F><t:{busyTime + DAY}:R>" """)
         
         
         

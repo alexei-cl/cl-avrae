@@ -15,6 +15,7 @@ jobInfoMap = {
   'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
   'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
   'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
+  'Leatherworker': {'jobValue': 30, 'jobStats': ["WIS", "DEX","STR"]},
   'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
   'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
   'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},

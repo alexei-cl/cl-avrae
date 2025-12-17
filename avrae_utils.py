@@ -1,6 +1,5 @@
 import os 
 import requests
-import Path
 
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')

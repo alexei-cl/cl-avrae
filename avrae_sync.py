@@ -1,9 +1,14 @@
 import avrae_utils as avrae
 import requests
+import os
+
+#Other tokens are set in avrae_utils
+SYNC_ALL = os.environ.get('SYNC_ALL', 'false').lower() == 'true'
+CHANGED_FILES=os.environ.get('CHANGED_FILES', '').split()
 
 if __name__ == '__main__':
   items, spells = False,False
-  for file_path in changed_files:
+  for file_path in CHANGED_FILES:
     if file_path.endswith('.alias'):
       # Handle alias file
       alias=avrae.parse_alias_file(file_path)
@@ -31,7 +36,7 @@ if __name__ == '__main__':
     elif file_path.startswith('HB Spells/'):
       # Handle HB spell
       spells=True
-  if items:
+  if items || SYNC_ALL:
     avrae.build_pack()
-  if spells:
+  if spells || SYNC_ALL:
     avrae.build_tome()

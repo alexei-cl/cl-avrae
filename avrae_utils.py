@@ -160,9 +160,10 @@ def build_pack():
     #    spellText=json.loads(spell.read())
     #  tome_dict['spells'].append(spellText)
     for path in list(itempaths):
-      itemjson=''
+      item=''
       with open(path,'r') as item:
         item=json.loads(item.read())
+        print(item)
       pack_dict['items'].append(item)
       
     req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = pack_dict )

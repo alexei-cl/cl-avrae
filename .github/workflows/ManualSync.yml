@@ -57,7 +57,7 @@ jobs:
       if: (github.event_name == 'push' && steps.changed-files.outputs.any_changed == 'true') || github.event_name == 'workflow_dispatch'
       env:
         AVRAE_TOKEN: ${{ secrets.AVRAE_TOKEN }}
-        CHANGED_FILES: ${{ github.event_name == 'push' && steps.changed-files.outputs.all_changed_files || steps.all-files.outputs.files }}
+        CHANGED_FILES: [] #${{ github.event_name == 'push' && steps.changed-files.outputs.all_changed_files || steps.all-files.outputs.files }}
         PACK_ID: ${{ secrets.PACK_ID }}
         TOME_ID: ${{ secrets.TOME_ID }}
         MAINTENANCE_WEBHOOK: ${{ secrets.MAINTENANCE_WEBHOOK }}

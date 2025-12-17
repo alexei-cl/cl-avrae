@@ -154,18 +154,13 @@ def build_pack():
     }
     itempaths = Path(fr'./HB-Items/').glob('*.item')
     print(list(itempaths))
-    #for path in list(spells):
-    #  spellText=''
-    #  with open(path,'r') as spell:
-    #    spellText=json.loads(spell.read())
-    #  tome_dict['spells'].append(spellText)
-    for path in list(itempaths):
+    for str(path) in list(itempaths):
       item=''
       with open(path,'r') as item:
         item=json.loads(item.read())
-        print(item)
+        print(f"->{item}")
       pack_dict['items'].append(item)
-      
+    print(f"-->{pack_dict['items']}")
     req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = pack_dict )
     
     #Some kind of webhook call to server upkeep to update the `!pack`

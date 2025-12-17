@@ -137,7 +137,7 @@ def build_tome():
   except Exception as e:
     embed={'title': f'Error: {e}', 'description':f'Tome function failed.'}
   payload = {
-      'username':"Crystal Library - Custom Content ManagerQOTD",
+      'username':"Crystal Library - Custom Content Manager",
       'avatar_url':'https://img.photouploads.com/file/PhotoUploads-com/SV7D.png',
       'embeds':[embed]
   }
@@ -152,29 +152,23 @@ def build_pack():
     'desc':'Homebrew Items for the Crystal Library',
     'items':[]
     }
-    print("...Building pack...")
-    print("...checking for items...")
     itempaths = Path(fr'./HB-Items/').glob('*.item')
-    for item in list(itempaths):
-      print("...item found...")
-      itemjson=json.loads(item.read())
+    for item_file in list(itempaths):
+      itemjson=''
+      with open(item_file,'r') as item:
+        itemjson=json.loads(item.read())
     pack_dict['items'].append(itemjson)
-    print("...items added...")
     req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = pack_dict )
-    print("...update call made added...")
     #Some kind of webhook call to server upkeep to update the `!pack`
     goodCodes = [200,201,202,204]
     if resp not in goodCodes:
       embed={'title': f'Error: {resp}', 'description':f'Pack failed to update'}
-      print(f"...API Error {resp}...")
     else:
       embed={'title': f'Pack Sync Successful: {resp}', 'description':f'The HB Item Tome has been rebuilt; someone needs to use `!pack` to update <@167439243147345921>.'}
-      print(f"...API Call success...")
   except Exception as e:
     embed={'title': f'Error: {e}', 'description':f'Pack function failed.'}
-    print(f"...str{e}...")
   payload = {
-      'username':"Crystal Library - Custom Content ManagerQOTD",
+      'username':"Crystal Library - Custom Content Manager",
       'avatar_url':'https://img.photouploads.com/file/PhotoUploads-com/SV7D.png',
       'embeds':[embed]
   }

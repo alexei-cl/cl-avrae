@@ -56,7 +56,7 @@ if __name__ == '__main__':
                 elif reqCode2 not in goodCodes:
                     embed = {
                         'title': f'Error: {reqCode2}',
-                        'description': f'Alias {file_path} failed to switch code versions:\n{}',
+                        'description': f'Alias {file_path} failed to switch code versions: {str(e)}',
                         'color': 0xFF0000  # Red
                     }
                 else:

@@ -1,0 +1,112 @@
+
+embed -title "Duration Manager"
+-footer "{{ctx.prefix+ctx.alias}} [originator] [effect_name] [rounds]"
+<drac2>
+## Based on Croebh and derixyleth's initiative utilities !effectcopy
+
+args = &ARGS&
+c = combat()
+if len(args) < 3:
+  return """ -desc "Need target, originator, and effect name" """
+if not c:
+  return """ -desc "Not in combat" """
+
+originator_name = args[0]
+effect_name = args[1]
+
+args=argparse(args)
+modDur = args.get('d',None)
+modDurInt = 0
+modDurFactor = -1
+if not modDur:
+  return f""" -desc "Invalid duration" """
+else:
+  if '+' in modDur[0]:
+    modDurFactor*=-1
+    modDur=str(modDur[0][modDur.find('+'):])
+  modDurInt= int(int(modDur[0])*modDurFactor)
+
+originator = c.get_combatant(originator_name)
+if not originator:
+  return f""" -desc "Invalid originator: {originator_name}" """
+
+effect = originator.get_effect(effect_name)
+if not effect:
+  return """ -desc "Invalid Effect Name" """
+
+#targets = []
+#for t_name in targets_names:
+#  targets.extend(c.get_group(t_name).combatants if c.get_group(t_name) else [c.get_combatant(t_name)])
+#if not (targets and any(targets)):
+#  return f""" -desc "Invalid target(s): {targets_names}" """
+
+def str_resist(resist):
+  out = []
+  for only in resist.get('only', []):
+    out.append(only)
+  for unless in resist.get('unless', []):
+    out.append(f"non{unless}")
+  out.append(resist['dtype'])
+  return " ".join(out)
+
+passives = effect.effect.copy()
+
+for r_type in ('resistances', 'immunities', 'vulnerabilities', 'ignored_resistances'):
+  if passives.get(r_type):
+    passives[r_type] = [str_resist(i) for i in passives[r_type]]
+
+target_out = []
+
+newName=effect.name
+newDuration=effect.remaining
+newConcentration=effect.conc
+newParent=effect.parent
+newEnd=effect.ticks_on_end
+newDesc=effect.desc
+newPassive_effects=passives
+newAttacks=effect.attacks
+newButtons=effect.buttons
+
+originator.add_effect(
+    'DummyEffect', 
+    duration=effect.remaining, 
+    concentration=effect.conc, 
+    parent=effect.parent, 
+    end=effect.ticks_on_end, 
+    desc=effect.desc, 
+    passive_effects=passives, 
+    attacks=effect.attacks, 
+    buttons=effect.buttons
+)
+
+if effect.children: #Preserve Children
+  for child in effect.children:
+    child.setParent('DummyEffect')
+
+#originator.remove_effect(effect.name) #Remove Original
+
+originator.add_effect(
+    newName, 
+    duration=int(newDuration)+int(modDurInt),
+    concentration=newConcentration, 
+    parent=newParent if newParent else None, 
+    end=newEnd, 
+    desc=newDesc, 
+    passive_effects=newPassive_effects, 
+    attacks=newAttacks, 
+    buttons=newButtons
+)
+
+if originator.get_effect('DummyEffect').children:
+  for child in originator.get_effect('DummyEffect').children:
+    child.setParent('newName')
+  
+originator.remove_effect('DummyEffect')
+
+return f""" -desc "Modifying the effect **{effect.name}** from {originator.name} by {modDurInt} rounds"
+-f "Original: **`{newDuration}`** rounds||inline"
+-f "New: **`{newDuration+modDurInt}`** rounds||inline"
+-f "Effect Description|```md
+{effect}
+```" """
+</drac2>

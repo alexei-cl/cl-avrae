@@ -1,0 +1,274 @@
+{
+  "name": "Nidas's Lightning Torrent",
+  "level": 5,
+  "school": "C",
+  "automation": [
+    {
+      "type": "roll",
+      "dice": "4d10[Lightning]",
+      "name": "Damage",
+      "higher": {
+        "6": "1d10",
+        "7": "2d10",
+        "8": "3d10",
+        "9": "4d10"
+      }
+    },
+    {
+      "type": "target",
+      "target": "self",
+      "effects": [
+        {
+          "type": "ieffect2",
+          "name": "Nidas's Lightning Torrent",
+          "duration": "10",
+          "attacks": [
+            {
+              "attack": {
+                "_v": 2,
+                "name": "Move the Storm",
+                "automation": [
+                  {
+                    "type": "target",
+                    "target": "self",
+                    "effects": [
+                      {
+                        "type": "ieffect2",
+                        "name": "Channeling the Storm",
+                        "save_as": "storm",
+                        "parent": "spell"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "target",
+                    "target": "all",
+                    "effects": [
+                      {
+                        "type": "ieffect2",
+                        "name": "In the Storm",
+                        "buttons": [
+                          {
+                            "automation": [
+                              {
+                                "type": "target",
+                                "target": "self",
+                                "effects": [
+                                  {
+                                    "type": "save",
+                                    "stat": "dex",
+                                    "fail": [
+                                      {
+                                        "type": "damage",
+                                        "damage": "4d10[lightning]",
+                                        "higher": {
+                                          "6": "1d10[lightning]",
+                                          "7": "2d10[lightning]",
+                                          "8": "3d10[lightning]",
+                                          "9": "4d10[lightning]"
+                                        }
+                                      }
+                                    ],
+                                    "success": [
+                                      {
+                                        "type": "damage",
+                                        "damage": "(4d10[lightning])/2",
+                                        "higher": {
+                                          "6": "(1d10[lightning])/2",
+                                          "7": "(2d10[lightning])/2",
+                                          "8": "(3d10[lightning])/2",
+                                          "9": "(4d10[lightning])/2"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ],
+                            "label": "Start of Turn: Storm Damage",
+                            "style": "3",
+                            "defaultDC": "spell_dc"
+                          },
+                          {
+                            "automation": [
+                              {
+                                "type": "remove_ieffect"
+                              }
+                            ],
+                            "label": "Leave the Storm",
+                            "verb": "decides to",
+                            "style": "1"
+                          }
+                        ],
+                        "desc": "When a creature starts its turn in the spell's area, it is struck by the lightning and must make a Dexterity saving throw.",
+                        "parent": "storm"
+                      }
+                    ]
+                  }
+                ],
+                "verb": "decides to",
+                "activation_type": 3
+              },
+              "defaultDC": "spell_dc"
+            },
+            {
+              "attack": {
+                "_v": 2,
+                "name": "Channel the Storm",
+                "automation": [
+                  {
+                    "type": "target",
+                    "target": "all",
+                    "effects": [
+                      {
+                        "type": "save",
+                        "stat": "dex",
+                        "fail": [
+                          {
+                            "type": "damage",
+                            "damage": "4d10[lightning]",
+                            "higher": {
+                              "6": "1d10[lightning]",
+                              "7": "2d10[lightning]",
+                              "8": "3d10[lightning]",
+                              "9": "4d10[lightning]"
+                            }
+                          }
+                        ],
+                        "success": [
+                          {
+                            "type": "damage",
+                            "damage": "(4d10[lightning])/2",
+                            "higher": {
+                              "6": "(1d10[lightning])/2",
+                              "7": "(2d10[lightning])/2",
+                              "8": "(3d10[lightning])/2",
+                              "9": "(4d10[lightning])/2"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "verb": "does",
+                "phrase": "It just Works!",
+                "activation_type": 2
+              }
+            }
+          ],
+          "conc": true,
+          "desc": "On each of your turns after you cast this spell, you can use a bonus action to move the column of lightning up to 30 feet in any direction.\n - Use `!a \"Move the Storm\"` to move it on to new creatures! Make sure to target.",
+          "save_as": "spell",
+          "tick_on_caster": true
+        },
+        {
+          "type": "ieffect2",
+          "name": "Channeling the Storm",
+          "save_as": "storm",
+          "parent": "spell"
+        }
+      ]
+    },
+    {
+      "type": "target",
+      "target": "all",
+      "effects": [
+        {
+          "type": "save",
+          "stat": "dex",
+          "fail": [
+            {
+              "type": "damage",
+              "damage": "{Damage}",
+              "higher": {}
+            }
+          ],
+          "success": [
+            {
+              "type": "damage",
+              "damage": "({Damage})/2"
+            }
+          ]
+        },
+        {
+          "type": "ieffect2",
+          "name": "In the Storm",
+          "buttons": [
+            {
+              "automation": [
+                {
+                  "type": "target",
+                  "target": "self",
+                  "effects": [
+                    {
+                      "type": "save",
+                      "stat": "dex",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "4d10[lightning]",
+                          "higher": {
+                            "6": "1d10[lightning]",
+                            "7": "2d10[lightning]",
+                            "8": "3d10[lightning]",
+                            "9": "4d10[lightning]"
+                          }
+                        }
+                      ],
+                      "success": [
+                        {
+                          "type": "damage",
+                          "damage": "(4d10[lightning])/2",
+                          "higher": {
+                            "6": "(1d10[lightning])/2",
+                            "7": "(2d10[lightning])/2",
+                            "8": "(3d10[lightning])/2",
+                            "9": "(4d10[lightning])/2"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "label": "Start of Turn: Torrent Damage",
+              "style": "3",
+              "defaultDC": "spell_dc"
+            },
+            {
+              "automation": [
+                {
+                  "type": "remove_ieffect"
+                }
+              ],
+              "label": "Leave Lightning Torrent",
+              "style": "1"
+            }
+          ],
+          "desc": "When a creature starts its turn in the spell's area, it is struck by the lightning and must make a Dexterity saving throw.",
+          "parent": "storm"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "You conjure a torrent of lightning within an area of your choosing. Create a 20-foot-radius, 60-foot-high cylinder of rapid lightning strikes centered on a point within range. When a creature enters the spell's area for the first time on a turn or starts its turn there, it is struck by the lightning and must make a Dexterity saving throw. On a failed save they take 4d10 lightning damage and cannot make opportunity attacks until the start of their next turn. On a successful save they take half as much damage and do not lose their ability to make opportunity attacks.\n\nOn each of your turns after you cast this spell, you can use a bonus action to move the column of lightning up to 30 feet in any direction.\n\nAt Higher Levels. When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 and the radius of the cylinder increases by 10 feet for each level above 5th. If you use a spell slot of 7th level or higher, you can move the column of lightning up to 60 feet instead.",
+      "title": "Nidas's Lightning Torrent"
+    }
+  ],
+  "classes": "Druid, Sorcerer, Wizard",
+  "subclasses": "",
+  "casttime": "1 action",
+  "range": "120ft./20ft.",
+  "components": {
+    "verbal": true,
+    "somatic": true,
+    "material": "a bronze or blue dragon scale and a copper rod"
+  },
+  "duration": "Concentration, 1 Minute",
+  "ritual": false,
+  "description": "You conjure a torrent of lightning within an area of your choosing. Create a 20-foot-radius, 60-foot-high cylinder of rapid lightning strikes centered on a point within range. When a creature enters the spell's area for the first time on a turn or starts its turn there, it is struck by the lightning and must make a Dexterity saving throw. On a failed save they take 4d10 lightning damage and cannot make opportunity attacks until the start of their next turn. On a successful save they take half as much damage and do not lose their ability to make opportunity attacks.\n\nOn each of your turns after you cast this spell, you can use a bonus action to move the column of lightning up to 30 feet in any direction.",
+  "higherlevels": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 and the radius of the cylinder increases by 10 feet for each level above 5th. If you use a spell slot of 7th level or higher, you can move the column of lightning up to 60 feet instead.",
+  "concentration": false
+}

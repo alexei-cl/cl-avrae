@@ -1,3 +1,8 @@
+# SYNC_CONFIG
+# coll_id: 6796a30e2b06e7656cecaf13
+# alias_id:  6796a3192cbd28f4da39bbd2
+# alias_name: !scribe
+# END_CONFIG
 <drac2>
 
 gvars= ['981c76e0-f465-413a-9b73-d1a20ba9f41c','8ff118c6-54dd-48ff-b956-dee2da56d791','9a4f2735-affc-4ae7-914e-be5c72d86940','02ba67a9-827f-49d9-8781-3c62f605e647','75ec3933-80cc-42c6-945f-6dd75451e8ea','21d662e0-9289-4550-823f-f38cf1239d0f']

@@ -11,3 +11,13 @@ craft/craft_webhook.txt
 craft/gvar_splitter.py
 craft/dailyCraft.bat
 craft/cl_webhook.txt
+/__pycache__
+avrae.py
+avrae_test.py
+parse_alias.py
+jwt_token
+jwt_auth.py
+parse_alias.py
+test.log
+parse_alias.py
+parse_alias.py

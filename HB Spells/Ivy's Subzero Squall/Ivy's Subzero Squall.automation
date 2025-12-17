@@ -1,0 +1,358 @@
+[
+  {
+    "type": "roll",
+    "dice": "6d8[bludgeoning]",
+    "name": "damage",
+    "higher": {
+      "8": "1d8[bludgeoning]",
+      "9": "2d8[bludgeoning]"
+    },
+    "displayName": "Damage",
+    "fixedValue": false
+  },
+  {
+    "type": "target",
+    "target": "self",
+    "effects": [
+      {
+        "type": "ieffect2",
+        "name": "Summoner of the Squall",
+        "duration": "11",
+        "attacks": [
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Spread the Squall",
+              "automation": [
+                {
+                  "type": "roll",
+                  "dice": "6d8[bludgeoning]",
+                  "name": "blud",
+                  "higher": {
+                    "8": "1d8[bludgeoning]",
+                    "9": "2d8[bludgeoning]"
+                  },
+                  "displayName": "Damage",
+                  "fixedValue": true
+                },
+                {
+                  "type": "target",
+                  "target": "all",
+                  "effects": [
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "{blud}",
+                          "fixedValue": true
+                        }
+                      ],
+                      "success": [
+                        {
+                          "type": "damage",
+                          "damage": "{blud}/2",
+                          "fixedValue": true
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ieffect2",
+                      "name": "Battered by the Blizzard (Deafened)",
+                      "duration": "10",
+                      "buttons": [
+                        {
+                          "automation": [
+                            {
+                              "type": "target",
+                              "target": "self",
+                              "effects": [
+                                {
+                                  "type": "roll",
+                                  "dice": "6d8[cold]",
+                                  "name": "cold",
+                                  "higher": {
+                                    "8": "1d8[cold]",
+                                    "9": "2d8[cold]"
+                                  },
+                                  "displayName": "Damage",
+                                  "fixedValue": true
+                                },
+                                {
+                                  "type": "save",
+                                  "stat": "con",
+                                  "fail": [
+                                    {
+                                      "type": "damage",
+                                      "damage": "{cold}",
+                                      "fixedValue": true
+                                    }
+                                  ],
+                                  "success": [
+                                    {
+                                      "type": "damage",
+                                      "damage": "{cold}/2",
+                                      "fixedValue": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "text": "Whenever a creature enters the Cube or ends its turn there, the creature must make a Constitution saving throw, taking 6d8 Cold damage on a failed save or half as much damage on a successful one. A creature makes this save only once per turn."
+                            }
+                          ],
+                          "label": "Subzero Squall: End of Turn",
+                          "verb": "ends their turn within the Squall",
+                          "style": "3",
+                          "defaultDC": "spell_dc"
+                        },
+                        {
+                          "automation": [
+                            {
+                              "type": "remove_ieffect"
+                            }
+                          ],
+                          "label": "Subzero Squall: Leave",
+                          "verb": "leaves the range of the Squall",
+                          "style": "4"
+                        }
+                      ],
+                      "parent": "squall",
+                      "tick_on_caster": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "When the Cube appears, the Cube moves, and whenever the Cube enters a creature\u2019s space, each creature in its area must make a Strength saving throw. On a failed save, the creature takes 6d8 Bludgeoning Damage and is pushed 10 feet in the wind's direction. On a successful save, it takes half as much damage only. A creature makes this save only once per turn.\n\nUntil the spell ends, you can take a Magic action to move the Cube up to 40 feet, change the direction of the wind, or both."
+                    }
+                  ]
+                }
+              ],
+              "verb": "goes to",
+              "proper": true,
+              "activation_type": 8
+            }
+          },
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Step into the Squall",
+              "automation": [
+                {
+                  "type": "target",
+                  "target": "all",
+                  "effects": [
+                    {
+                      "type": "roll",
+                      "dice": "6d8[cold]",
+                      "name": "cold",
+                      "higher": {
+                        "8": "1d8[cold]",
+                        "9": "2d8[cold]"
+                      },
+                      "displayName": "Damage",
+                      "fixedValue": true
+                    },
+                    {
+                      "type": "save",
+                      "stat": "con",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "{cold}",
+                          "fixedValue": true
+                        }
+                      ],
+                      "success": [
+                        {
+                          "type": "damage",
+                          "damage": "{cold}/2",
+                          "fixedValue": true
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ieffect2",
+                      "name": "Battered by the Blizzard",
+                      "duration": "10",
+                      "buttons": [
+                        {
+                          "automation": [
+                            {
+                              "type": "target",
+                              "target": "self",
+                              "effects": [
+                                {
+                                  "type": "roll",
+                                  "dice": "6d8[cold]",
+                                  "name": "cold",
+                                  "higher": {
+                                    "8": "1d8[cold]",
+                                    "9": "2d8[cold]"
+                                  },
+                                  "displayName": "Damage",
+                                  "fixedValue": true
+                                },
+                                {
+                                  "type": "save",
+                                  "stat": "con",
+                                  "fail": [
+                                    {
+                                      "type": "damage",
+                                      "damage": "{cold}",
+                                      "fixedValue": true
+                                    }
+                                  ],
+                                  "success": [
+                                    {
+                                      "type": "damage",
+                                      "damage": "{cold}/2",
+                                      "fixedValue": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "text": "Whenever a creature enters the Cube or ends its turn there, the creature must make a Constitution saving throw, taking 6d8 Cold damage on a failed save or half as much damage on a successful one. A creature makes this save only once per turn."
+                            }
+                          ],
+                          "label": "Subzero Squall: End of Turn",
+                          "verb": "ends their turn within the Squall",
+                          "style": "3",
+                          "defaultDC": "spell_dc"
+                        },
+                        {
+                          "automation": [
+                            {
+                              "type": "remove_ieffect"
+                            }
+                          ],
+                          "label": "Subzero Squall: Leave",
+                          "verb": "leaves the range of the Squall",
+                          "style": "4"
+                        }
+                      ],
+                      "parent": "squall",
+                      "tick_on_caster": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "Whenever a creature enters the Cube or ends its turn there, the creature must make a Constitution saving throw, taking 6d8 Cold damage on a failed save or half as much damage on a successful one. A creature makes this save only once per turn."
+                    }
+                  ]
+                }
+              ],
+              "verb": "beckons you to",
+              "proper": true,
+              "activation_type": 8
+            }
+          }
+        ],
+        "save_as": "squall"
+      }
+    ]
+  },
+  {
+    "type": "target",
+    "target": "all",
+    "effects": [
+      {
+        "type": "save",
+        "stat": "str",
+        "fail": [
+          {
+            "type": "damage",
+            "damage": "{damage}",
+            "fixedValue": true
+          }
+        ],
+        "success": [
+          {
+            "type": "damage",
+            "damage": "{damage}/2",
+            "fixedValue": true
+          }
+        ]
+      },
+      {
+        "type": "ieffect2",
+        "name": "Battered by the Blizzard (Deafened)",
+        "duration": "10",
+        "buttons": [
+          {
+            "automation": [
+              {
+                "type": "target",
+                "target": "self",
+                "effects": [
+                  {
+                    "type": "roll",
+                    "dice": "6d8[cold]",
+                    "name": "cold",
+                    "higher": {
+                      "8": "1d8[cold]",
+                      "9": "2d8[cold]"
+                    },
+                    "displayName": "Damage",
+                    "fixedValue": true
+                  },
+                  {
+                    "type": "save",
+                    "stat": "con",
+                    "fail": [
+                      {
+                        "type": "damage",
+                        "damage": "{cold}",
+                        "fixedValue": true
+                      }
+                    ],
+                    "success": [
+                      {
+                        "type": "damage",
+                        "damage": "{cold}/2",
+                        "fixedValue": true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "Whenever a creature enters the Cube or ends its turn there, the creature must make a Constitution saving throw, taking 6d8 Cold damage on a failed save or half as much damage on a successful one. A creature makes this save only once per turn."
+              }
+            ],
+            "label": "Subzero Squall: End of Turn",
+            "verb": "ends their turn within the Squall",
+            "style": "3",
+            "defaultDC": "spell_dc"
+          },
+          {
+            "automation": [
+              {
+                "type": "remove_ieffect"
+              }
+            ],
+            "label": "Subzero Squall: Leave",
+            "verb": "leaves the range of the Squall",
+            "style": "4"
+          }
+        ],
+        "parent": "squall",
+        "tick_on_caster": true
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "You beckon bitter cold and freezing winds in a 40-foot Cube within range. Choose a horizontal direction for the wind to blow when you cast the spell. The Cube is difficult terrain, and creatures within it have the Deafened condition.\n\nWhen the Cube appears, the Cube moves, and whenever the Cube enters a creature\u2019s space, each creature in its area must make a Strength saving throw. On a failed save, the creature takes 6d8 Bludgeoning Damage and is pushed 10 feet in the wind's direction. On a successful save, it takes half as much damage only. A creature makes this save only once per turn."
+  },
+  {
+    "type": "text",
+    "text": "Whenever a creature enters the Cube or ends its turn there, the creature must make a Constitution saving throw, taking 6d8 Cold damage on a failed save or half as much damage on a successful one. A creature makes this save only once per turn.\n\nUntil the spell ends, you can take a Magic action to move the Cube up to 40 feet, change the direction of the wind, or both.",
+    "title": "Continued"
+  }
+]

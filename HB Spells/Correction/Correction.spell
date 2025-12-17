@@ -1,0 +1,20 @@
+{
+  "name": "Correction",
+  "level": 2,
+  "school": "E",
+  "automation": [],
+  "classes": "",
+  "subclasses": "",
+  "casttime": "1 reaction, which you take when a creature you can see or hear within 30 feet of you, other than yourself, fails an attack roll, ability check, or saving throw",
+  "range": "30 feet",
+  "components": {
+    "verbal": true,
+    "somatic": false,
+    "material": ""
+  },
+  "duration": "Instantaneous",
+  "ritual": false,
+  "description": "You critique the triggering creature in Elvish and implore them to try again. They can reroll the 1d20 and must use the second roll.",
+  "higherlevels": "When you cast this spell using a spell slot of 3rd level or higher, the triggering creature can add a +1 bonus to their new roll for each slot level above 2nd.",
+  "concentration": false
+}

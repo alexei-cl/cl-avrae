@@ -1,0 +1,5 @@
+{
+  "name": "Tax's Bandage Brace",
+  "meta": "[Common](https://www.dndbeyond.com/magic-items/7477842-taxs-bandage-brace)",
+  "desc": "The item takes for a medium strip of bandage that latches onto the person. It allows a bit of Tax's energy assist you in your time of need.\n\nThe item has 3 charges and you regain all missing charges daily at dawn. As an action, you can spend 1 of the 3 charges to tend to a creature and restore 1d6 + 4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. A creature can't benefit from this healing again until it finishes a short or long rest."
+}

@@ -1,3 +1,8 @@
+# SYNC_CONFIG
+# coll_id: 666cc1181a5f3a30373e7165
+# alias_id: 667e6dfeaa964d02b9af2cf5
+# alias_name: !dayjob
+# END_CONFIG
 embed
 <drac2>
 argString=""" %*% """.strip()
@@ -29,13 +34,13 @@ jobInfoMap = {
   'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
   'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
   'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
-  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
   'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
   'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
   'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
   'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
   'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
   'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
+  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
   'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON", "DEX"]},
   'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
   'Woodcarver':    {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
@@ -97,6 +102,7 @@ def getJobMultiplier(dayjobRoll):
 
 
 args = &ARGS&
+
 if '-v' in args: # Early out for help
   desc = f"""{ctx.alias.title()} is a tool for generating a dayjob earning.
   `{ctx.prefix+ctx.alias} <JobName> [args]`
@@ -220,6 +226,10 @@ dayjobEarning = dayjobEarning / 100 # Fractional gp -> translates into silver an
 
 level=character().levels.total_level
 tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+if 'weekly' or '-weekly' in args:
+  downtime_days = 5
+  busyTime = CurTime + ((downtime_days-1) * DAY)
 
 outTitle = (f'Dayjob')
 outDescr = (f'\n**Character:** {target.name}') +  \

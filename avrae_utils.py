@@ -81,17 +81,19 @@ def parse_alias_file(file_path):
 
 #Given an aliasID and a code string, check if this code string is an update to the relevant alias and if so, push and set the version to be corrected
 
-def updateAlias(aliasID=int,code=str):
+def updateAlias(aliasID:int,code:str):
   old_code, reqCode = avraeREST("get",f"workshop/alias/{aliasID}/code")
-  print(old_code.json()['data'])
+  print(reqCode)
   for code_version in old_code.json()['data']:
+    print(f"Code Version {code_version['version']}")
     if code_version['is_current']==True:
-      old_code=code_version['content']
+      print("Current Found")
+      current_code_content =code_version['content']
       break
-  if old_code!=code:
+  if current_code_content !=code:
     payload={ "content":code }
     req, reqCode1 = avraeREST("post",f"workshop/alias/{aliasID}/code", payload=payload)
-    update, reqCode2 = avraeREST("PUT",f"workshop/alias/{aliasID}/active-code", payload={ 'version':req.json()['data']['version'] } )
+    update, reqCode2 = avraeREST("put",f"workshop/alias/{aliasID}/active-code", payload={ 'version':req.json()['data']['version'] } )
     return req, reqCode1, reqCode2
   else:
     return None, None, None

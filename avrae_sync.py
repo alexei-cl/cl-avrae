@@ -38,7 +38,7 @@ if __name__ == '__main__':
             embed = None
             
             try:
-                req, reqCode1, reqCode2 = avrae.updateAlias(alias[0], alias[1])
+                req, reqCode1, reqCode2 = avrae.updateAlias(alias[0]['alias_id'], alias[1])
                 goodCodes = [200, 201, 202, 204]
                 
                 if reqCode1 not in goodCodes:

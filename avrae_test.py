@@ -10,24 +10,16 @@ import requests
 import time
 import re
 import sys
-from parse_alias import parse_alias_file
+import avrae_utils
+#from parse_alias import parse_alias_file
 from functools import lru_cache
 import jwt
 import datetime
-from jwt_auth import get_avrae_token
+#from jwt_auth import get_avrae_token
 
-AVRAE_DISCORD_TOKEN=get_avrae_token()
+#A#VRAE_DISCORD_TOKEN=get_avrae_token()
 
 # Basic information for any payloads we send to the REST API
-DEFAULT_HEADER = {
-            'Authorization': f"{AVRAE_DISCORD_TOKEN}",
-            'Accept': 'application/json, text/plain, */*',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36',
-            'Content-Type': 'application/json',
-            'Sec-Fetch-Site': 'same-site',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty'
-          }
 
 def avraeREST(type: str, endpoint: str, payload: str = None, ttl_hash = None, headers=None):
   del ttl_hash
@@ -133,39 +125,15 @@ def build_pack():
   return tome_dict
 
 if __name__ == '__main__':
-  inputs=[]
-  if len(sys.argv)<2:
-    print("Err: Please pass files to script")
-    exit(1)
-  for item in sys.argv[1:]:
-    inputs.append(item)
-    print(f"-->{item}")
-    file=parse_alias_file(item)[1]
-    headers=parse_alias_file(item)[0]
-    coll_id=headers['coll_id']
-    alias_id="667e6dfeaa964d02b9af2cf5"
-    print( isinstance(file,str) )
-    content= { 
-        "content":file
+  payload = {
+        'username':"Crystal Library - Custom Content ManagerQOTD",
+        'avatar_url':'https://img.photouploads.com/file/PhotoUploads-com/SV7D.png',
+        'embeds':[{
+            'title':'Alias Sync',
+            'description':'Abcd'
+        }]
     }
-    
-    req, reqCode = avraeREST("get",f"homebrew/items/67a6994d34712b681892268f")
-    content= req.json()['data']
-    print(content)
-    print(content.keys())
-    for spell in content['items']:
-      folder=f".\HB Items"
-      with open(f"{folder}\{spell['name']}.item",'w') as file:
-        file.write(json.dumps(spell,indent=2))
-    #for item in content['data']['aliases']:
-#      print(f"{item['name']} - {item['_id']}")
-      #print()
-    
-    #req, reqCode = avraeREST("get",f"workshop/alias/{alias_id}")
-    #req, reqCode = avraeREST("get",f"discord/users/@alexei")
-    #req, reqCode = avraeREST("post",f"workshop/alias/{alias_id}/code",payload=content)
-    #req, reqCode = avraeREST("get",f"workshop/alias/{alias_id}/code",payload=content)
-    #req, reqCode = updateAlias(alias_id,file)
-    #req, reqCode = avraeREST("PUT",f"workshop/alias/{alias_id}/active-code", payload={ 'v':18 } )
-    #print(req.content)
-    print(reqCode)
+  MAINTENANCE_WEBHOOK="https://discord.com/api/webhooks/1319705056546652231/vYO1Up-2d8quWmtzRspN2Avs-64HgFD_5_FboIcEf20S6fge2cArIz-7LurIdkDeqlnh"
+  response = requests.post(MAINTENANCE_WEBHOOK,json=payload)
+  print(response.json())
+  print(response)

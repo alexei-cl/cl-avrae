@@ -1,4 +1,5 @@
 import os 
+import requests
 
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')
@@ -81,41 +82,69 @@ def updateAlias(aliasID=int,code=str):
     update, reqCode2 = avraeREST("PUT",f"workshop/alias/{aliasID}/active-code", payload={ 'version':req.json()['data']['version'] } )
     return req, reqCode1, reqCode2
   else:
-    return None, None
+    return None, None, None
 
 #Run on update of any file inside the HB Spells Directory
 def build_tome():
-  tome_dict = {
-  "name": "CL - Spells",
-  "public": True,
-  "desc": "HB Spells for the Crystal Library Server",
-  "image": "",
-  "spells": []
+  try:
+    tome_dict = {
+    "name": "CL - Spells",
+    "public": True,
+    "desc": "HB Spells for the Crystal Library Server",
+    "image": "",
+    "spells": []
+    }
+    spells = Path(fr'./HB Spells/').glob('**/*.spell')
+    for path in list(spells):
+      spellText=''
+      with open(path,'r') as spell:
+        spellText=json.loads(spell.read())
+      tome_dict['spells'].append(spellText)
+    req,resp=avraeREST("PUT",f"homebrew/spells/{TOME_ID}", payload = tome_dict )
+    # Create a webhook response to remind people to use `!tome` to update the file
+    goodCodes = [200,201,202,204]
+    if resp not in goodCodes:
+      embed={'title': f'Error: {resp}', 'description':f'Tome failed to update'}
+    else:
+      embed={'title': f'Tome Sync Successful: {resp}', 'description':f'The HB Spell Tome has been rebuilt; someone needs to use `!tome` to update <@167439243147345921>.'}
+  except Exception as e:
+    embed={'title': f'Error: {e}', 'description':f'Tome function failed.'}
+  payload = {
+      'username':"Crystal Library - Custom Content ManagerQOTD",
+      'avatar_url':'https://img.photouploads.com/file/PhotoUploads-com/SV7D.png',
+      'embeds':[embed]
   }
-
-  folderpaths = Path(fr'./HB Spells/').glob('*')
-  paths = Path(fr'./HB Spells/').glob('**/*')
-  spells = Path(fr'./HB Spells/').glob('**/*.spell')
-  for path in list(spells):
-    spellText=''
-    with open(path,'r') as spell:
-      spellText=json.loads(spell.read())
-    tome_dict['spells'].append(spellText)
-  req,resp=avraeREST("PUT",f"homebrew/spells/{TOME_ID}", payload = tome_dict )
-  # Create a webhook response to remind people to use `!tome` to update the file
+  response = requests.post(MAINTENANCE_WEBHOOK,json=payload)
   return tome_dict
 
 def build_pack():
-  pack_dict = {
-  'name':"CL - Homebrew 2025",
-  'public':True,
-  'desc':'Homebrew Items for the Crystal Library',
-  'items':[]
+  try:
+    pack_dict = {
+    'name':"CL - Homebrew 2025",
+    'public':True,
+    'desc':'Homebrew Items for the Crystal Library',
+    'items':[]
+    }
+    itempaths = Path(fr'./HB Items/').glob('*.item')
+    for item in list(itempaths):
+      itemjson=json.loads(item.read())
+    pack_dict['items'].append(itemjson)
+    req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = pack_dict )
+    #Some kind of webhook call to server upkeep to update the `!pack`
+    goodCodes = [200,201,202,204]
+    if resp not in goodCodes:
+      embed={'title': f'Error: {resp}', 'description':f'Pack failed to update'}
+    else:
+      embed={'title': f'Pack Sync Successful: {resp}', 'description':f'The HB Item Tome has been rebuilt; someone needs to use `!pack` to update <@167439243147345921>.'}
+  except Exception as e:
+    embed={'title': f'Error: {e}', 'description':f'Pack function failed.'}
+  payload = {
+      'username':"Crystal Library - Custom Content ManagerQOTD",
+      'avatar_url':'https://img.photouploads.com/file/PhotoUploads-com/SV7D.png',
+      'embeds':[embed]
   }
-  itempaths = Path(fr'./HB Items/').glob('*.item')
-  for item in list(itempaths):
-    itemjson=json.loads(item.read())
-  pack_dict['items'].append(spellText)
-  req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = tome_dict )
-  #Some kind of webhook call to server upkeep to update the `!pack`
+  response = requests.post(MAINTENANCE_WEBHOOK,json=payload)
   return tome_dict
+  
+if __name__ == '__main__':
+  exit(1)

@@ -14,3 +14,7 @@ craft/cl_webhook.txt
 avrae.py
 \!duration.alias
 avrae_test.py
+/__pycache__
+jwt_auth.py
+jwt_token
+test.log

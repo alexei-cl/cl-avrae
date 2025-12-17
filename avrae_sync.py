@@ -7,6 +7,7 @@ AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')
 PACK_ID = os.environ.get('PACK_ID')
 MAINTENANCE_WEBHOOK=os.environ.get('MAINTENANCE_WEBHOOK')
+CHANGED_FILES=os.environ.get('CHANGED_FILES','false').lower() == 'true'
 LOCAL=os.environ.get('LOCAL','false').lower() == 'true'
 
 if __name__ == '__main__':

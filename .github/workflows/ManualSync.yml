@@ -1,8 +1,8 @@
 name: Sync to Avrae (M)
 
 on:
-  push:
-    branches: [ main ]
+  #push:
+  #  branches: [ main ]
   workflow_dispatch:  # Allow manual trigger for full sync
     inputs:
       sync_all:

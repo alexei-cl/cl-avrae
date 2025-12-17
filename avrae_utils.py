@@ -91,7 +91,7 @@ def updateAlias(aliasID:int,code:str):
   
   old_code, reqCode = avraeREST("get",f"workshop/alias/{aliasID}/code")
   
-  print(old_code.json())
+  #print(old_code.json())
   try:
     print(old_code.json().keys)
   finally:
@@ -153,12 +153,20 @@ def build_pack():
     'items':[]
     }
     itempaths = Path(fr'./HB-Items/').glob('*.item')
-    for item_file in list(itempaths):
+    print(list(itempaths))
+    #for path in list(spells):
+    #  spellText=''
+    #  with open(path,'r') as spell:
+    #    spellText=json.loads(spell.read())
+    #  tome_dict['spells'].append(spellText)
+    for path in list(itempaths):
       itemjson=''
-      with open(item_file,'r') as item:
-        itemjson=json.loads(item.read())
-    pack_dict['items'].append(itemjson)
+      with open(path,'r') as item:
+        item=json.loads(item.read())
+      pack_dict['items'].append(item)
+      
     req,resp=avraeREST("PUT",f"homebrew/items/{PACK_ID}", payload = pack_dict )
+    
     #Some kind of webhook call to server upkeep to update the `!pack`
     goodCodes = [200,201,202,204]
     if resp not in goodCodes:
@@ -173,6 +181,7 @@ def build_pack():
       'embeds':[embed]
   }
   response = requests.post(MAINTENANCE_WEBHOOK,json=payload)
+  print(response.status_code)
   return pack_dict
   
 if __name__ == '__main__':

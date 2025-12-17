@@ -27,8 +27,8 @@ jobs:
       uses: tj-actions/changed-files@v41
       with:
         files: |
-          HB Items/**
-          HB Spells/**
+          HB-Items/**
+          HB-Spells/**
           **/*.alias
     
     - name: Get all alias files (manual dispatch)

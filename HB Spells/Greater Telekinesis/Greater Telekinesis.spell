@@ -424,7 +424,7 @@
     },
     {
       "type": "text",
-      "text": "Creatures that would collide with objects or creatures you move must make a Strength saving throw against your spell save DC. On a failed save, they take 6d6 bludgeoning damage, and are knocked prone. Restrained creatures or objects take the same damage, or no damage if the creature succeeds it's save.\n\nAt any time, you may release one or more creatures or objects from your telekinetic grip as a free action.\n\n**This Spell Gives you Actions!**\n * Crush specific restrained creatures with `!a \"Crush\" -t X `\n * Crush **all** retrained creatures with `!a \"Destroy\"`\n * Fling things/restrained creatures with `!a \"Fling\" -t X`\n * Try to grab up to three new creatures with `!a \"Greater Telekinesis Restrain\" -t X` (this does let go of who you're currently grabbing; that's how it works!)",
+      "text": "Creatures that would collide with objects or creatures you move must make a Strength saving throw against your spell save DC. On a failed save, they take 6d6 bludgeoning damage, and are knocked prone. Restrained creatures or objects take the same damage, or no damage if the creature succeeds it's save.\n\nAt any time, you may release one or more creatures or objects from your telekinetic grip as a free action.\n\n**This Spell Gives you Actions!**\n * Crush specific restrained creatures with `!a \"Crush\" -t X `\n * Crush **all** retrained creatures with `!a \"Destroy\"`\n * Fling things/restrained creatures with `!a \"Fling\" -t X`\n * Try to grab up to three new creatures with `!a \"Greater Telekinesis Restrain\" -t X` (this does let go of who you are currently grabbing; that's how it works!)",
       "title": "Effect (cont.)"
     }
   ],

@@ -1,7 +1,6 @@
 import avrae_utils as avrae
 import requests
 import os
-import Path
 
 # Other tokens are set in avrae_utils
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')

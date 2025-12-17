@@ -69,7 +69,7 @@ if __name__ == '__main__':
             
             if embed:
                 send_webhook_notification(embed)
-                
+            break
         elif file_path.startswith('HB Items/'):
             # Handle HB item
             items = True

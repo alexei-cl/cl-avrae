@@ -86,8 +86,15 @@ def updateAlias(alias):
 
 def updateAlias(aliasID:int,code:str):
   print(f"Running Update for Alias: {aliasID}")
+  
   old_code, reqCode = avraeREST("get",f"workshop/alias/{aliasID}/code")
-  print(f"Code: {reqCode}")
+  
+  print(old_code.json())
+  try:
+    print(old_code.json().keys())
+  finally:
+    pass
+  print(f"Code: {reqCode} {old_code.content}")
   for code_version in old_code.json()['data']:
     print(f"Code Version {code_version['version']}")
     if code_version['is_current']==True:

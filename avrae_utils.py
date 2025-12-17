@@ -1,5 +1,6 @@
 import os 
 import requests
+import Path
 
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')
@@ -83,6 +84,7 @@ def parse_alias_file(file_path):
 
 def updateAlias(aliasID=int,code=str):
   old_code, reqCode = avraeREST("get",f"workshop/alias/{aliasID}/code")
+  print(old_code.json()['data'])
   for code_version in old_code.json()['data']:
     if code_version['is_current']==True:
       old_code=code_version['content']
@@ -155,7 +157,7 @@ def build_pack():
       'embeds':[embed]
   }
   response = requests.post(MAINTENANCE_WEBHOOK,json=payload)
-  return tome_dict
+  return pack_dict
   
 if __name__ == '__main__':
   exit(1)

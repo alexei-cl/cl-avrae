@@ -1,6 +1,7 @@
 import avrae_utils as avrae
 import requests
 import os
+import Path
 
 # Other tokens are set in avrae_utils
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
@@ -65,7 +66,7 @@ if __name__ == '__main__':
                     'description': f'Alias {file_path} has thrown an error and failed to sync with avrae.\n\nError: {str(e)}',
                     'color': 0xFF0000  # Red
                 }
-                print(f"Error processing {file_path}: {e}")
+                print(f"Error processing {file_path}: {e} \n {str(e)}")
             
             if embed:
                 send_webhook_notification(embed)

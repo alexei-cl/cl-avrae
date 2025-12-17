@@ -9,6 +9,16 @@ LOCAL=os.environ.get('LOCAL','false').lower() == 'true'
 
 ## Makes a call to the AVRAE
 def avraeREST(type: str, endpoint: str, payload: str = None, ttl_hash = None, headers=None):
+  DEFAULT_HEADER = {
+            'Authorization': f"{AVRAE_DISCORD_TOKEN}",
+            'Accept': 'application/json, text/plain, */*',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36',
+            'Content-Type': 'application/json',
+            'Sec-Fetch-Site': 'same-site',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Dest': 'empty'
+          }
+
   del ttl_hash
   if payload is None:
     payload = ""

@@ -82,7 +82,7 @@ def parse_alias_file(file_path):
 #Given an aliasID and a code string, check if this code string is an update to the relevant alias and if so, push and set the version to be corrected
 
 def updateAlias(aliasID:int,code:str):
-  print(f"Running Update for Alias:" {aliasID}")
+  print(f"Running Update for Alias: {aliasID}")
   old_code, reqCode = avraeREST("get",f"workshop/alias/{aliasID}/code")
   print(f"Code: {reqCode}")
   for code_version in old_code.json()['data']:

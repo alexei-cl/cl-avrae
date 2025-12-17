@@ -36,7 +36,7 @@ if __name__ == '__main__':
     elif file_path.startswith('HB Spells/'):
       # Handle HB spell
       spells=True
-  if items || SYNC_ALL:
+  if items or SYNC_ALL:
     avrae.build_pack()
-  if spells || SYNC_ALL:
+  if spells or SYNC_ALL:
     avrae.build_tome()

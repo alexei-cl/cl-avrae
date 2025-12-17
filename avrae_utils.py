@@ -5,6 +5,7 @@ AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')
 PACK_ID = os.environ.get('PACK_ID')
 MAINTENANCE_WEBHOOK=os.environ.get('MAINTENANCE_WEBHOOK')
+LOCAL=os.environ.get('LOCAL','false').lower() == 'true'
 
 ## Makes a call to the AVRAE
 def avraeREST(type: str, endpoint: str, payload: str = None, ttl_hash = None, headers=None):

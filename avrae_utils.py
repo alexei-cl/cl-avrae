@@ -1,6 +1,7 @@
 import os 
 import requests
 from pathlib import Path
+import json
 
 AVRAE_TOKEN = os.environ.get('AVRAE_TOKEN')
 TOME_ID = os.environ.get('TOME_ID')
@@ -92,10 +93,10 @@ def updateAlias(aliasID:int,code:str):
   
   print(old_code.json())
   try:
-    print(old_code.json().keys())
+    print(old_code.json().keys)
   finally:
     pass
-  print(f"Code: {reqCode} {old_code.content.keys()}")
+  print(f"Code: {reqCode} {old_code.json().keys()}")
   for code_version in old_code.json()['data']:
     print(f"Code Version {code_version['version']}")
     if code_version['is_current']==True:

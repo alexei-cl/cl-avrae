@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 req, reqCode1, reqCode2 = avrae.updateAlias(alias[0]['alias_id'], alias[1])
                 goodCodes = [200, 201, 202, 204]
                 
-                elif reqCode1 not in goodCodes:
+                if reqCode1 not in goodCodes:
                     embed = {
                         'title': f'Error: {reqCode1}',
                         'description': f'Alias {file_path} failed to accept new code version.',

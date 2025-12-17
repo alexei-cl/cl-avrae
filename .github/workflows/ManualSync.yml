@@ -30,18 +30,18 @@ jobs:
           HB Items/**
           HB Spells/**
           **/*.alias
-     
-     - name: Get all alias files (manual dispatch)
-       if: github.event_name == 'workflow_dispatch'
-       id: all-files
-       run: |
-         # Find all .alias files
-         files=$(find . -name "*.alias" -type f)
-         # Convert newlines to spaces for the output
-         files_list=$(echo "$files" | tr '\n' ' ')
-         echo "files=$files_list" >> $GITHUB_OUTPUT
-         echo "any_changed=true" >> $GITHUB_OUTPUT
-     
+    
+    - name: Get all alias files (manual dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      id: all-files
+      run: |
+        # Find all .alias files
+        files=$(find . -name "*.alias" -type f)
+        # Convert newlines to spaces for the output
+        files_list=$(echo "$files" | tr '\n' ' ')
+        echo "files=$files_list" >> $GITHUB_OUTPUT
+        echo "any_changed=true" >> $GITHUB_OUTPUT
+    
     - name: Set up Python
       if: (github.event_name == 'push' && steps.changed-files.outputs.any_changed == 'true') || github.event_name == 'workflow_dispatch'
       uses: actions/setup-python@v4
@@ -58,10 +58,3 @@ jobs:
       env:
         AVRAE_TOKEN: ${{ secrets.AVRAE_JWT }}
         CHANGED_FILES: ${{ github.event_name == 'push' && steps.changed-files.outputs.all_changed_files || steps.all-files.outputs.files }}
-        PACK_ID: ${{ secrets.PACK_ID }}
-        TOME_ID: ${{ secrets.TOME_ID }}
-        MAINTENANCE_WEBHOOK: ${{ secrets.MAINTENANCE_WEBHOOK }}
-        SYNC_ALL: ${{ github.event_name == 'workflow_dispatch' }}
-        REBUILD_PACK: ${{ github.event_name == 'workflow_dispatch' }}
-      run: |
-        python sync_script.py

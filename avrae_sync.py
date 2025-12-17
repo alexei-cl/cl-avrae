@@ -47,10 +47,16 @@ if __name__ == '__main__':
                         'description': f'Alias {file_path} failed to accept new code version.',
                         'color': 0xFF0000  # Red
                     }
+                elif reqCode2 is None:
+                  embed = {
+                        'title': f'No Changes Detected',
+                        'description': f'Alias {file_path} was not updated as no changes were made.',
+                        'color': 0xFF0000  # Red
+                    }
                 elif reqCode2 not in goodCodes:
                     embed = {
                         'title': f'Error: {reqCode2}',
-                        'description': f'Alias {file_path} failed to switch code versions.',
+                        'description': f'Alias {file_path} failed to switch code versions:\n{}',
                         'color': 0xFF0000  # Red
                     }
                 else:

@@ -44,4 +44,4 @@ jobs:
         TOME_ID: ${{ secrets.TOME_ID }}
         MAINTENANCE_WEBHOOK: ${{ secrets.MAINTENANCE_WEBHOOK }}
       run: |
-        python sync_script.py
+        python avrae_sync.py

@@ -1,6 +1,8 @@
-name: Sync to Avrae (Manual)
+name: Sync to Avrae (M)
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:  # Allow manual trigger for full sync
     inputs:
       sync_all:
@@ -18,6 +20,16 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    
+    - name: Get all changed files (push only)
+      if: github.event_name == 'push'
+      id: changed-files
+      uses: tj-actions/changed-files@v41
+      with:
+        files: |
+          HB Items/**
+          HB Spells/**
+          **/*.alias
     
     - name: Get all files (manual dispatch)
       if: github.event_name == 'workflow_dispatch'
@@ -45,10 +57,10 @@ jobs:
       if: (github.event_name == 'push' && steps.changed-files.outputs.any_changed == 'true') || github.event_name == 'workflow_dispatch'
       env:
         AVRAE_TOKEN: ${{ secrets.AVRAE_JWT }}
-        CHANGED_FILES: ${{ steps.all-files.outputs.files }}
+        CHANGED_FILES: ${{ github.event_name == 'push' && steps.changed-files.outputs.all_changed_files || steps.all-files.outputs.files }}
         PACK_ID: ${{ secrets.PACK_ID }}
         TOME_ID: ${{ secrets.TOME_ID }}
         MAINTENANCE_WEBHOOK: ${{ secrets.MAINTENANCE_WEBHOOK }}
         SYNC_ALL: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
-        python sync_script.py
+        python avrae_sync.py

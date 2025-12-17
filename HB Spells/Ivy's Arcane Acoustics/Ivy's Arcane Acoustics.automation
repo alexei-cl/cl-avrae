@@ -1,0 +1,23 @@
+[
+  {
+    "type": "target",
+    "target": "self",
+    "effects": [
+      {
+        "type": "ieffect2",
+        "name": "Arcane Acoustics",
+        "duration": "10",
+        "effects": {
+          "check_adv": [
+            "performance"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "You magically augment the instrument used in the casting. Until the spell ends, you can adjust sound that the instrument produces. A creature has advantage on Charisma (Performance) checks when playing an instrument under the effects of this spell. If you cast this spell multiple times, you can have up to three of its effects active at a time.\n\n***Amplify.*** You magnify the volume of the instrument. Its sound can be heard up to 300 feet away.\n\n***Augment.*** You modify the frequency, pitch, key, or tone of the sound the instrument makes.\n\n***Project.*** The instrument catches the sound of your voice and makes it audible up to 300 feet away.\n\n***Synthesize.*** You radically change the sound the instrument produces, making it sound like a completely different instrument (within reason), or applying unique effects to the sound.",
+    "title": "Effect"
+  }
+]

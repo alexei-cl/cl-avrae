@@ -1,0 +1,6 @@
+{
+  "name": "Draupnir",
+  "meta": "[Weapon (spear), very rare (requires attunement) - HB LINK](https://www.dndbeyond.com/magic-items/6624205-draupnir)",
+  "desc": "You have a +2 bonus to attack and damage rolls made with this magic weapon.\n\nThis spear is beautifully made, with golden etchings of rings along the spear blade. On the haft hands a banner, a blood red wrap that trails from it. The spear feels light and responsive, and flies like the wind itself.\n\nOnce per turn, you may charge Draupnir with radiant energy and make an attack by hurling it at a creature or nonmagical structure within range as a bonus action.\n\nOn a hit, the spear detonates. The target takes take an additional 1d10 radiant damage and must succeed on a DC 17 Strength saving throw or be knocked prone. A creature that is Huge or larger automatically succeeds on this saving throw.\n\nA nonmagical structure is vulnerable to damage from this charged attack, and the wielder has advantage on the attack roll.\n\nAfter Draupnir is thrown in this way, the detonated spear magically reforms in in your hand.",
+  "image": "https://www.gmbinder.com/images/zvOuwRp.png"
+}

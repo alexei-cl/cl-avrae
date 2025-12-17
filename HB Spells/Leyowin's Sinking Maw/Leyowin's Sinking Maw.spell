@@ -1,0 +1,148 @@
+{
+  "name": "Leyowin's Sinking Maw",
+  "level": 5,
+  "school": "T",
+  "automation": [
+    {
+      "type": "target",
+      "target": "self",
+      "effects": [
+        {
+          "type": "ieffect2",
+          "name": "Sinking Maw",
+          "duration": "10",
+          "attacks": [
+            {
+              "attack": {
+                "_v": 2,
+                "name": "Grasping Maw",
+                "automation": [
+                  {
+                    "type": "target",
+                    "target": "all",
+                    "effects": [
+                      {
+                        "type": "save",
+                        "stat": "dex",
+                        "fail": [
+                          {
+                            "type": "ieffect2",
+                            "name": "Restrained (Sinking Maw)",
+                            "effects": {
+                              "attack_advantage": "-1",
+                              "save_dis": [
+                                "dex"
+                              ]
+                            },
+                            "buttons": [
+                              {
+                                "automation": [
+                                  {
+                                    "type": "target",
+                                    "target": "self",
+                                    "effects": [
+                                      {
+                                        "type": "check",
+                                        "ability": [
+                                          "athletics",
+                                          "acrobatics"
+                                        ],
+                                        "success": [
+                                          {
+                                            "type": "remove_ieffect"
+                                          },
+                                          {
+                                            "type": "text",
+                                            "text": "A restrained creature can use its action to make a Strength (athletics) or Dexterity (acrobatics) check (its choice) against your spell save DC. On a success, it frees itself and clambers onto the surface.",
+                                            "title": "Lewoyin's Sinking Maw"
+                                          }
+                                        ],
+                                        "fail": [
+                                          {
+                                            "type": "text",
+                                            "text": "A restrained creature can use its action to make a Strength (athletics) or Dexterity (acrobatics) check (its choice) against your spell save DC. On a success, it frees itself and clambers onto the surface.",
+                                            "title": "Lewoyin's Sinking Maw"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "label": "Action: Try to Escape (Athletics/Acrobatics)",
+                                "style": "1"
+                              }
+                            ],
+                            "desc": "Speed is 0ft\n - Dis on outgoing attacks and Dex Saves\n - Adv on attacks against it (players: use 2d20hk1)\n - When a creature ends its turn restrained, it moves 10ft towards the center of the maw\n - Lasts until removed (not removed by conc dropping)",
+                            "save_as": "damageTarget"
+                          }
+                        ],
+                        "success": []
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "Any creature that enters the area for the first time on a turn or starts its turn within the area must make a Dexterity saving throw. On a failure, a creature sinks halfway into the sand and become restrained by the ground.**",
+                    "title": "Leyowin's Sinking Maw"
+                  }
+                ],
+                "verb": "harries their target with their spell's",
+                "proper": true,
+                "activation_type": 2
+              }
+            },
+            {
+              "attack": {
+                "_v": 2,
+                "name": "Solidify",
+                "automation": [
+                  {
+                    "type": "target",
+                    "target": "all",
+                    "effects": [
+                      {
+                        "type": "damage",
+                        "damage": "9d4[magical bludgeoning]"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "remove_ieffect",
+                    "removeParent": "always"
+                  }
+                ],
+                "verb": "ends their spell and causes the ground to",
+                "proper": true
+              }
+            }
+          ],
+          "conc": true,
+          "desc": "Concentrating on a swirling vortex of sand\n - Force Dex saves vs Restrained: !a \"Grasping Maw\" -t X\n - End spell and do Damage: !a \"Solidify\" -t X",
+          "save_as": "SinkingMaw"
+        },
+        {
+          "type": "text",
+          "text": "[Leyowin's Sinking Maw](https://www.dndbeyond.com/spells/2402401-leyowins-sinking-maw)\n\nChoose a point on the ground that you can see within range. Ground within 30 feet of that point becomes swirling sand until the spell ends. The sand is difficult terrain. Any creature that enters the area for the first time on a turn or starts its turn within the area must make a Dexterity saving throw. On a failure, a creature sinks halfway into the sand and become restrained by the ground.\n\nUntil the spell ends, if a creature ends its turn while restrained by the ground in this way, it is pulled up to 10 feet toward the center of the area. A restrained creature can use its action to make a Strength (athletics) or Dexterity (acrobatics) check (its choice) against your spell save DC. On a success, it frees itself and clambers onto the surface."
+        },
+        {
+          "type": "text",
+          "text": "When the spell ends, the ground returns to the solid form it had before the spell was cast. Each creature restrained by the spell within 10 feet of the center must make a Constitution saving throw. A creature takes 9d4 magical bludgeoning damage on a failed save, or half as much damage on a success. Creatures are still restrained by the solid ground (not by any creature or spell) until they escape, and they have disadvantage on ability checks made to escape solid ground. A restrained creature, or another creature within 5 feet, must succeed a Strength (athletics) or Dexterity (acrobatics)check (its choice) against your spell save DC. \n\nCreatures with a burrowing speed can't be restrained by the ground using this spell.\n\n**__Usage:__**\n* `!a \"Grasping Maw\" -t X` \nTo cause creatures to save vs being restrained\n* `!a Solidify -t X`\nTo end the spell and cause damage to applicable creatures"
+        }
+      ]
+    }
+  ],
+  "classes": "",
+  "subclasses": "",
+  "casttime": "1 Action",
+  "range": "150ft (30ft sphere)",
+  "components": {
+    "verbal": true,
+    "somatic": true,
+    "material": "an antlion shell filled with sand"
+  },
+  "duration": "Concentration, up to 1 Minute",
+  "ritual": false,
+  "description": "[Leyowin's Sinking Maw](<https://www.dndbeyond.com/spells/2402401-leyowins-sinking-maw>)\n\nChoose a point on the ground that you can see within range. Ground within 30 feet of that point becomes swirling sand until the spell ends. The sand is difficult terrain. \n\nAny creature that enters the area for the first time on a turn or starts its turn within the area must make a Dexterity saving throw. On a failure, a creature sinks halfway into the sand and become Restrained by the ground.\n\nUntil the spell ends, if a creature ends its turn while restrained by the ground in this way, it is pulled up to 10 feet toward the center of the area. A restrained creature can use its action to make a Strength (Athletics) or Dexterity (Acrobatics) check (its choice) against your spell save DC. On a success, it frees itself and clambers onto the surface.\n\nWhen the spell ends, the ground returns to the solid form it had before the spell was cast. Each creature restrained by the spell within 10 feet of the center must make a Constitution saving throw. A creature takes 9d4 magical bludgeoning damage on a failed save, or half as much damage on a success. Creatures are still restrained by the solid ground (not by any creature or spell) until they escape, and they have disadvantage on ability checks made to escape solid ground. A restrained creature, or another creature within 5 feet, must succeed a Strength (athletics) or Dexterity (acrobatics) check (its choice) against your spell save DC. \n\nCreatures with a burrowing speed can't be restrained by the ground using this spell.",
+  "higherlevels": "",
+  "concentration": false
+}

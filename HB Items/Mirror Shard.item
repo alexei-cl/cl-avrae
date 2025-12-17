@@ -1,0 +1,5 @@
+{
+  "name": "Mirror Shard",
+  "meta": "[Wondrous Item, rare](https://www.dndbeyond.com/magic-items/6715866-mirror-shard)",
+  "desc": "This shard is the shape of a sword handle with a refractive crystal as the pommel. While wielding a one-handed weapon that isn't a firearm and holding the shard in your offhand, you can use a bonus action to speak the command word as the shard reforms and takes the shape of the other weapon. If the original weapon requires attunement you must be attuned to that weapon for the shard to take its shape. While transformed it functions as an identical duplicate of that weapon with the following changes:\n\n* If the original weapon requires attunement the duplicate does not.\n* If the original weapon has charges the duplicate has none.\n* If the original weapon has abilities that recharge the duplicate lacks those abilities.\n* It the original weapon provides a bonus to spell attack rolls, spell save DCs, armor *class, or saving throws the duplicate does not.\n \nIt remains as the duplicated weapon until you use a bonus action to speak the command word again or you let go of the weapon, where it transforms back to the shard."
+}

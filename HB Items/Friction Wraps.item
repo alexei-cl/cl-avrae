@@ -1,0 +1,6 @@
+{
+  "name": "Friction Wraps",
+  "meta": "[Wondrous Item, very rare (requires attunement)](https://www.dndbeyond.com/magic-items/10567220-friction-wraps)",
+  "desc": "While wearing these wraps, you have a +1 bonus to attack rolls and damage rolls made with your Unarmed Strikes.\n\nPunching with these wraps generates intense heat that is diffused into the target with each subsequent blow. When you hit with an Unarmed Strike while wearing these wraps, each subsequent Unarmed Strike you make with them before the end of this turn deals an extra 1d8 Fire damage. This damage stacks with itself to a maximum 3d8 extra Fire damage on a single hit.\n\nStarting on the third hit on a given turn, for each instance of Fire damage you deal with this item's effect you take 1d8 Fire damage as your wraps begin to overheat.\n\n```ansi\nHit     Additional Damage   Overheat Damage\nFirst   \u001b[2;33mNone\u001b[0m                \u001b[2;31mNone\u001b[0m\nSecond  \u001b[2;33m1d8\u001b[0m                 \u001b[2;31mNone\u001b[0m\nThird   \u001b[2;33m2d8\u001b[0m                 \u001b[2;31m1d8\u001b[0m\nFourth  \u001b[2;33m3d8\u001b[0m                 \u001b[2;31m1d8\u001b[0m\n```",
+  "image": "https://www.dndbeyond.com/avatars/51401/937/638927990910761836.jpeg"
+}

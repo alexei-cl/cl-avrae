@@ -1,0 +1,6 @@
+{
+  "name": "Scouter",
+  "meta": "[Wondrous Item, rare (HB Link)](https://www.dndbeyond.com/magic-items/9717091-scouter)",
+  "desc": "This colored glass lens fit over one eye. While wearing it, you can take a Search action to make a Wisdom (Insight) check against a creature you can see, contested by the target\u2019s Charisma (Deception) check. On a success, you learn their level, or challenge rating, as well as their creature type.\n\nWhen you take the Search action to try and locate a concealed creature while wearing this lens, you gain a +5 bonus to the roll.",
+  "image": "https://i.imgur.com/nYYqvrA.png"
+}

@@ -1,0 +1,426 @@
+[
+  {
+    "type": "target",
+    "target": "self",
+    "effects": [
+      {
+        "type": "save",
+        "stat": "cha",
+        "fail": [],
+        "success": []
+      }
+    ]
+  },
+  {
+    "type": "target",
+    "target": "self",
+    "effects": [
+      {
+        "type": "ieffect2",
+        "name": "Greater Telekinesis",
+        "duration": "100",
+        "attacks": [
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Greater Telekinesis Restrain",
+              "automation": [
+                {
+                  "type": "target",
+                  "target": "self",
+                  "effects": [
+                    {
+                      "type": "save",
+                      "stat": "cha",
+                      "fail": [],
+                      "success": []
+                    },
+                    {
+                      "type": "ieffect2",
+                      "name": "Telekinetically Restraining",
+                      "attacks": [
+                        {
+                          "attack": {
+                            "_v": 2,
+                            "name": "Destroy Them All",
+                            "automation": [
+                              {
+                                "type": "roll",
+                                "dice": "3d12[force]",
+                                "name": "damage",
+                                "displayName": "Damage"
+                              },
+                              {
+                                "type": "target",
+                                "target": "all",
+                                "effects": [
+                                  {
+                                    "type": "damage",
+                                    "damage": "{damage}"
+                                  },
+                                  {
+                                    "type": "text",
+                                    "text": "As a bonus action on your turn, you can move each creature or object you have in your telekinetic grip up to 60 feet in any direction, but not beyond 120 feet of yourself. In addition, you can choose any number of creatures restrained in this way and deal 3d12 force damage to each of them."
+                                  }
+                                ]
+                              }
+                            ],
+                            "proper": true,
+                            "activation_type": 3
+                          },
+                          "defaultDC": "lastSaveDC"
+                        },
+                        {
+                          "attack": {
+                            "_v": 2,
+                            "name": "Crush",
+                            "automation": [
+                              {
+                                "type": "roll",
+                                "dice": "3d12[force]",
+                                "name": "damage",
+                                "displayName": "Damage"
+                              },
+                              {
+                                "type": "target",
+                                "target": "all",
+                                "effects": [
+                                  {
+                                    "type": "damage",
+                                    "damage": "{damage}"
+                                  },
+                                  {
+                                    "type": "text",
+                                    "text": "As a bonus action on your turn, you can move each creature or object you have in your telekinetic grip up to 60 feet in any direction, but not beyond 120 feet of yourself. In addition, you can choose any number of creatures restrained in this way and deal 3d12 force damage to each of them."
+                                  }
+                                ]
+                              }
+                            ],
+                            "proper": true,
+                            "activation_type": 3
+                          },
+                          "defaultDC": "lastSaveDC"
+                        },
+                        {
+                          "attack": {
+                            "_v": 2,
+                            "name": "Fling",
+                            "automation": [
+                              {
+                                "type": "roll",
+                                "dice": "6d6[bludgeoning]",
+                                "name": "damage",
+                                "displayName": "Damage"
+                              },
+                              {
+                                "type": "target",
+                                "target": "all",
+                                "effects": [
+                                  {
+                                    "type": "save",
+                                    "stat": "str",
+                                    "fail": [
+                                      {
+                                        "type": "damage",
+                                        "damage": "{damage}"
+                                      },
+                                      {
+                                        "type": "ieffect2",
+                                        "name": "Prone",
+                                        "effects": {
+                                          "attack_advantage": "-1"
+                                        },
+                                        "buttons": [
+                                          {
+                                            "automation": [
+                                              {
+                                                "type": "remove_ieffect"
+                                              }
+                                            ],
+                                            "label": "Stand Up",
+                                            "verb": "decides to Stand Up",
+                                            "style": "2"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "success": []
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "text",
+                                "text": "Creatures that would collide with objects or creatures you move must make a Strength saving throw against your spell save DC. On a failed save, they take 6d6 bludgeoning damage, and are knocked prone. Restrained creatures or objects take the same damage, or no damage if the creature succeeds it's save."
+                              }
+                            ],
+                            "verb": "uses their Greater Telekinesis to",
+                            "proper": true
+                          },
+                          "defaultDC": "lastSaveDC"
+                        }
+                      ],
+                      "save_as": "grappling",
+                      "parent": "spell",
+                      "target_self": true
+                    }
+                  ]
+                },
+                {
+                  "type": "target",
+                  "target": "all",
+                  "effects": [
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "ieffect2",
+                          "name": "Restrained",
+                          "effects": {
+                            "attack_advantage": "-1",
+                            "save_dis": [
+                              "dex"
+                            ]
+                          },
+                          "buttons": [
+                            {
+                              "automation": [
+                                {
+                                  "type": "target",
+                                  "target": "self",
+                                  "effects": [
+                                    {
+                                      "type": "save",
+                                      "stat": "str",
+                                      "fail": [],
+                                      "success": [
+                                        {
+                                          "type": "remove_ieffect",
+                                          "removeParent": "if_no_children"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "text": "At the end of a restrained creature\u2019s turn, it can repeat the saving throw, ending the effect on itself on a success.",
+                                  "title": "Greater Telekinesis"
+                                }
+                              ],
+                              "label": "EOT: Resist Greater Telekinesis",
+                              "style": "1",
+                              "defaultDC": "lastSaveDC"
+                            }
+                          ],
+                          "parent": "grappling"
+                        }
+                      ],
+                      "success": []
+                    }
+                  ]
+                }
+              ],
+              "verb": "tries to grab someone with their"
+            },
+            "defaultDC": "lastSaveDC"
+          }
+        ],
+        "conc": true,
+        "desc": "Crush restrained creatures with `!a \"Greater Telekinesis Crushing\"`\n - Crush **all** retrained creatures with `!a \"Crush All\"`\n - Fling restrained creatures with `!a \"Greater Telekinesis Fling\"`\n - Try to grab up to three new creatures with `!a \"Greater Telekinesis Restrain\"`",
+        "save_as": "spell",
+        "target_self": true,
+        "tick_on_caster": true
+      },
+      {
+        "type": "ieffect2",
+        "name": "Telekinetically Restraining",
+        "attacks": [
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Destroy Them All",
+              "automation": [
+                {
+                  "type": "roll",
+                  "dice": "3d12[force]",
+                  "name": "damage",
+                  "displayName": "Damage"
+                },
+                {
+                  "type": "target",
+                  "target": "children",
+                  "effects": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}"
+                    },
+                    {
+                      "type": "text",
+                      "text": "As a bonus action on your turn, you can move each creature or object you have in your telekinetic grip up to 60 feet in any direction, but not beyond 120 feet of yourself. In addition, you can choose any number of creatures restrained in this way and deal 3d12 force damage to each of them."
+                    }
+                  ]
+                }
+              ],
+              "verb": "looks at the week cratures in their telekinetic grasp and decides to",
+              "proper": true,
+              "activation_type": 3
+            }
+          },
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Crush",
+              "automation": [
+                {
+                  "type": "roll",
+                  "dice": "3d12[force]",
+                  "name": "damage",
+                  "displayName": "Damage"
+                },
+                {
+                  "type": "target",
+                  "target": "all",
+                  "effects": [
+                    {
+                      "type": "damage",
+                      "damage": "{damage}"
+                    },
+                    {
+                      "type": "text",
+                      "text": "As a bonus action on your turn, you can move each creature or object you have in your telekinetic grip up to 60 feet in any direction, but not beyond 120 feet of yourself. In addition, you can choose any number of creatures restrained in this way and deal 3d12 force damage to each of them."
+                    }
+                  ]
+                }
+              ],
+              "verb": "uses their Greater Telekinesis to",
+              "proper": true,
+              "activation_type": 3
+            },
+            "defaultDC": "lastSaveDC"
+          },
+          {
+            "attack": {
+              "_v": 2,
+              "name": "Fling",
+              "automation": [
+                {
+                  "type": "roll",
+                  "dice": "6d6[bludgeoning]",
+                  "name": "damage",
+                  "displayName": "Damage"
+                },
+                {
+                  "type": "target",
+                  "target": "all",
+                  "effects": [
+                    {
+                      "type": "save",
+                      "stat": "str",
+                      "fail": [
+                        {
+                          "type": "damage",
+                          "damage": "{damage}"
+                        },
+                        {
+                          "type": "ieffect2",
+                          "name": "Prone",
+                          "effects": {
+                            "attack_advantage": "-1"
+                          },
+                          "buttons": [
+                            {
+                              "automation": [
+                                {
+                                  "type": "remove_ieffect"
+                                }
+                              ],
+                              "label": "Stand Up",
+                              "verb": "decides to Stand Up",
+                              "style": "2"
+                            }
+                          ]
+                        }
+                      ],
+                      "success": []
+                    },
+                    {
+                      "type": "text",
+                      "text": "Creatures that would collide with objects or creatures you move must make a Strength saving throw against your spell save DC. On a failed save, they take 6d6 bludgeoning damage, and are knocked prone. Restrained creatures or objects take the same damage, or no damage if the creature succeeds it's save."
+                    }
+                  ]
+                }
+              ],
+              "verb": "uses their Greater Telekinesis to"
+            },
+            "defaultDC": "lastSaveDC"
+          }
+        ],
+        "save_as": "grappling",
+        "parent": "spell",
+        "target_self": true,
+        "tick_on_caster": true
+      }
+    ]
+  },
+  {
+    "type": "target",
+    "target": "all",
+    "effects": [
+      {
+        "type": "save",
+        "stat": "str",
+        "fail": [
+          {
+            "type": "ieffect2",
+            "name": "Restrained",
+            "effects": {
+              "attack_advantage": "-1",
+              "save_dis": [
+                "dex"
+              ]
+            },
+            "buttons": [
+              {
+                "automation": [
+                  {
+                    "type": "target",
+                    "target": "self",
+                    "effects": [
+                      {
+                        "type": "save",
+                        "stat": "str",
+                        "fail": [],
+                        "success": [
+                          {
+                            "type": "remove_ieffect",
+                            "removeParent": "if_no_children"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "label": "EOT: Resist Greater Telekinesis",
+                "style": "1",
+                "defaultDC": "lastSaveDC"
+              }
+            ],
+            "parent": "grappling"
+          }
+        ],
+        "success": []
+      }
+    ]
+  },
+  {
+    "type": "text",
+    "text": "You gain the ability to move or manipulate many creatures or objects by thought. When you cast the spell, you can exert your will on up to ten creatures or objects that you can see within 120 feet of you. No one target can weigh more than 4,000 pounds. You can affect the same targets round after round, or choose up to three new targets each round as an action. If you switch targets, any prior targets are no longer affected by the spell.\n\nEach targeted creature must succeed on a Strength saving throw against your spell save DC or be restrained in a telekinetic grip. Creatures can choose to fail this saving throw. At the end of a restrained creature\u2019s turn, it can repeat the saving throw, ending the effect on itself on a success. As a bonus action on your turn, you can move each creature or object you have in your telekinetic grip up to 60 feet in any direction, but not beyond 120 feet of yourself. In addition, you can choose any number of creatures restrained in this way and deal 3d12 force damage to each.",
+    "title": "Effect"
+  },
+  {
+    "type": "text",
+    "text": "Creatures that would collide with objects or creatures you move must make a Strength saving throw against your spell save DC. On a failed save, they take 6d6 bludgeoning damage, and are knocked prone. Restrained creatures or objects take the same damage, or no damage if the creature succeeds it's save.\n\nAt any time, you may release one or more creatures or objects from your telekinetic grip as a free action.\n\n**This Spell Gives you Actions!**\n * Crush specific restrained creatures with `!a \"Crush\" -t X `\n * Crush **all** retrained creatures with `!a \"Destroy\"`\n * Fling things/restrained creatures with `!a \"Fling\" -t X`\n * Try to grab up to three new creatures with `!a \"Greater Telekinesis Restrain\" -t X` (this does let go of who you're currently grabbing; that's how it works!)",
+    "title": "Effect (cont.)"
+  }
+]

@@ -1,4 +1,4 @@
-name: Sync to Avrae
+name: Sync to Avrae (Manual)
 
 on:
   workflow_dispatch:  # Allow manual trigger for full sync

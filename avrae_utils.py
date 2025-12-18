@@ -153,10 +153,12 @@ def build_pack():
     'items':[]
     }
     itempaths = Path(fr'./HB-Items/').glob('*.item')
-    print(list(itempaths))
-    for path in list(itempaths):
+    items=list(itempaths)
+    print(items)
+    for path in items:
+      print(path.name)
       item=''
-      with open(str(path),'r') as item:
+      with open(path.name,'r') as item:
         item=json.loads(item.read())
         print(f"->{item}")
       pack_dict['items'].append(item)

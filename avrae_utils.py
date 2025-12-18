@@ -156,9 +156,10 @@ def build_pack():
     items=list(itempaths)
     print(items)
     for path in items:
+      print(path)
       print(path.name)
       item=''
-      with open(path.name,'r') as item:
+      with open(path,'r') as item:
         item=json.loads(item.read())
         print(f"->{item}")
       pack_dict['items'].append(item)

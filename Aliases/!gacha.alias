@@ -1,0 +1,159 @@
+embed
+<drac2>
+timestamp=int(time())
+target = character()
+
+level=character().levels.total_level
+tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
+
+table = """
+```python
+Reward           |Odds|  1d200
+-----------------|----|-------
+Free Level/      |0.5%|    200
+  25k Post20 XP  |    |       
+Cursed Item      | 1% |198-199
+  of Tier        |    |       
+Quest GP Doubler | 3% |192-197
+                 |    |       
+Shop Discount    | 3% |186-191
+  Coupon         |    |       
+Crafting Tokens  | 4% |178-185
+                 |    |       
+500 x Tier GP    | 4% |170-177
+                 |    |       
+50 x Tier GP     | 5% |160-169
+                 |    |       
+5 X Tier GP      |10% |140-159
+                 |    |       
+Bead of Refresh./|12% |116-139
+  Nourishment    |    |       
+Uncommon Item    |21% | 74-115
+  of Choice      |    |       
+Common or Mundane|36% |   1-73
+  Item of Choice |    |
+```
+"""
+table=""
+argString=""" %*% """.strip()
+
+def sanitize(string):
+  return string.replace('"',"").replace("'",'')
+
+if argString:
+  if argString[0] =='"':
+    argString=argString[1:]
+  if argString[-1]=='"':
+    argString=argString[:-1]
+  
+footer =f""" -footer '{ctx.prefix}{ctx.alias} {argString}' """
+
+args = &ARGS& if &ARGS& else [" "]
+pulls = int(argparse(args).get('pulls',2)[0]) if '-pulls' in args else 1
+channel=[946307661270503454,941142168062554122,941139522400448582,939866928053370913,938991022506123335,971501692191395850,1164277046562799766,1094748344678633512,1094739485444538398,1066572741320384552,272244121580732418]
+
+if any(x for x in ['help','?'] if args[0] in x) or not(any(x for x in channel if x==ctx.channel.id)): # Early out for help
+  desc = f"""{ctx.alias.title()} lets you gamble!
+  `{ctx.prefix+ctx.alias}`
+  You should only use me in: https://discord.com/channels/938988968404451339/1066572741320384552 according to the pinned rules
+  """
+  return f"""embed -title "Looking to gamble?" -desc "{desc}" """
+
+gachas=[]
+for i in range(pulls):
+  gacha = vroll("1d200")
+  gachas.append(gacha)
+
+
+
+token = {
+    1:"Common",
+    2:"Uncommon",
+    3:"Rare",
+    4:"Very Rare",
+    5:"Legendary"
+}
+
+rewards = {
+    "level":          {"roll_high":200, 
+                       "roll_low":200, 
+                       "text":f"{'__Free Level!__' if level < 20 else '__25k Post20 xp!__'}",
+                       "num":0},
+    "cursed":         {"roll_high":199, 
+                       "roll_low":199, 
+                       "text":f"__Cursed Item of {token[tier]} rarity or lower.__",
+                       "num":0},
+    "gp_voucher":     {"roll_high":198,
+                       "roll_low":194, 
+                       "text":"Double Quest GP Voucher",
+                       "num":0},
+    "shop_voucher":   {"roll_high":193,
+                       "roll_low":189, 
+                       "text":"Shop Discount Coupon (50% off!)",
+                       "num":0},
+    "crafting_tokens":{"roll_high":188, 
+                       "roll_low":183, 
+                       "text":f"{token[tier]} Crafting Tokens:",
+                       "num":0},
+    "uncommon":       {"roll_high":182, 
+                       "roll_low":177, 
+                       "text":"An Uncommon Item of Choice.",
+                       "num":0},
+    "common":        {"roll_high":176, 
+                       "roll_low":169, 
+                       "text":"A Common or Mundane Item of Choice.",
+                       "num":0},
+    "gp_big":         {"roll_high":168, 
+                       "roll_low":149, "text":f"500 X Tier {tier} = **`{tier*500}`** GP ",
+                       "num":0},
+    "gp_small":          {"roll_high":148, 
+                       "roll_low":129, "text":f"50 X Tier {tier} = **`{tier*50}`** GP ",
+                       "num":0},
+    "gp_tiny":       {"roll_high":128, 
+                       "roll_low":91,
+                       "text":f"5 X Tier {tier} = **`{tier*5}`** GP ",
+                       "num":0},
+    "beads":          {"roll_high":90,
+                       "roll_low":1,
+                       "text":"A Bead of Refreshment or Nourishment, your choice.",
+                       "num":0}
+}
+
+result=''
+outTitle = (f'GACHA... gacha... PON!')
+outDescr = (f'\n**__Character__:** {target.name} (Tier {tier}) - <@{ctx.author.id}>')
+i=0
+rollOutput=['','','']
+for gacha in gachas:
+  i+=1
+  result=''
+  for key in rewards:
+    h=rewards.get(key).get('roll_high')
+    l=rewards.get(key).get('roll_low')
+    r = gacha.total
+    if r<=h and r>=l:
+      rewards.get(key)['num']+=1
+      break
+  rollOutput[i%3]+= (f'* **Roll {i}:**\n {gacha}\n')
+outDescr += (f'\n\n**__Gacha Rewards__**')
+rewards.get('crafting_tokens')['num']*=5
+for key in rewards:
+    
+  if rewards.get(key).get('num'):
+    outDescr += (f'\n * **{rewards.get(key).get("text")}**: {rewards.get(key).get("num")}')
+  if key == 'crafting_tokens' and rewards.get('crafting_tokens')['num']:
+    outDescr+= (f" ({int(rewards.get('crafting_tokens')['num']/5)}) rolls)")
+
+gp_out=(rewards['gp_big']['num']*500+rewards['gp_small']['num']*50+rewards['gp_tiny']['num']*5)*tier
+if gp_out:
+  outDescr += (f'\n**__Total Gold Received__**: {gp_out} GP') 
+helper=''
+if ctx.channel.id != 1066572741320384552:
+  helper = (f'\n\n\n-# Or, that is how it would would work if you used this in the gacha channel! https://discord.com/channels/938988968404451339/1066572741320384552')
+
+
+
+argument=""" %*% """
+newline="\n"
+return f' -title "{outTitle}" -desc "{outDescr}" -f "|\n{rollOutput[1]}|inline" -f "Pulls|\n{rollOutput[2]}|inline" -f "|\n{rollOutput[0]}|inline" -f "{helper}" -thumb https://i.imgur.com/n4xFbqh.gif -footer {footer} '
+</drac2>

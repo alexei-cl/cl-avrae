@@ -213,7 +213,7 @@ else: ##CRAFTING SPECS
     if foundItem.get('craftingTags'):
       outMsg+= (f"""\n* **Token Cost:** `{(foundItem.get('tokenCost','') +" " + foundItem.get('rarity','')).replace('"','')}` """) #Token Cost
       outMsg+= (f"""\n* **GP Cost:** `{foundItem.get('gpCrafting','')}gp` """) #Gp Cost
-      outMsg+= (f"""\n* **Crafting DC:** `{dcMap.get(foundItem.get('rarity','').replace('"','').title())}` """) #Days
+      #outMsg+= (f"""\n* **Crafting DC:** `{dcMap.get(foundItem.get('rarity','').replace('"','').title())}` """) #Days
       outMsg+= (f"""\n* **Crafting Time:** `{timeMap.get(foundItem.get('rarity','').replace('"','').title())} days` """) #DC
       outMsg+= (f"""\n* **Can be crafted with:** `{foundItem.get('craftingTags','').replace('"','')}` tools """) #Tools
     else:
@@ -252,20 +252,20 @@ else: ##CRAFTING SPECS
         timeDiscountMod=1.0
         dayBonus=0
         miscNotes=' -f "Misc Notes|'
-        if (args.get('arti') or character().levels.get('Aritficer')>9) and (foundItem.get('rarity','').replace('"','').title()=='Common' or foundItem.get('rarity','').replace('"','').title()=='Uncommon'):
-          gpDiscountMod/=2
-          timeDiscountMod/=4
-          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half the cost in a quarter of the time due to artificer's Magic Item Adept!"
+        #if (args.get('arti') or character().levels.get('Aritficer')>9) and (foundItem.get('rarity','').replace('"','').title()=='Common' or foundItem.get('rarity','').replace('"','').title()=='Uncommon'):
+        #  gpDiscountMod/=2
+        #  timeDiscountMod/=4
+        #  miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half the cost in a quarter of the time due to artificer's Magic Item Adept!"
         if args.get('scribes') and ('scroll' in foundItem.get('name','').replace('"','').lower()):
           gpDiscountMod/=2
           timeDiscountMod/=2
           miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
-        if args.get('gift') and int(time())<=1740808799:
-          if foundItem.get('rarity').lower() != 'legendary':
-            gpDiscountMod/=2
-            miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to the seasonal Winter Gods Favor!"
-          dayBonus-=1
-          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
+        elif args.get('half'):
+          #gpDiscountMod/=2
+          timeDiscountMod/=2
+          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} in half the time due to a class feature!"
+          #dayBonus-=1
+          #miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
         gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
         tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
         
@@ -317,21 +317,21 @@ else: ##CRAFTING SPECS
         else:
           success=0
 
-        
+        success=1
         ## Give Da Results
         
         outMsg = (f""" -title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
-        outMsg+= (f"""-f "**Using {useJobName}[{useStat}], DC {dc}**" """)
-        outMsg+= (f"""-f "Crafting Check|{diceRoll} vs DC {dc}" """)
-        match success:
-          case -1:
-            outMsg+= (f"""-f "<:weh:586050062266794023> Failure by five or more! <:weh:586050062266794023>|Lose half the relevant crafting materials you'd use to craft the item." """)
-            outMsg+= (f"""-f "{character().name} loses: \n * {ceil(tokens/2)} {foundItem.get('rarity').replace('"','').title()} tokens and \n * {int(gpCost/2*100)/100}gp." """)
-          case 0:
-            outMsg+= (f"""-f "<:disgosting:807475930288619561> Failure! <:disgosting:807475930288619561>|But at least you don't lose any materials." """)
-          case 1:
-            outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
-            outMsg+= (f"""|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
+        outMsg+= (f"""-f "**Using {useJobName}**" """)
+        #outMsg+= (f"""-f "Crafting Check|{diceRoll} vs DC {dc}" """)
+        #match success:
+        #  case -1:
+        #    outMsg+= (f"""-f "<:weh:586050062266794023> Failure by five or more! <:weh:586050062266794023>|Lose half the relevant crafting materials you'd use to craft the item." """)
+        #    outMsg+= (f"""-f "{character().name} loses: \n * {ceil(tokens/2)} {foundItem.get('rarity').replace('"','').title()} tokens and \n * {int(gpCost/2*100)/100}gp." """)
+        #  case 0:
+        #    outMsg+= (f"""-f "<:disgosting:807475930288619561> Failure! <:disgosting:807475930288619561>|But at least you don't lose any materials." """)
+        #  case 1:
+        #    outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
+        outMsg+= (f"""-f "|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
         
         downtime_chunks = ceil(days/4)
         downtime_days = floor(days/8) if (success >=1) else (1)
@@ -341,7 +341,7 @@ else: ##CRAFTING SPECS
         HOUR = 3600
         DAY = 86400                                     #seconds per day
         CurTime = int(time())                           #get current time
-        busyTime = (CurTime + ((downtime_days-1)*DAY)+chunk*HOUR) if (success > 0) else (CurTime)  #calculate time when the activity ends
+        busyTime = CurTime+ max( ( (downtime_days-1)*DAY)+chunk*HOUR,HOUR*8)  #calculate time when the activity ends
         
         outMsg+=(f""" -f "**Item Done: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime}:F><t:{busyTime}:R> " """) if (success>0) else ''
         outMsg+=(f""" -f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F><t:{busyTime + DAY}:R>" """)

@@ -235,7 +235,7 @@ outTitle = (f'Dayjob')
 outDescr = (f'\n**Character:** {target.name}') +  \
            (f'\n**Job:** {useJobName} ({useStat})') +  \
            (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
-           (f'\n**Gold:** {jobValue} gp/Day --> {dayjobEarning} \* Tier {tier} --> **{dayjobEarning*tier} gp**') +  \
+           (f'\n**Gold:** {jobValue} * {downtime_days} day(s) gp/Day --> {dayjobEarning * downtime_days } \* Tier {tier} --> **{dayjobEarning*tier * downtime_days} gp**') +  \
            (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \
 		   (f'\n\n**next downtime use:**\n <t:{busyTime + DAY}:F> \n')
 

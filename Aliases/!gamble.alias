@@ -1,7 +1,7 @@
 # SYNC_CONFIG
 # coll_id: 6772339e6459318a826bbe60
 # alias_id:  67723508f73e2c9c7aa72e9c
-# alias_name: !pitfight
+# alias_name: !gamble
 # END_CONFIG
 embed
 <drac2>
@@ -287,7 +287,7 @@ roll3= vroll(f"{ch.skills['intimidation'].d20(d20Dict['Roll 3']['adv'], d20Dict[
 
 cheats=1
 cheatNotes = ''
-pitfightSuccess = 0
+gambleSuccess = 0
 outField1 = (f"__Check 1 - WIS(Insight)__|**DC** {DC1} \n**Check** {roll1}\n")
 outField2 = (f"__Check 2 - CHA({skill2.title()})__|**DC** {DC2} \n**Check** {roll2}\n")
 outField3 = (f"__Check 3 - CHA(Intimidation)__|**DC** {DC3} \n**Check** {roll3}\n")
@@ -296,7 +296,7 @@ outField3 = (f"__Check 3 - CHA(Intimidation)__|**DC** {DC3} \n**Check** {roll3}\
 ##### Roll 1 #####
 #####        #####
 
-if roll1.total >= DC1.total: pitfightSuccess = pitfightSuccess +1
+if roll1.total >= DC1.total: gambleSuccess = gambleSuccess +1
 else: #Cheat Logic
   cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
   
@@ -346,7 +346,7 @@ else: #Cheat Logic
       """)
       roll1=vroll(modifiedBonus)
       if modifiedBonus >= DC1.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField1 = outField1 + (f"""**Successful cheating!**
         """)
       else:
@@ -362,7 +362,7 @@ else: #Cheat Logic
       """)
       roll1=vroll(modifiedBonus)
       if modifiedBonus >= DC1.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField1 = outField1 + (f"""Successful cheating!
         """)
       else:
@@ -378,7 +378,7 @@ else: #Cheat Logic
       """)
       roll1=vroll(modifiedBonus)
       if modifiedBonus >= DC1.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField1 = outField1 + (f"""**Successful cheating!**
         """)
       else:
@@ -389,7 +389,7 @@ else: #Cheat Logic
       DC1=vroll('9999')
       DC2=vroll('9999')
       DC3=vroll('9999')
-      pitfightSuccess = -3
+      gambleSuccess = -3
     elif result <= -5:
       outField1 = outField1 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check.\n""")
       outField2 = (f"__Check 2 - CHA({skill2.title()})__|**DC** {DC2}+2[gambling failure]={DC2.total+2} \n**Check** {roll2}\n")
@@ -402,7 +402,7 @@ else: #Cheat Logic
 ##### Roll 2 #####
 #####        #####
 
-if roll2.total >= DC2.total: pitfightSuccess = pitfightSuccess +1
+if roll2.total >= DC2.total: gambleSuccess = gambleSuccess +1
 else: #Cheat Logic
   cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
   
@@ -451,7 +451,7 @@ else: #Cheat Logic
       """)
       roll2=vroll(modifiedBonus)
       if modifiedBonus >= DC2.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField2 = outField2 + (f"""**Successful cheating!**
         """)
       else:
@@ -467,7 +467,7 @@ else: #Cheat Logic
       """)
       roll2=vroll(modifiedBonus)
       if modifiedBonus >= DC2.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField2 = outField2 + (f"""Successful cheating!
         """)
       else:
@@ -483,7 +483,7 @@ else: #Cheat Logic
       """)
       roll2=vroll(modifiedBonus)
       if modifiedBonus >= DC2.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField2 = outField2 + (f"""**Successful cheating!**
         """)
       else:
@@ -494,7 +494,7 @@ else: #Cheat Logic
       DC2=vroll('9999')
       DC2=vroll('9999')
       DC3=vroll('9999')
-      pitfightSuccess = -3
+      gambleSuccess = -3
     elif result <= -5:
       outField2 = outField2 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check.\n""")
       outField3 = (f"__Check 3 - CHA(Intimidation)__|**DC** {DC3}+2[gambling failure]={DC3.total+2} \n**Check** {roll3}\n")
@@ -507,7 +507,7 @@ else: #Cheat Logic
 ##### Roll 3 #####
 #####        #####
 
-if roll3.total >= DC3.total: pitfightSuccess = pitfightSuccess +1
+if roll3.total >= DC3.total: gambleSuccess = gambleSuccess +1
 else: #Cheat Logic
   cheatDC=cheatDCMap[cheats] - (character().skills['sleightOfHand'].value + ( 5 if character().skills['sleightOfHand'].adv else 0)) #implied +5 bonus to sleight of hand with advantage
   
@@ -556,7 +556,7 @@ else: #Cheat Logic
       """)
       roll3=vroll(modifiedBonus)
       if modifiedBonus >= DC3.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField3 = outField3 + (f"""**Successful cheating!**
         """)
       else:
@@ -572,7 +572,7 @@ else: #Cheat Logic
       """)
       roll3=vroll(modifiedBonus)
       if modifiedBonus >= DC3.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField3 = outField3 + (f"""Successful cheating!
         """)
       else:
@@ -588,7 +588,7 @@ else: #Cheat Logic
       """)
       roll3=vroll(modifiedBonus)
       if modifiedBonus >= DC3.total:
-        pitfightSuccess = pitfightSuccess +1
+        gambleSuccess = gambleSuccess +1
         outField3 = outField3 + (f"""**Successful cheating!**
         """)
       else:
@@ -599,28 +599,28 @@ else: #Cheat Logic
       DC3=vroll('9999')
       DC3=vroll('9999')
       DC3=vroll('9999')
-      pitfightSuccess = -3
+      gambleSuccess = -3
     elif result <= -5:
       outField3 = outField3 + (f"""\n * Uh oh, failure by 5 or more! Add +2 to the next gambling check. Good thing this is the last one!\n""")
     else:
       outField3 = outField3 + (f"""\n * Uh oh, you failed to cheat effectively!\n""")
     cheats += 1
 
-if pitfightSuccess > 0:
-  pitfightEarning = int(pitEarningMap[str(pitfightSuccess)] * stake * 100)/100
+if gambleSuccess > 0:
+  gambleEarning = int(pitEarningMap[str(gambleSuccess)] * stake * 100)/100
 else:
-  pitfightEarning = 0
+  gambleEarning = 0
 
 tier = 1 if level < 5 else ( 2 if level < 9 else (3 if level < 13 else (4 if level < 17 else 5)))
 
-outcome='You were caught cheating and lost all the money you bet. You\'re barred from gambling for 1 week (5 days).' if pitfightSuccess <0 else ('Lose all the money you bet, and accrue a debt equal to that amount.' if pitfightSuccess <1 else ('Lose half the money you bet' if pitfightSuccess <2 else ('Gain the amount you bet plus half again more.' if pitfightSuccess<3 else ('Gain double the amount you bet.'))))
+outcome='You were caught cheating and lost all the money you bet. You\'re barred from gambling for 1 week (5 days).' if gambleSuccess <0 else ('Lose all the money you bet, and accrue a debt equal to that amount.' if gambleSuccess <1 else ('Lose half the money you bet' if gambleSuccess <2 else ('Gain the amount you bet plus half again more.' if gambleSuccess<3 else ('Gain double the amount you bet.'))))
 
 outTitle = (f'{character().name} gambles staking {stake} gp:\n<t:{CurTime}:D> - <t:{busyTime}:D>')
 outDescr = (f'\n**Character:** {ch.name}') +  \
-           ((f'\n**Successes:** {str(pitfightSuccess)} / 3') if pitfightSuccess >= 0 else '\n**Caught Cheating!**: Banned/3 Successes') +  \
+           ((f'\n**Successes:** {str(gambleSuccess)} / 3') if gambleSuccess >= 0 else '\n**Caught Cheating!**: Banned/3 Successes') +  \
            (f'\n**Outcome:** ' + outcome) + \
-           ((f'\n**Winnings:** {str(pitfightEarning)} * Tier {tier} --> **{pitfightEarning * tier }gp**!') if pitfightSuccess > 1 else (f'\n**Losings:** {str(pitfightEarning)}gp') ) +  \
-           ((f'\n**Net GP Change**: {pitfightEarning * tier} - {stake}[original stake] --> **{pitfightEarning * tier - stake}gp**!') if pitfightSuccess > 1 else (f'\n**Net GP Change:** {(pitfightEarning)}- {stake}[original stake] --> **{pitfightEarning-stake}gp**') ) + \
+           ((f'\n**Winnings:** {str(gambleEarning)}gp!') if gambleSuccess > 1 else (f'\n**Losings:** {str(gambleEarning)}gp') ) +  \
+           ((f'\n**Net GP Change**: ({gambleEarning} - {stake}[original stake]) \* Tier {tier} --> **{(gambleEarning - stake)*tier}gp**!') if gambleSuccess > 1 else (f'\n**Net GP Change:** {(gambleEarning)}- {stake}[original stake] --> **{gambleEarning-stake}gp**') ) + \
            (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)')
 
 nextFreetime =(f'next downtime use|<t:{busyTime + DAY}:F> \n')

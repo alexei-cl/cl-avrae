@@ -22,28 +22,27 @@ busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activit
 
 
 jobInfoMap = {
-  'Alchemist':     {'jobValue': 15, 'jobStats': ["INT", "WIS"]},
-  'Brewer':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
-  'Calligrapher':  {'jobValue': 30, 'jobStats': ["INT", "DEX", "CHA"]},
-  'Carpenter':     {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
-  'Cartographer':  {'jobValue': 30, 'jobStats': ["INT", "DEX"]},
-  'Cobbler':       {'jobValue': 10, 'jobStats': ["CHA", "DEX"]},
-  'Cook':          {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
-  'Driver':        {'jobValue': 15, 'jobStats': ["INT", "WIS", "CON"]},
-  'Enchanter':     {'jobValue': 20, 'jobStats': ["INT", "WIS"]},
-  'Glassblower':   {'jobValue': 20, 'jobStats': ["CHA", "CON"]},
-  'Herbalist':     {'jobValue': 10, 'jobStats': ["INT", "WIS"]},
-  'Jeweler':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
-  'Mason':         {'jobValue': 20, 'jobStats': ["CON", "STR"]},
-  'Musician':      {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
-  'Painter':       {'jobValue': 30, 'jobStats': ["CHA", "DEX"]},
-  'Performer':     {'jobValue': 15, 'jobStats': ["CHA", "CON"]},
-  'Potter':        {'jobValue': 15, 'jobStats': ["CHA", "DEX"]},
-  'Smith':         {'jobValue': 15, 'jobStats': ["CON", "STR"]},
-  'Tanner':        {'jobValue': 15, 'jobStats': ["DEX", "WIS"]},
-  'Tinkerer':      {'jobValue': 15, 'jobStats': ["INT", "CON", "DEX"]},
-  'Weaver':        {'jobValue': 10, 'jobStats': ["CHA", "WIS"]},
-  'Woodcarver':    {'jobValue': 10, 'jobStats': ["STR", "DEX"]},
+  'Alchemist':     {'jobValue': 15, 'jobSkills': ['nature','medicine']},
+  'Brewer':        {'jobValue': 15, 'jobSkills': ['constitution','nature','insight']},
+  'Calligrapher':  {'jobValue': 30, 'jobSkills': ['performance','sleightOfHand','religion']},
+  'Carpenter':     {'jobValue': 10, 'jobSkills': ['sleightOfHand','athletics']},
+  'Cartographer':  {'jobValue': 30, 'jobSkills': ['stealth','history']},
+  'Cobbler':       {'jobValue': 10, 'jobSkills': ['persuasion','sleightOfHand']},
+  'Cook':          {'jobValue': 10, 'jobSkills': ['constitution','nature','survival']},
+  'Driver':        {'jobValue': 15, 'jobSkills': ['investigation','perception']},
+  'Glassblower':   {'jobValue': 20, 'jobSkills': ['persuasion','sleightOfHand']},
+  'Herbalist':     {'jobValue': 10, 'jobSkills': ['nature','survival']},
+  'Jeweler':       {'jobValue': 30, 'jobSkills': ['deception','sleightOfHand']},
+  'Mason':         {'jobValue': 20, 'jobSkills': ['constitution','athletics']},
+  'Musician':      {'jobValue': 15, 'jobSkills': ['performance',]},
+  'Painter':       {'jobValue': 30, 'jobSkills': ['persuasion','sleightOfHand']},
+  'Performer':     {'jobValue': 15, 'jobSkills': ['performance','sleightOfHand']},
+  'Potter':        {'jobValue': 15, 'jobSkills': ['performance','sleightOfHand']},
+  'Smith':         {'jobValue': 15, 'jobSkills': ['constitution','athletics']},
+  'Tanner':        {'jobValue': 15, 'jobSkills': ['sleightOfHand','athletics','animalHandling']},
+  'Tinkerer':      {'jobValue': 15, 'jobSkills': ['constitution','sleightOfHand','arcana']},
+  'Weaver':        {'jobValue': 10, 'jobSkills': ['performance','sleightOfHand','survival']},
+  'Woodcarver':    {'jobValue': 10, 'jobSkills': ['sleightOfHand','athletics']}
 }
 availableJobs = ', '.join(jobInfoMap.keys())
 
@@ -66,20 +65,22 @@ def findBestMatch(lookupMap, keyArgument):
         return None
   return bestMatch
 
+
+##REWORK THIS
 def getJobInfo(argDayjob, target, jobInfoMap):
   jobKey = findBestMatch(jobInfoMap, argDayjob)
   if jobKey is not None:
     jobInfo = jobInfoMap[jobKey]
     jobValue = jobInfo['jobValue']
     max_mod = -5
-    for stat in jobInfo['jobStats']:
-      mod_value = target.stats.get_mod(stat)
-      if character().skills[attMap[stat]].adv: mod_value+=4 #Adv translates to ~+4
-      if stat=='STR' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
-      if stat=='CHA' and ('ogl' in &ARGS&): mod_value+=(max(1,character().stats.get_mod('wisdom')))
+    for skill in jobInfo['jobSkills']:
+      mod_value = target.skills[skill]
+      if character().skills[skill].adv: mod_value+=4 #Adv translates to ~+4
+      if skill=='athletics' and ( character().levels.get('Barbarian')>=18 or 'indom' in args): mod_value+= character().stats.strength - 10 #Should result in STR being used
+      if skill in ['pesuasion','deception','intimidation','performance'] and ('ogl' in &ARGS&): mod_value+=(max(1,character().stats.get_mod('wisdom')))
       if mod_value > max_mod:
         max_mod = mod_value
-        useStat = stat
+        useStat = skill
     return jobValue, useStat, jobKey
   else:
     return None, None, None
@@ -111,15 +112,14 @@ if '-v' in args: # Early out for help
 
   **__Valid Arguments__**
   ** * `-v`** To see advanced arguments
-  ** * `-exp`** = if you have Expertise in this Job.
   ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
-  ** * `adv`** if you roll with advantage
+  ** * `-with <skill>`** = if you want to choose the skill used with the job instead of trusting robots
+  ** * `adv`** if you roll with advantage, such as from a tool
   ** * `rel`** if you have reliable talent
   ** * `lucky`** if you are a halfling
   ** * `royal`** if you are a Royal Mothfolk
   ** * `indom`** if you are a level 18 barbarian
   ** * `ogl`** if you are a fey wanderer ranger
-  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
   ** __Example:__ `!{ctx.alias.title()} callig rel adv`**
   """
   return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
@@ -132,9 +132,8 @@ if not (args and not (Com := combat())) or any(x for x in ['help','?'] if args[0
 
   **__Valid Arguments__**
   ** * `-v`** To see advanced arguments
-  ** * `-exp`** = if you have Expertise in this Job.
   ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
-  ** * `-with <str/dex/con/int/wis/cha>`** if you want to overwrite which skill to use with this tool.
+  ** * `-with <skill>`** = if you want to choose the skill used with the job instead of trusting robots
   ** __Example:__ `!{ctx.alias.title()} callig`**
   """
   return f"""embed -title "Looking for some earnings?" -desc "{desc}" {footer}"""
@@ -164,20 +163,22 @@ if not useStat:
   ** * `-v`** To see advanced arguments
   ** * `-exp`** = if you have Expertise in this Job.
   ** * `-b <bonus>`** = if you have an additional bonus. (1d8+5)
+  ** * `-with <skill>`** = if you want to choose the skill used with the job instead of trusting robots
   ** __Example:__ `!{ctx.alias.title()} callig`**
   
   """
   return f"""embed -title "I just couldn't find the job you're looking for?" -desc "{desc}" {footer}"""
 
 if args.get('with') and args.get('with') !='True':
-  for statAbrv in attMap.keys():
-    if (args.get('with')[0].lower() in attMap[statAbrv]) and (statAbrv in jobInfoMap.get(useJobName).get('jobStats')):
-      useStat=statAbrv
+  valid_skills = jobInfoMap[useJobName]['jobSkills']
+  for i in range(len(valid_skills)):
+    if args.get('with')[0].lower() in valid_skills[i].lower():
+      useStat=valid_skills[i]
 
 ## Check for adv in avrae ##
 if 'adv' in args:
   miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
-elif character().skills[attMap[useStat]].adv:
+elif character().skills[useStat].adv:
   argAdv = True
   miscNotes+=f'\n{character().name} has advantage on all {useStat} rolls for some reason (Set in Avrae)'
 
@@ -200,11 +201,11 @@ if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: ad
 ##Else because 18 barb cannot be also be a 10 rogue
 elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
   argRel = character().stats.strength
-  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {attMap[useStat]} rolls due to Barbarian\'s Indomitable Might'
+  miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on {useStat} rolls due to Barbarian\'s Indomitable Might'
 ##Royal Mothfolk
 elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
   argRel = 5
-  miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
+  miscNotes+=f'\n{character().name} cannot roll below a {5} on {useStat} rolls due to being a {character().race}'
   
 if 'ogl' in &ARGS& and useStat=='CHA':
   argBonus=(argBonus + f" + {max(1,character().stats.get_mod('wisdom'))}[wisdom]") if argBonus else (f"{max(1,character().stats.get_mod('wisdom'))}[wisdom]")
@@ -213,7 +214,7 @@ if 'ogl' in &ARGS& and useStat=='CHA':
 if miscNotes:
   miscNotes = '-f "**__Misc Notes:__**'+miscNotes+'"'
 
-useDice = f"{target.skills[attMap[useStat]].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
+useDice = f"{target.skills[useStat].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
 
 if (args.get('exp')) or 'exp' in &ARGS&:
   dayjobRoll = vroll(f'{useDice}+{2*target.stats.prof_bonus}{f"+{argBonus}" if argBonus else ""}')
@@ -233,7 +234,7 @@ if 'weekly' or '-weekly' in args:
 
 outTitle = (f'Dayjob')
 outDescr = (f'\n**Character:** {target.name}') +  \
-           (f'\n**Job:** {useJobName} ({useStat})') +  \
+           (f'\n**Job:** {useJobName} ({useStat.title() if useStat!="sleightOfHand" else "Sleight of Hand" })') +  \
            (f'\n**Roll:** {dayjobRoll} --> **{multiplier*100}%**') +  \
            (f'\n**Gold:** {jobValue} * {downtime_days} day(s) gp/Day --> {dayjobEarning * downtime_days } \* Tier {tier} --> **{dayjobEarning*tier * downtime_days} gp**') +  \
            (f'\n [Downtime earnings are multiplied by tier!](https://discord.com/channels/938988968404451339/938988968404451342/1290479256584851526)') +  \

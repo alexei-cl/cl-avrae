@@ -141,7 +141,7 @@ if len(&ARGS&)<1 or 'help' in args:
   For the discount for knowing multiple tools:
   ```{ctx.prefix+ctx.alias} \\"<Item>\\" -with \\"Tool\\" -with \\"Other Tool\\"```
   ** __Example:__** 
-  ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\" -with \\"Smith\\" -with \\"Smith\\"```
+  ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\" -with \\"Smith\\" -with \\"Leather\\"```
   **__But what about my bonuses?__**
   Good news, it supports adding in all your bits and bobs. Add these to the **__end__** of your command as a separate word.
 * `arti` if your artificer subclass gives you half crafting time

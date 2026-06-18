@@ -2,7 +2,7 @@
 # date_edited: 12/17/2025
 # coll_id: 6775fcffb9c5268f34006adc
 # alias_id: 6775fd303313cf1a5d17f363
-# alias_name: !scribe
+# alias_name: !craft
 # END_CONFIG
 embed 
 <drac2>
@@ -121,6 +121,8 @@ ch = character()
 outMsg=''
 miscNotes=''
 foundItems=[]
+tools_known=0
+tools_known_out=""
 
 if len(&ARGS&)<1 or 'help' in args:
   outMsg+=(f""" -title "Looking for some crafting recipes?" """)
@@ -136,18 +138,16 @@ if len(&ARGS&)<1 or 'help' in args:
   ** __Example:__** 
   ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\" -with \\"Smith\\"```
   
+  For the discount for knowing multiple tools:
+  ```{ctx.prefix+ctx.alias} \\"<Item>\\" -with \\"Tool\\" -with \\"Other Tool\\"```
+  ** __Example:__** 
+  ```{ctx.prefix+ctx.alias} \\"Armor of Invulnerability\\" -with \\"Smith\\" -with \\"Smith\\"```
   **__But what about my bonuses?__**
-  Good news, it supports adding in all your bits and bobs. Add these to the end of your command.
-  
-  ```
-adv    Advantage to your Crafting Check
-lucky  Rerolls 1s on your Crafting Check (halfing)
-rel    A rogue's reliable talent (minimuim roll 10)
-indom  A barbarian's Indomitable Might
-royal  A Royal Mothfolk's Well Mannered
--b X   For any other misc bonuses to your roll!
--gift  For the Winter Event Crafting Boon (USE LAST!)
-```
+  Good news, it supports adding in all your bits and bobs. Add these to the **__end__** of your command as a separate word.
+* `arti` if your artificer subclass gives you half crafting time
+* `scribes` if you're a Scribes wizard with Master Scrivener (Scrolls only!)
+* `multicraft` if you're doing one of the above and want to make multiple items at once
+* `-multicraft 3` if you're for some reason only making three common items in one go...
   "
   """)
   if ctx.channel.id == 946108279543713802:
@@ -169,9 +169,11 @@ for gid in craftingGvars:
         break
   if found:
     break
-        
+    
+##      ##      ##      ##      ##      ##
+##  Too many items found, give first 10 ##
+##      ##      ##      ##      ##      ##
 
-## Too many items found, give first 10
 if len(foundItems)>1:
   outMsg = (f"""-title "Multiple Matches Found" """)
   if 'True' in args.get('with') or len(args.get('with'))==0:
@@ -190,14 +192,19 @@ if len(foundItems)>1:
   outMsg += (f""" " """)
   if ctx.channel.id == 946108279543713802:
     outMsg+=(f""" -t 30 -f "Because a help message was called in #downtime-log, this message will self destruct in: <t:{int(time())+30}:R> seconds" """)
-
-
+  return outMsg
+##  ##  ##  ##  ##
+## No Matches   ##
+##  ##  ##  ##  ##
 elif len(foundItems)<1:
   outMsg = (f"""-title "No Items Founds" """) + \
            (f"""-f "Your input was: `{item}`\n Maybe this isn't craftable, or maybe check your spelling?" """)
   if ctx.channel.id == 946108279543713802:
     outMsg+=(f""" -t 30 -f "Because a help message was called in #downtime-log, this message will self destruct in: <t:{int(time())+30}:R> seconds" """)
-## one item found
+##  ##  ##  ##  ##  ##
+##  one item found  ##
+## lets get craftin ##
+##  ##  ##  ##  ##  ##
 else: ##CRAFTING SPECS
   foundItem=foundItems[0]
   if 'True' in args.get('with') or len(args.get('with'))==0:
@@ -232,162 +239,96 @@ else: ##CRAFTING SPECS
     #  return (f"""-f "Sorry, actually doing the crafting part of things is not ready yet. Please just use me as a lookup tool!" "-t 15" """)
     tool = args.get('with')
     if foundItem.get('craftingTags'):
-      if tool[0].lower() in foundItem.get('craftingTags','').lower(): ## valid tool
-        ##shit we're in business!
-        dc=dcMap.get(foundItem.get('rarity','').replace('"','').title())
-        days=timeMap.get(foundItem.get('rarity','').replace('"','').title())
-        prof=1
-        if args.get('prof'):
-          prof=1
-        if args.get('exp'):
-          prof=2
-        
-        bonus=0
-        if args.get('b') and ('True' not in args.get('b')):
-          bonus=int(args.get('b')[0])
-        
-        
-        
-        gpDiscountMod=1.0
-        timeDiscountMod=1.0
-        dayBonus=0
-        miscNotes=' -f "Misc Notes|'
-        #if (args.get('arti') or character().levels.get('Aritficer')>9) and (foundItem.get('rarity','').replace('"','').title()=='Common' or foundItem.get('rarity','').replace('"','').title()=='Uncommon'):
-        #  gpDiscountMod/=2
-        #  timeDiscountMod/=4
-        #  miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half the cost in a quarter of the time due to artificer's Magic Item Adept!"
-        if args.get('scribes') and ('scroll' in foundItem.get('name','').replace('"','').lower()):
-          gpDiscountMod/=2
-          timeDiscountMod/=2
-          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
-        elif args.get('half'):
-          #gpDiscountMod/=2
-          timeDiscountMod/=2
-          miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} in half the time due to a class feature!"
-          #dayBonus-=1
-          #miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at one day faster due to the seasonal Winter Gods Favor!"
-        gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
-        tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
-        
-        days=(days)*8 #how many downtime hours
-        days=max(4,ceil(days*timeDiscountMod)+dayBonus*8) #how many downtime hours
-          
-        ##Okay, figure out what the best stat is for the tool in question##
-        
-        jobValue, useStat, useJobName = getJobInfo(tool[0], character(), jobInfoMap)
-        
-        ##Make da roll (see !downtime)
-        ## Check for adv in avrae ##
-        argRel=0
-        indom=False
-        reroll=False
-        
-        if 'adv' in args:
-          miscNotes+=f'\n{character().name} has advantage (Player passed the **`adv`** argument)'
-        #Reroll nat1
-        if 'halfling' in character().race.lower() or 'lucky' in args:
-          reroll=True
-          miscNotes+=f'\n{character().name} rerolls Nat 1s due to being a {character().race}"'
-        # .d20(base_adv=None, reroll=None, min_val=None, mod_override=None)
-        if 'rel' in args or character().levels.get('Rogue')>6: #reliable talent TODO: add `rel`
-          argRel=10
-          miscNotes+=f'\n{character().name} cannot roll below a 10 on roll with proficiency due to Rogue\'s Reliable Talent'
-        ##Else because 18 barb cannot be also be a 10 rogue
-        elif (useStat == 'STR') and ( character().levels.get('Barbarian')>=18 or 'indom' in args):
-          indom=True
-          miscNotes+=f'\n{character().name} cannot roll below a {character().stats.strength} on Strength rolls due to Barbarian\'s Indomitable Might'
-        ##Royal Mothfolk
-        elif (useStat == 'CHA') and (('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower())):
-          argRel = 5 if argRel < 10 else 10
-          miscNotes+=f'\n{character().name} cannot roll below a {5} on {attMap[useStat]} rolls due to being a {character().race}'
-        ## Roll Da Output
-        miscNotes+='"'
-        
-        useDice= (f"""{2 if 'adv' in args else 1}d20{'ro1' if reroll else ''}""") + \
-                 (f"""{'mi'+argRel if argRel > 0 else ''}{'kh1' if 'adv' in args else ''}""") + \
-                 (f"""+{character().stats.get_mod(attMap[useStat])}[{useStat}]+""") + \
-                 (f"""{character().stats.prof_bonus*prof}[prof]{"+"+bonus+"[misc]" if bonus!=0 else ''}""")
-        diceRoll=vroll(useDice)
-        total = diceRoll.total
-        success=0
-        if diceRoll.total>=dc:
-          success=1
-        elif dc-5>=diceRoll.total:
-          success=-1
-        else:
-          success=0
-
-        success=1
-        ## Give Da Results
-        
-        outMsg = (f""" -title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
-        outMsg+= (f"""-f "**Using {useJobName}**" """)
-        #outMsg+= (f"""-f "Crafting Check|{diceRoll} vs DC {dc}" """)
-        #match success:
-        #  case -1:
-        #    outMsg+= (f"""-f "<:weh:586050062266794023> Failure by five or more! <:weh:586050062266794023>|Lose half the relevant crafting materials you'd use to craft the item." """)
-        #    outMsg+= (f"""-f "{character().name} loses: \n * {ceil(tokens/2)} {foundItem.get('rarity').replace('"','').title()} tokens and \n * {int(gpCost/2*100)/100}gp." """)
-        #  case 0:
-        #    outMsg+= (f"""-f "<:disgosting:807475930288619561> Failure! <:disgosting:807475930288619561>|But at least you don't lose any materials." """)
-        #  case 1:
-        #    outMsg+= (f"""-f "<:eyeswidesmile:682684878315323393> Successful crafting! <:eyeswidesmile:682684878315323393> """)
-        outMsg+= (f"""-f "|{character().name} spends: \n * **{tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{gpCost}gp** to craft their new \n **{foundItem.get('name','')}**." """)
-        
-        downtime_chunks = ceil(days/4)
-        downtime_days = floor(days/8) if (success >=1) else (1)
-        chunk=days%8
-        
-        
-        HOUR = 3600
-        DAY = 86400                                     #seconds per day
-        CurTime = int(time())                           #get current time
-        busyTime = CurTime+ max( ( (downtime_days-1)*DAY)+chunk*HOUR,HOUR*8)  #calculate time when the activity ends
-        
-        outMsg+=(f""" -f "**Item Done: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime}:F><t:{busyTime}:R> " """) if (success>0) else ''
-        outMsg+=(f""" -f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F><t:{busyTime + DAY}:R>" """)
-        
-        
-        
+      item_tools=foundItem.get('craftingTags').split(',')
+      for i in range(len(tool)):
+        for j in range(len(item_tools)):
+          if tool[i].lower() in item_tools[j].lower(): ## valid tool
+          ##shit we're in business!
+          ##just loop count how many tool matches there are; we do the crafting math out of this conditional
+            tools_known+=1
+            tools_known_out+=", `" + item_tools[j] + " Tools`" if len(tools_known_out)>0 else "`" + item_tools[j] + " Tools`"
       else: ##invalid tool
-        outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
-        outMsg+= (f"""-f "Invalid tool|I'm sorry to say that `{tool[0]}` is not a tool you can use to craft `{foundItem.get('name','')}`" """)
-        outMsg+= (f"""-f "Try using one of these: `{foundItem.get('craftingTags','').replace('"','')}`" """)
-        outMsg+= (f"""-f "Or, look up the item in [#bot-testing](https://discord.com/channels/938988968404451339/941139522400448582): `{ctx.prefix}{ctx.alias} '{foundItem.get('name','')}'`" """)
-        outMsg +=(f""" -t 45 """)
-    else:
+        if i==len(foundItem.get('craftingTags','').lower()) and tools_known==0: ##only break if none of the tools are valid
+          outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
+          outMsg+= (f"""-f "Invalid tool|I'm sorry to say that `{tool[0]}` is not a tool you can use to craft `{foundItem.get('name','')}`" """)
+          outMsg+= (f"""-f "Try using one of these: `{foundItem.get('craftingTags','').replace('"','')}`" """)
+          outMsg+= (f"""-f "Or, look up the item in [#bot-testing](https://discord.com/channels/938988968404451339/941139522400448582): `{ctx.prefix}{ctx.alias} '{foundItem.get('name','')}'`" """)
+          outMsg +=(f""" -t 45 """)
+          return outMsg
+    else: ## Edge Case
       outMsg = (f"""-title "{character().name} tried to craft: `{foundItem.get('name','')}`" """)
       outMsg+= (f"""-f "Item cannot be crafted|I'm sorry to say that `{foundItem.get('name','')}` is not a craftable item." """)
       if ctx.channel.id == 946108279543713802:
         outMsg+=(f""" -t 30 -f "This message will self destruct in: <t:{int(time())+30}:R> seconds" """)
-## -rarity
-
-# Arguments:
-# !craft "Name of Item"
-# -manual 
-# -rarity Mundane/Common/Uncommon/Rare/Very Rare/Legendary
-# -tool <x>
-##      Crafting rules require proficiency at minimum
-# -exp
-# -gp <x>
-# -tk <x>
-# -b <x>
-# -adv
-# -with STR/DEX/CON/INT/WIS/CHA
-#       IDK if there's anything like this applicable in downtime, but it's a thought
-
-##Weird Crafting Modifiers!
-# -scribe    -> for Scribes wizards on scrolls
-# -ogl       -> for Fey Wanderer Ranger
-
-##Weird Crafting Modifiers I can in theory catch automagically
-# -arti      -> for level 10 artificers on common/unc
-# -rel       -> for rogue 11
-# -indom     -> for Barbarian 18
-# -lucky     -> Halfling
-# -royal     -> Royal Mothfolk
-
+##  ##  ##  ##  ##  ##  ##   ##
+##  Check crafting discounts ##
+##  ##  ##  ##  ##  ##  ##   ##
+if tools_known>0:
+  gpDiscountMod=1.0
+  timeDiscountMod=1.0
+  dayBonus=0
+  miscNotes=' -f "Misc Notes|'
+  if args.get('scribes') and ('scroll' in foundItem.get('name','').replace('"','').lower()):
+    gpDiscountMod/=2
+    timeDiscountMod/=2
+    miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} at half cost due to their status as a Master Scrivener!"
+  elif args.get('arti'):
+    timeDiscountMod/=2
+    miscNotes+=f"\n{character().name} crafts {foundItem.get('name','')} in half the time due to a class feature!"
+  
+  gpCost=int((int(foundItem.get('gpCrafting'))*gpDiscountMod)*100)/100
+  tokens=ceil(int(foundItem.get('tokenCost'))*gpDiscountMod)
+  days=timeMap.get(foundItem.get('rarity','').replace('"','').title())
+  days=(days)*8 #how many downtime hours
+  days=max(8,ceil(days*timeDiscountMod)+dayBonus*8) #how many downtime hours
+  days_mod=max(8,days-(tools_known-1)*8) #lol dancing back and forth
+  if days != days_mod:
+    miscNotes+=f'\nCrafting time was {"further " if timeDiscountMod<1 else "" }shortened by `{int((days-days_mod)/8)}` day{"s" if (days-days_mod)>8 else "" } due to the crafter knowing multiple applicable tools!'
+    days=days_mod
+  
+  ##    ##      ##      ##      ##
+  ## Figure out multicrafting   ##
+  ##    ##      ##      ##      ##
+  multicraft = True if args.get('multicraft') else False
+  if 'True' not in args.get('multicraft') and len(args.get('multicraft'))>1:
+    if '3' in args.get('multicraft')[0]:
+      three = True
+  which=1
+  if timeDiscountMod<1 and foundItem.get('rarity','').replace('"','').title() in ['Common','Uncommon']:
+    which=4 if foundItem.get('rarity','').replace('"','').title()=='Common' else 2
+    if three:
+      which = 3
+    if multicraft:
+      miscNotes+=f"\nBecause of {character().name}\'s class features, they craft `{which}` at once!"
+    else:
+      miscNotes+=f"\nBecause of {character().name}\'s class features, you can craft `{which}` of these at once! If you're doing so, mark that many of the indicated resources and reply to this box in chat."
+      which=1
+  multicraft = True if which > 1 else False ## turn off for formatting
+  ##    ##      ##      ##
+  ## Give Da Results    ##
+  ##    ##      ##      ##
+  outMsg+= (f""" -title "{character().name} crafts:{' `x ' + which if multicraft else '`'}{foundItem.get('name','')}`" """)
+  outMsg+= (f"""-f "**Using {tools_known_out}**" """)
+  outMsg+= (f"""-f "|{character().name} spends: \n * **{which*tokens} {foundItem.get('rarity','').replace('"','').title()} tokens** and \n * **{which*gpCost}gp** to craft their new \n **{'x'+which if multicraft else ''} {foundItem.get('name','')}**." """)
+  
+  downtime_chunks = ceil(days/4)
+  downtime_days = floor(days/8)
+  chunk=days%8
+  
+  
+  HOUR = 3600
+  DAY = 86400                                     #seconds per day
+  CurTime = int(time())                           #get current time
+  busyTime = CurTime+ max( ( (downtime_days-1)*DAY)+chunk*HOUR,HOUR*8)  #calculate time when the activity ends
+  
+  outMsg+=(f""" -f "**Item Done: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime}:F><t:{busyTime}:R> " """)
+  outMsg+=(f""" -f "**Next downtime use: in {downtime_days} days {f'and {chunk} hours' if chunk>0 else '' }**\n <t:{busyTime + DAY}:F><t:{busyTime + DAY}:R>" """)
+  
+  
+  
+miscNotes+=" \" " if len(miscNotes)>1 else ""
 outMsg+=miscNotes
-return "embed" + outMsg + (""" -f "-# Crafting alias is in 'beta' pending testing and approval." """)
+return "embed" + outMsg
 
 </drac2>
 

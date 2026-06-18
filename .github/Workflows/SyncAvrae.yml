@@ -43,5 +43,5 @@ jobs:
         PACK_ID: ${{ secrets.PACK_ID }}
         TOME_ID: ${{ secrets.TOME_ID }}
         MAINTENANCE_WEBHOOK: ${{ secrets.MAINTENANCE_WEBHOOK }}
-      run: | 
+      run: |
         python avrae_sync.py

@@ -102,14 +102,19 @@ def updateAlias(aliasID:int,code:str):
     if code_version['is_current']==True:
       print("Current Found")
       current_code_content =code_version['content']
+      print("Breaking")
       break
+  print("Moving on ti check code version content vs code..")
   if current_code_content !=code:
     payload={ "content":code }
     req, reqCode1 = avraeREST("post",f"workshop/alias/{aliasID}/code", payload=payload)
     update, reqCode2 = avraeREST("put",f"workshop/alias/{aliasID}/active-code", payload={ 'version':req.json()['data']['version'] } )
+    print(f"Returning {req}, {reqCode1}, {reqCode2}")
     return req, reqCode1, reqCode2
   else:
+    print("Returning None, None, None")
     return None, None, None
+  return None, None, None
 
 #Run on update of any file inside the HB Spells Directory
 def build_tome():

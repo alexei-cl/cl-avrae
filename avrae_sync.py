@@ -40,30 +40,29 @@ if __name__ == '__main__':
             try:
                 req, reqCode1, reqCode2 = avrae.updateAlias(alias[0]['alias_id'], alias[1])
                 goodCodes = [200, 201, 202, 204]
-                
-                print("Check 1")
                 if reqCode1 not in goodCodes:
+                    print("Check 1")
                     embed = {
                         'title': f'Error: {reqCode1}',
                         'description': f'Alias {file_path} failed to accept new code version.',
                         'color': 0xFF0000  # Red
                     }
-                print("Check 2")
                 elif reqCode2 is None:
+                    print("Check 2")
                     embed = {
                           'title': f'No Changes Detected',
                           'description': f'Alias {file_path} was not updated as no changes were made.',
                           'color': 0xFF0000  # Red
                       }
-                print("Check 3")
                 elif reqCode2 not in goodCodes:
+                    print("Check 3")
                     embed = {
                         'title': f'Error: {reqCode2}',
                         'description': f'Alias {file_path} failed to switch code versions: {str(e)}',
                         'color': 0xFF0000  # Red
                     }
-                print("Check 4 - SUCCESS?")
                 else:
+                    print("Check 4 - SUCCESS?")
                     embed = {
                         'title': f'Alias Sync Successful: {reqCode1} {reqCode2}',
                         'description': f'Alias {file_path} has been updated and synced to avrae.',

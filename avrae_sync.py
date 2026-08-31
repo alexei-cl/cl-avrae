@@ -50,11 +50,11 @@ if __name__ == '__main__':
                     }
                 Print("Check 2")
                 elif reqCode2 is None:
-                  embed = {
-                        'title': f'No Changes Detected',
-                        'description': f'Alias {file_path} was not updated as no changes were made.',
-                        'color': 0xFF0000  # Red
-                    }
+                    embed = {
+                          'title': f'No Changes Detected',
+                          'description': f'Alias {file_path} was not updated as no changes were made.',
+                          'color': 0xFF0000  # Red
+                      }
                 Print("Check 3")
                 elif reqCode2 not in goodCodes:
                     embed = {

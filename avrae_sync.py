@@ -28,7 +28,7 @@ if __name__ == '__main__':
     items, spells = False, False
     
     for file_path in CHANGED_FILES:
-        if not file_path.strip():  # Skip empty strings
+        if not file_path.strip().replacte('\\',''):  # Skip empty strings
             continue
             
         if file_path.endswith('.alias'):

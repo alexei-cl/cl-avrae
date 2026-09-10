@@ -28,13 +28,14 @@ if __name__ == '__main__':
     items, spells = False, False
     
     for file_path in CHANGED_FILES:
-        if not file_path.strip().replace('\\',''):  # Skip empty strings
+        f_path = file_path.strip().replace('\\','')
+        if not f_path.strip():  # Skip empty strings
             continue
             
-        if file_path.endswith('.alias'):
+        if f_path.endswith('.alias'):
             # Handle alias file
-            print(f"Processing alias: {file_path}")
-            alias = avrae.parse_alias_file(file_path)
+            print(f"Processing alias: {f_path}")
+            alias = avrae.parse_alias_file(f_path)
             embed = None
             
             try:
@@ -44,37 +45,37 @@ if __name__ == '__main__':
                     print("Check 1")
                     embed = {
                         'title': f'Error: {reqCode1}',
-                        'description': f'Alias {file_path} failed to accept new code version.',
+                        'description': f'Alias {f_path} failed to accept new code version.',
                         'color': 0xFF0000  # Red
                     }
                 elif reqCode2 is None:
                     print("Check 2")
                     embed = {
                           'title': f'No Changes Detected',
-                          'description': f'Alias {file_path} was not updated as no changes were made.',
+                          'description': f'Alias {f_path} was not updated as no changes were made.',
                           'color': 0xFF0000  # Red
                       }
                 elif reqCode2 not in goodCodes:
                     print("Check 3")
                     embed = {
                         'title': f'Error: {reqCode2}',
-                        'description': f'Alias {file_path} failed to switch code versions: {str(e)}',
+                        'description': f'Alias {f_path} failed to switch code versions: {str(e)}',
                         'color': 0xFF0000  # Red
                     }
                 else:
                     print("Check 4 - SUCCESS?")
                     embed = {
                         'title': f'Alias Sync Successful: {reqCode1} {reqCode2}',
-                        'description': f'Alias {file_path} has been updated and synced to avrae.',
+                        'description': f'Alias {f_path} has been updated and synced to avrae.',
                         'color': 0x00FF00  # Green
                     }
             except Exception as e:
                 embed = {
                     'title': 'Error: Exception',
-                    'description': f'Alias {file_path} has thrown an error and failed to sync with avrae.\n\nError: {str(e)}',
+                    'description': f'Alias {f_path} has thrown an error and failed to sync with avrae.\n\nError: {str(e)}',
                     'color': 0xFF0000  # Red
                 }
-                print(f"Error processing {file_path}: {e} \n {str(e)}")
+                print(f"Error processing {f_path}: {e} \n {str(e)}")
             
             if embed:
                 send_webhook_notification(embed)

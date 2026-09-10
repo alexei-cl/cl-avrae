@@ -387,10 +387,10 @@ if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: 
   if ch.skills['stealth'].prof > 0.5:
     d20Dict['Roll 1'].update({'min_val':10})
     miscNotes+=f'\n{character().name} cannot roll below a 10 on Stealth rolls due to Rogue\'s Reliable Talent'
-  if ch.skills[skillTwo.lower()].prof > 0.5:
+  if ch.skills[skillTwo].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillTwo} rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 2'].update({'min_val':10})
-  if ch.skills[skillThree.lower()].prof > 0.5:
+  if ch.skills[skillThree()].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 3'].update({'min_val':10})
 
@@ -405,10 +405,10 @@ if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'i
   d20Dict['Roll 3'].update({'min_val':character().stats.strength})
 # Royal Mothfolk #
 if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
-  if 'Deception' in skillTwo and ch.skills[skillThree.lower()].prof > 0.5:
+  if 'deception' in skillTwo and ch.skills[skillThree()].prof > 0.5:
     miscNotes+=f'\n"{character().name} cannot roll below a {5} on {attMap[sillTwoMod]} ({skillTwo}) rolls due to being a {character().race}'
     d20Dict['Roll 2'].update({'min_val':5})
-  if 'Deception' in skillThree and ch.skills[skillThree.lower()].prof > 0.5:
+  if 'deception' in skillThree and ch.skills[skillThree()].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a {5} on {skillThree} rolls due to being a {character().race}'
     d20Dict['Roll 3'].update({'min_val':5})
 
@@ -461,13 +461,13 @@ roll1 = vroll(useDice)
 #useDice += (f"+{b2Invest}[gp bonus]" if b2 else '')
 #useDice += (f"{b2Bonus}[misc bonus]" if b2Bonus else '')
 
-useDice = f"{ch.skills[skillTwo.lower()].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}"
+useDice = f"{ch.skills[skillTwo].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}"
 
 roll2 = vroll(useDice)
 
 ## Roll 3 - Skill of choice! ##
 
-useDice = f"{ch.skills[skillThree.lower()].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
+useDice = f"{ch.skills[skillThree()].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
 
 roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b3 else ''}{f'{b3Bonus}[misc bonus]' if b3Bonus else ''}")
 

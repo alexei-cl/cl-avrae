@@ -467,7 +467,7 @@ roll2 = vroll(useDice)
 
 ## Roll 3 - Skill of choice! ##
 
-useDice = f"{ch.skills[skillThree()].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
+useDice = f"{ch.skills[skillThree].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"
 
 roll3 = vroll(f"{useDice}{f'+{b3Invest}[gp bonus]' if b3 else ''}{f'{b3Bonus}[misc bonus]' if b3Bonus else ''}")
 

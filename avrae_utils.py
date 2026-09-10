@@ -100,19 +100,19 @@ def updateAlias(aliasID:int,code:str):
   for code_version in old_code.json()['data']:
     print(f"Code Version {code_version['version']}")
     if code_version['is_current']==True:
-      print("Current Found")
+      print("Current Found - No Change Needed")
       current_code_content =code_version['content']
-      print("Breaking")
+      print("Breaking, no change needed")
       break
-  print("Moving on ti check code version content vs code..")
+  print("Moving on to check code version content vs code..")
   if current_code_content !=code:
     payload={ "content":code }
     req, reqCode1 = avraeREST("post",f"workshop/alias/{aliasID}/code", payload=payload)
     update, reqCode2 = avraeREST("put",f"workshop/alias/{aliasID}/active-code", payload={ 'version':req.json()['data']['version'] } )
-    print(f"Returning {req}, {reqCode1}, {reqCode2}")
+    print(f"[Changed] Returning {req}, {reqCode1}, {reqCode2}")
     return req, reqCode1, reqCode2
   else:
-    print("Returning None, None, None")
+    print("[No Change] Returning None, None, None")
     return None, None, None
   return None, None, None
 

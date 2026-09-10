@@ -87,6 +87,7 @@ def getCrimeInfo(argCrime, target, crimeMap):
   crimeKey = findBestMatch(crimeMap, argCrime)
   if crimeKey is not None:
     crimeInfo     = crimeMap[crimeKey]      #SafeDict
+    crimeInfo     = crimeMap[crimeKey]      #SafeDict
     crimeDC       = crimeInfo['DC']         #int
     crimePayout   = crimeInfo['PayoutFine'] #int
     crimeLong     = crimeInfo['LongDesc']   #int
@@ -349,11 +350,11 @@ if character().skills['stealth'].adv:
   d20Dict['Roll 1'].update({'adv':True})
   miscNotes+=f'\n{character().name} has advantage on Stealth (Dexterity) rolls for some reason (Set in Avrae)'
 
-if character().skills[skillTwo.lower()].adv:
+if character().skills[skillTwo].adv:
   d20Dict['Roll 2'].update({'adv':True})
   miscNotes+=f'\n{character().name} has advantage on {skillTwo} ({attMap[skillTwoMod]}) rolls for some reason (Set in Avrae)'
 
-if character().skills[skillThree.lower()].adv:
+if character().skills[skillThree].adv:
   d20Dict['Roll 3'].update({'adv':True})
   miscNotes+=f'\n{character().name} has advantage on {skillThree} ({attMap[skillThreeMod]}) rolls for some reason (Set in Avrae)'
   

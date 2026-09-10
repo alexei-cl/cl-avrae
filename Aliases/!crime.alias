@@ -390,7 +390,7 @@ if 'rel' in args or character().levels.get('Rogue')>=11: #reliable talent TODO: 
   if ch.skills[skillTwo].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillTwo} rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 2'].update({'min_val':10})
-  if ch.skills[skillThree()].prof > 0.5:
+  if ch.skills[skillThree].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a 10 on {skillThree} rolls due to Rogue\'s Reliable Talent'
     d20Dict['Roll 3'].update({'min_val':10})
 
@@ -405,10 +405,10 @@ if skillThree == 'Athletics' and ( character().levels.get('Barbarian')>=18 or 'i
   d20Dict['Roll 3'].update({'min_val':character().stats.strength})
 # Royal Mothfolk #
 if ('royal' in args) or ('moth' in character().race.lower() and 'royal' in character().race.lower()):
-  if 'deception' in skillTwo and ch.skills[skillThree()].prof > 0.5:
+  if 'deception' in skillTwo and ch.skills[skillThree].prof > 0.5:
     miscNotes+=f'\n"{character().name} cannot roll below a {5} on {attMap[sillTwoMod]} ({skillTwo}) rolls due to being a {character().race}'
     d20Dict['Roll 2'].update({'min_val':5})
-  if 'deception' in skillThree and ch.skills[skillThree()].prof > 0.5:
+  if 'deception' in skillThree and ch.skills[skillThree].prof > 0.5:
     miscNotes+=f'\n{character().name} cannot roll below a {5} on {skillThree} rolls due to being a {character().race}'
     d20Dict['Roll 3'].update({'min_val':5})
 

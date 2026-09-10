@@ -522,4 +522,4 @@ return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}"
 </drac2>
 -thumb <image>
 -color <color>
--footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}} "
+-footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}}"

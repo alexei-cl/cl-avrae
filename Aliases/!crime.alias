@@ -204,7 +204,7 @@ verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
 if '-v' in args:
   return f"""embed -title "Looking to do something *bad*?" -desc "{verbose}" """
 
-if not args or (Com := combat()) or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
+if not args or (args and any(x for x in ['help','?'] if args[0] in x)) : # Early out for help
   desc = defaultDesc
   return f"""embed -title "Looking to do something *bad*?" -desc "{desc}" """
 
@@ -521,4 +521,4 @@ return f'-title "{outTitle}" -f "{introField}" -f "{outField1}" -f "{outField2}"
 </drac2>
 -thumb <image>
 -color <color>
--footer "{{ctx.prefix}}{{ctx.alias}} {{&ARGS& if len(&ARGS&)>0 else ""}} "
+-footer "{{ctx.prefix}}{{ctx.alias}} {{" ".join(f"'{item}'" if not item.startswith("-") else item for item in &ARGS&) if len(&ARGS&) > 0 else ""}}"

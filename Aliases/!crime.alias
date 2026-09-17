@@ -138,7 +138,7 @@ def validateInvest(gp,b1,b2,b3):
   else:
     return 0
 
-# Command format: `!crime "<Crime Name>" -gp "<Info Fee>" -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+# Command format: `!crime "<Crime Name>" -gp "<Info Fee>" -b1 <X> -b2 <X> -b3 <X>`
 
 # Time calculations
 downtime_days = 5                               #how many days take this downtime activity
@@ -151,7 +151,7 @@ args = &ARGS&
 defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activities
 
   **__Usage__**:
-  `!crime '<Crime Name>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+  `!crime '<Crime Name>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X>`
 
   **__Crime Names:__** `{availableCrimes}`
   
@@ -171,7 +171,7 @@ defaultDesc = f"""{ctx.alias.title()} is a tool for committing criminal activiti
 verbose=f"""{ctx.alias.title()} is a tool for committing criminal activities
 
   **__Usage__**:
-  `!crime '<Crime Name>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X> [prof/exp]`
+  `!crime '<Crime Name>' -gp '<Info Fee>' -b1 <X> -b2 <X> -b3 <X>`
 
   **__Crime Names:__** `{availableCrimes}`
   
@@ -463,8 +463,7 @@ roll1 = vroll(useDice)
 
 useDice = f"{ch.skills[skillTwo].d20(d20Dict['Roll 2']['adv'], d20Dict['Roll 2']['reroll'], d20Dict['Roll 2']['min_val'], d20Dict['Roll 2']['mod_override'])}"
 
-roll2 = vroll(useDice)
-
+roll2 = vroll(f"{useDice}{f'+{b2Invest}[gp bonus]' if b2 else ''}{f'{b2Bonus}[misc bonus]' if b2Bonus else ''}")
 ## Roll 3 - Skill of choice! ##
 
 useDice = f"{ch.skills[skillThree].d20(d20Dict['Roll 3']['adv'], d20Dict['Roll 3']['reroll'], d20Dict['Roll 3']['min_val'], d20Dict['Roll 3']['mod_override'])}"

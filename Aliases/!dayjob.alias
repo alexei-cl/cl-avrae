@@ -217,9 +217,9 @@ if miscNotes:
 useDice = f"{target.skills[useStat].d20(argAdv, reroll if (reroll is not None) else None, argRel if argRel is not None else None, None)}"
 
 if (args.get('exp')) or 'exp' in &ARGS&:
-  dayjobRoll = vroll(f'{useDice}+{f"+{argBonus if argBonus else "" }" } ')
+  dayjobRoll = vroll(f'{useDice}+{f"{argBonus if argBonus else str(None) }" } ')
 else:
-  dayjobRoll = vroll(f'{useDice}+{f"+{argBonus if argBonus else "" }" } ')
+  dayjobRoll = vroll(f'{useDice}+{f"{argBonus if argBonus else str(None) }" } ')
 
 multiplier = getJobMultiplier(dayjobRoll.total)
 dayjobEarning = ceil(jobValue * multiplier * 100) #Maybe there's something I'm missing in the docs but I don't see where the gain is rounded up to the nearest gold piece

@@ -114,10 +114,20 @@ def getDowntimeDays(days):
 
 args = &ARGS&
 
-raw = %*%.strip()
-item = raw
-if len(raw) > 1 and raw[0] == raw[-1] and raw[0] in ["'", '"']:
-  item = raw[1:-1]
+parts = [%*%]
+raw = parts[0].strip() if parts else ''
+
+def unquote(s):
+  s = s.strip()
+  if len(s) > 1 and s[0] == s[-1] and s[0] in ["'", '"']:
+    s = s[1:-1].strip()
+  return s
+
+# pad so a leading or trailing -with still matches, then cut at the first one
+padded = ' ' + raw + ' '
+idx = padded.lower().find(' -with ')
+first = padded[:idx] if idx >= 0 else padded
+item = unquote(first)
   
 args = argparse(args,parse_ephem=False)
 ch = character()

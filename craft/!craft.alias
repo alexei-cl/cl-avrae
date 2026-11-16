@@ -1,9 +1,3 @@
-# SYNC_CONFIG
-# date_edited: 12/17/2025
-# coll_id: 6775fcffb9c5268f34006adc
-# alias_id: 6775fd303313cf1a5d17f363
-# alias_name: !craft
-# END_CONFIG
 embed 
 <drac2>
 
@@ -111,11 +105,14 @@ def getDowntimeDays(days):
   busyTime = CurTime + ((downtime_days-1) * DAY)  #calculate time when the activity ends
   return busyTime
 ############################
+
 args = &ARGS&
-if len(args)>0:
-  item = str(args[0]).replace("'",'')
-else:
-  item = ''
+
+raw = %*%.strip()
+item = raw
+if len(raw) > 1 and raw[0] == raw[-1] and raw[0] in ["'", '"']:
+  item = raw[1:-1]
+  
 args = argparse(args,parse_ephem=False)
 ch = character()
 outMsg=''

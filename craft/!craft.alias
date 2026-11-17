@@ -4,7 +4,7 @@
 # alias_id: 6775fd303313cf1a5d17f363
 # alias_name: !craft
 # END_CONFIG
-embed 
+embed
 <drac2>
 
 ## Dict of Tools and their associated approved ability check modifiers
@@ -114,21 +114,23 @@ def getDowntimeDays(days):
 
 args = &ARGS&
 
-parts = [%*%]
-raw = parts[0].strip() if parts else ''
-
+parts = """  %*%  """.strip()
+raw = parts.strip() if parts else ''
+raw.replace('“','"').replace('”','"')
 def unquote(s):
   s = s.strip()
   if len(s) > 1 and s[0] == s[-1] and s[0] in ["'", '"']:
     s = s[1:-1].strip()
-  return s
+  else:
+    return s
+  return unquote(s)
 
 # pad so a leading or trailing -with still matches, then cut at the first one
-padded = ' ' + raw + ' '
+padded = unquote(raw)
 idx = padded.lower().find(' -with ')
-first = padded[:idx] if idx >= 0 else padded
+first = padded[:idx+1] if idx >= 0 else padded
 item = unquote(first)
-  
+
 args = argparse(args,parse_ephem=False)
 ch = character()
 outMsg=''
